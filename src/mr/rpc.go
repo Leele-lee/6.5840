@@ -14,6 +14,14 @@ import "strconv"
 // and reply for an RPC.
 //
 
+type Task struct {
+	TaskType int       // 0 represent map; 1 represent reduce
+	TaskID int		   // index in mapl or reducel
+	WorkerID int       // only record worker ID when task state is 1 or 2
+	FileName []string  // filename for map input
+	State int          // 0 presents idle; 1 presents in-progress; 2 presents completed
+}
+
 type ExampleArgs struct {
 	X int
 }
@@ -24,15 +32,21 @@ type ExampleReply struct {
 
 // Add your RPC definitions here.
 type RequestArgs struct {
+	WorkerID int
 }
 
 type RequestReply struct {
-	Id int
-	FileName string
+	TaskType int
+	TaskID int
+	FileName []string
+	NReduce int
+	NMap int
 }
 
 type UpdateArgs struct {
-	Id int
+	TaskType int
+	TaskID int
+	WorkerID int
 }
 
 type UpdateReply struct {
