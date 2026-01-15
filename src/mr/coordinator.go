@@ -5,15 +5,9 @@ import "net"
 import "os"
 import "net/rpc"
 import "net/http"
-
-type Task struct {
-	TaskType int        // 0 represent map; 1 represent reduce; 2 represent wait
-	TaskID int          // index in mapl or reducel
-	WorkerID int        // only record worker ID when task state is 1 or 2
-	FileName []string   // filename for map input
-	State string           // 0 presents idle; 1 presents in-progress; 2 presents completed
-	StartTime time.Time 
-}
+import "sync"
+import "time"
+import "fmt"
 
 type Coordinator struct {
 	// Your definitions here.
@@ -23,13 +17,16 @@ type Coordinator struct {
 }
 
 // Your code here -- RPC handlers for the worker to call.
-func (c *Coordinate) RequestTask(args *RequestArgs, reply *RequestReply) error {
+func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error {
+	log.Printf("Handler: RequestTask started") // LOG 1
 	c.mu.Lock()
+	log.Printf("Handler: RequestTask acquired lock") // LOG 2
 	defer c.mu.Unlock()
+	fmt.Printf("Coordinator begin deal with request!\n")
 	inProgressNum := 0
-	for i, t : range c.mapl {
+	for i, t := range c.mapl {
 		if t.State == "idle" {
-			t.State == "in-progress"
+			t.State = "in-progress"
 			t.WorkerID = args.WorkerID
 			t.StartTime = time.Now()
 
@@ -47,9 +44,9 @@ func (c *Coordinate) RequestTask(args *RequestArgs, reply *RequestReply) error {
 	}
 
 	// only after map phase is finished can do reduce work
-	for i, t : range c.reducel {
+	for i, t := range c.reducel {
 		if t.State == "idle" {
-			t.State == "in-progress"
+			t.State = "in-progress"
 			t.WorkerID = args.WorkerID
 			t.StartTime = time.Now()
 
@@ -64,7 +61,7 @@ func (c *Coordinate) RequestTask(args *RequestArgs, reply *RequestReply) error {
 	return nil
 }
 
-func (c *Coordinate) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
+func (c *Coordinator) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	taskID := args.TaskID
@@ -76,7 +73,7 @@ func (c *Coordinate) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 			return nil
 		}
 		if c.mapl[taskID].WorkerID == workerID && c.mapl[taskID].State == "in-progress" {
-			c.mapl[taskID].State == "completed"
+			c.mapl[taskID].State = "completed"
 		}
 		
 	case 1:
@@ -84,7 +81,7 @@ func (c *Coordinate) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 			return nil
 		}
 		if c.reducel[taskID].WorkerID == workerID && c.reducel[taskID].State == "in-progress" {
-			c.reducel[taskID].State == "completed"
+			c.reducel[taskID].State = "completed"
 		}
 	}
 	return nil
@@ -125,33 +122,36 @@ func (c *Coordinator) server() {
 func (c *Coordinator) Done() bool {
 	ret := false
 
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	// Your code here.
-	for i, t : range c.mapl {
-		if t.State == "idle" or t.State == "in-progress" {
+	for _, t := range c.mapl {
+		if t.State == "idle" || t.State == "in-progress" {
 			return ret
 		}
 	}
 
-	for i, t : range c.reducel {
-		if t.State == "idle" or t.State == "in-progress" {
+	for _, t := range c.reducel {
+		if t.State == "idle" || t.State == "in-progress" {
 			return ret
 		}
 	}
+	fmt.Printf("coodrdinator is done!\n")
 	ret = true
 	return ret
 }
 
 func (c *Coordinator) CheckTimeout() {
 	for {
+		time.Sleep(500 * time.Millisecond)
 		c.mu.Lock()
-		defer c.mu.Unlock()
 
-		for i, t : range c.mapl {
-			if t.State = "in-progress" && time.Since(t.StartTime) >= 10 * time.Second {
+		for _, t := range c.mapl {
+			if t.State == "in-progress" && time.Since(t.StartTime) >= 10 * time.Second {
 				t.State = "idle"
 			}
 	    }
-		time.Sleep(500 * time.Millisecond)
+		c.mu.Unlock()
 	}
 
 
@@ -167,15 +167,19 @@ func (c *Coordinator) CheckTimeout() {
 func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	c := Coordinator{}
 	// Your code here.
-	for i, fileName := in range files {
+	c.mapl = make([]Task, len(files))
+	c.reducel = make([]Task, nReduce)
+
+	nMap := len(files)
+	for i, fileName := range files {
 		// i is index of files
-		nMap := len(files)
-		c.mapl[i] := Task{WorkType: 0, TaskID: i, FileName: fileName, State: "idle", NReduce: nReduce, NMap: nNamp}
+		c.mapl[i] = Task{TaskType: 0, TaskID: i, FileName: fileName, State: "idle", NReduce: nReduce, NMap: nMap}
 	}
-	for i := 0, i < nReduce {
-		c.reducel[i] := Task{WorkType: 1, TaskID: i, State: "idle", NReduce: nReduce, NMap: nNamp}
+	for i := 0; i < nReduce; i++ {
+		c.reducel[i] = Task{TaskType: 1, TaskID: i, State: "idle", NReduce: nReduce, NMap: nMap}
 	}
 	go c.CheckTimeout()
 	c.server()
+	fmt.Printf("the server is working\n")
 	return &c
 }

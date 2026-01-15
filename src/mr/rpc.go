@@ -8,6 +8,7 @@ package mr
 
 import "os"
 import "strconv"
+import "time"
 
 //
 // example to show how to declare the arguments
@@ -18,8 +19,11 @@ type Task struct {
 	TaskType int       // 0 represent map; 1 represent reduce
 	TaskID int		   // index in mapl or reducel
 	WorkerID int       // only record worker ID when task state is 1 or 2
-	FileName []string  // filename for map input
-	State int          // 0 presents idle; 1 presents in-progress; 2 presents completed
+	FileName string  // filename for map input
+	State string          // 0 presents idle; 1 presents in-progress; 2 presents completed
+	StartTime time.Time 
+	NReduce int
+	NMap int
 }
 
 type ExampleArgs struct {
@@ -38,7 +42,7 @@ type RequestArgs struct {
 type RequestReply struct {
 	TaskType int
 	TaskID int
-	FileName []string
+	FileName string
 	NReduce int
 	NMap int
 }

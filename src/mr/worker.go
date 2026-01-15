@@ -4,7 +4,10 @@ import "fmt"
 import "log"
 import "net/rpc"
 import "hash/fnv"
-
+import "os"
+import "encoding/json"
+import "sort"
+import "time"
 
 //
 // Map functions return a slice of KeyValue.
@@ -13,6 +16,13 @@ type KeyValue struct {
 	Key   string
 	Value string
 }
+// for sorting by key.
+type ByKey []KeyValue
+
+// for sorting by key.
+func (a ByKey) Len() int           { return len(a) }
+func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 //
 // use ihash(key) % NReduce to choose the reduce
@@ -30,12 +40,12 @@ func ihash(key string) int {
 func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 	buckets := make([][]KeyValue, nReduce) 
 
-	for _, kv : range kvs {
-		bID := ihash(kv.key) % NReduce
+	for _, kv := range kvs {
+		bID := ihash(kv.Key) % nReduce
 		buckets[bID] = append(buckets[bID], kv)
 	}
 
-	for i := 0, i < nReduce; i++ {
+	for i := 0; i < nReduce; i++ {
 		if buckets[i] == nil {
 			continue
 		}
@@ -48,7 +58,7 @@ func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 		}
 		tmpName := tmpFile.Name()
 
-		enc := json.NewEncode(tmpName)
+		enc := json.NewEncoder(tmpFile)
 		for _, kv := range buckets[i] {
 			if err := enc.Encode(&kv); err != nil {
 				log.Fatal(err)
@@ -64,9 +74,9 @@ func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 }
 
 func aggreagateIntermediateFiles(nMap int, reduceID int) []KeyValue {
-	kva := make([]KeyValue)
-	for x := 0; x < NMap; i++ {
-		fileName := fmt.Sprintf("mr-%d-%d", x, taskID)
+	kva := []KeyValue{}
+	for x := 0; x < nMap; x++ {
+		fileName := fmt.Sprintf("mr-%d-%d", x, reduceID)
 		file, err := os.Open(fileName)
 		if os.IsNotExist(err) {
 			continue
@@ -74,7 +84,7 @@ func aggreagateIntermediateFiles(nMap int, reduceID int) []KeyValue {
 		if (err != nil) {
 			log.Fatal("error:", err)
 		}
-		dec := json.NewDecoder(fileName)
+		dec := json.NewDecoder(file)
 		for {
 			var kv KeyValue
 			if err := dec.Decode(&kv); err != nil {
@@ -87,13 +97,14 @@ func aggreagateIntermediateFiles(nMap int, reduceID int) []KeyValue {
 }
 
 
-func reduceHelper(intermediate []KeyValue, tmpFile *os.File) {
+func reduceHelper(intermediate []KeyValue, tmpFile *os.File, 
+	reducef func(string, []string) string, reduceID int) {
 	// loop all kv pairs in list, for every single key build a []keyValue
 	// which stores all the value for this key, and pass the key and list to reducef
 	// at last write "key reduceOutput" to the file tmp-out-reduceID
 	tmpOutName := tmpFile.Name()
-	valList := make([]string)
-	preKey := intermediate[0]
+	valList := []string{}
+	preKey := intermediate[0].Key
 	for i := 0; i < len(intermediate); i++ {
 		kv := intermediate[i]
 		key := kv.Key
@@ -102,7 +113,7 @@ func reduceHelper(intermediate []KeyValue, tmpFile *os.File) {
 		//preValList := valList
 		if key != preKey {
 			// reducef return the number of occurrences of this word
-			outPut := reducef(preKey, ValList)
+			outPut := reducef(preKey, valList)
 
 			line := fmt.Sprintf("%v %v\n", preKey, outPut)
 			tmpFile.WriteString(line)
@@ -110,7 +121,7 @@ func reduceHelper(intermediate []KeyValue, tmpFile *os.File) {
 			valList = []string{val}
 			preKey = key
 		}
-		valList.append(valList, val)
+		valList = append(valList, val)
 
 	}
 	tmpFile.Close()
@@ -126,70 +137,71 @@ func reduceHelper(intermediate []KeyValue, tmpFile *os.File) {
 //
 func Worker(mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
-
 	// Your worker implementation here.
+	i := 0
 	for {
-		i := 0
-		go func(i int) {
-			requestArgs := RequestArgs{WorkerID: i}
-			requestReply := RequestReply{}
-			err := call("Coordinator.RequestTask", &requestArgs, &requestReply)
+		fmt.Printf("I am worker: %d\n", i)
+		requestArgs := RequestArgs{WorkerID: i}
+		requestReply := RequestReply{}
+
+		ok := call("Coordinator.RequestTask", &requestArgs, &requestReply)
+		fmt.Printf("After call Coordinator.RequestTask\n")
+		if !ok {
+			fmt.Printf("call failed!\n")
+		}
+		taskID := requestReply.TaskID
+		fileName := requestReply.FileName
+		taskType := requestReply.TaskType
+		NReduce := requestReply.NReduce
+		NMap := requestReply.NMap
+
+		fmt.Printf("taskType is : %d\n", taskType)
+		switch taskType {
+		case 0:
+			//map, ihash and store correspond intermediate files
+			fileContent, err := os.ReadFile(fileName)
 			if err != nil {
-				log.Fatal("error: ", err)
+				log.Fatal("error:", err)
 			}
-			taskID := requestReply.TaskID
-			fileName := requestReply.FileName
-			taskType := requestReply.TaskType
-			NReduce := requestReply.NReduce
-			NMap := requestReply.NMap
+			kvs := mapf(fileName, string(fileContent))
+			mapTaskHelper(taskID, NReduce, kvs)
 
-			switch taskType {
-			case 0:
-				//map, ihash and store correspond intermediate files
-				fileContent, err := os.ReadFile(fileName)
-				if err != nil {
-					log.Fatal("error:", err)
-				}
-				kvs := mapf(fileName, string(fileContent))
-				mapTaskHelper(taskID, NReduce, kvs)
+			updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
+			updateReply := UpdateReply{}
+			ok := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
+			if !ok {
+				fmt.Printf("call failed!\n")
+			}
+		case 1:
+			//reduce, for each intermediate files in a certain reduceID sort pairs, for loop each pairs in current reduceID
+			// aggreagate all values belong to the same key to a list, and pass key and list 
+			// to reducel get one line %v, %v output, save the line in mr-out-reduceID
+			// after file close rename filename]
 
-				updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
-				updateReply := UpdateReply{}
-				err := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
-				if err != nil {
-					log.Fatal("error: ", err)
-				}
-			case 1:
-				//reduce, for each intermediate files in a certain reduceID sort pairs, for loop each pairs in current reduceID
-				// aggreagate all values belong to the same key to a list, and pass key and list 
-				// to reducel get one line %v, %v output, save the line in mr-out-reduceID
-				// after file close rename filename]
+			// read all files into a list, and sort this list
+			intermediate := aggreagateIntermediateFiles(NMap, taskID)
+			if intermediate == nil {
+				i++
+				return
+			}
+			sort.Sort(ByKey(intermediate))
+			tmpFile, err := os.CreateTemp(".", "mrout-tmp-*")
+			if err != nil {
+				panic(err)
+			}
+			// save the output of reducef on intermediate pairs to files
+			reduceHelper(intermediate, tmpFile, reducef, taskID)
 
-				// read all files into a list, and sort this list
-				intermediate := aggreagateIntermediateFiles(NMap, taskID)
-				if intermediate == nil {
-					continue
-				}
-				sort.Sort(ByKey(intermediate))
-			    tmpFile, err := os.CreateTemp(".", "mrout-tmp-*")
-		        if err != nil {
-					panic(err)
-				}
-				tmpOutName := tmpFile.Name()
-				// save the output of reducef on intermediate pairs to files
-				reduceHelper(intermediate, tmpFile)
-
-				updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
-				updateReply := UpdateReply{}
-				err := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
-				if err != nil {
-					log.Fatal("error: ", err)
-				}
-			case 2:
-				//wait
-				time.Sleep(500 * time.Millisecond)
-				continue
-		}(i)
+			updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
+			updateReply := UpdateReply{}
+			ok := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
+			if !ok {
+				fmt.Printf("call failed!\n")
+			}
+		case 2:
+			//wait
+			time.Sleep(500 * time.Millisecond)
+		}
 		i++
 	}
 
