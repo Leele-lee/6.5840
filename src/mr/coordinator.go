@@ -15,24 +15,34 @@ type Coordinator struct {
 	mapl []Task
 	reducel []Task
 }
+func (c *Coordinator) printTask() {
+	for _, t := range c.mapl {
+		fmt.Printf("{TaskID: %d, TaskType: %d, FileName: %s, State: %s, NReduce: %d, NMap: %d}\n", 
+		t.TaskID, t.TaskType, t.FileName, t.State, t.NReduce, t.NMap)
+	}
+}
 
 // Your code here -- RPC handlers for the worker to call.
 func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error {
-	log.Printf("Handler: RequestTask started") // LOG 1
+	//log.Printf("Handler: RequestTask started") // LOG 1
 	c.mu.Lock()
-	log.Printf("Handler: RequestTask acquired lock") // LOG 2
+	//log.Printf("Handler: RequestTask acquired lock") // LOG 2
 	defer c.mu.Unlock()
 	fmt.Printf("Coordinator begin deal with request!\n")
+	c.printTask()
+
 	inProgressNum := 0
 	for i, t := range c.mapl {
 		if t.State == "idle" {
-			t.State = "in-progress"
-			t.WorkerID = args.WorkerID
-			t.StartTime = time.Now()
+			c.mapl[i].State = "in-progress"
+			c.mapl[i].WorkerID = args.WorkerID
+			c.mapl[i].StartTime = time.Now()
 
 			reply.TaskType = t.TaskType
-			reply.TaskID = i
+			reply.TaskID = t.TaskID
 			reply.FileName = t.FileName
+			reply.NReduce = t.NReduce
+			reply.NMap = t.NMap
 			return nil
 		} else if t.State == "in-progress" {
 			inProgressNum++
@@ -46,9 +56,9 @@ func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error 
 	// only after map phase is finished can do reduce work
 	for i, t := range c.reducel {
 		if t.State == "idle" {
-			t.State = "in-progress"
-			t.WorkerID = args.WorkerID
-			t.StartTime = time.Now()
+			c.reducel[i].State = "in-progress"
+			c.reducel[i].WorkerID = args.WorkerID
+			c.reducel[i].StartTime = time.Now()
 
 			reply.TaskType = t.TaskType
 			reply.TaskID = i
@@ -67,6 +77,9 @@ func (c *Coordinator) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 	taskID := args.TaskID
 	workerID := args.WorkerID
 
+	fmt.Printf("In updateTask has taskID: %d, workerID from list: %d, workerID from arg: %d, state: %s, time: %v\n",
+	 taskID, c.mapl[taskID].WorkerID , workerID, c.mapl[taskID].State, c.mapl[taskID].StartTime)
+
 	switch args.TaskType {
 	case 0: // map
 		if c.mapl[taskID].State == "completed" {
@@ -74,6 +87,7 @@ func (c *Coordinator) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 		}
 		if c.mapl[taskID].WorkerID == workerID && c.mapl[taskID].State == "in-progress" {
 			c.mapl[taskID].State = "completed"
+			fmt.Printf("Task id: %d, task type: %d is done!\n", taskID, args.TaskType)
 		}
 		
 	case 1:
@@ -82,6 +96,7 @@ func (c *Coordinator) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 		}
 		if c.reducel[taskID].WorkerID == workerID && c.reducel[taskID].State == "in-progress" {
 			c.reducel[taskID].State = "completed"
+			fmt.Printf("Task id: %d, task type: %d is done!\n", taskID, args.TaskType)
 		}
 	}
 	return nil
@@ -181,5 +196,6 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	go c.CheckTimeout()
 	c.server()
 	fmt.Printf("the server is working\n")
+	//fmt.Printf("default NReduce is: %d\nNMap is: %d\n", )
 	return &c
 }

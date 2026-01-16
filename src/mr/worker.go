@@ -145,7 +145,6 @@ func Worker(mapf func(string, string) []KeyValue,
 		requestReply := RequestReply{}
 
 		ok := call("Coordinator.RequestTask", &requestArgs, &requestReply)
-		fmt.Printf("After call Coordinator.RequestTask\n")
 		if !ok {
 			fmt.Printf("call failed!\n")
 		}
@@ -155,7 +154,10 @@ func Worker(mapf func(string, string) []KeyValue,
 		NReduce := requestReply.NReduce
 		NMap := requestReply.NMap
 
-		fmt.Printf("taskType is : %d\n", taskType)
+
+		fmt.Printf("taskID is: %d, fileName is: %s, taskType is : %d, NReduce is: %d, NMap is: %d\n",
+		 taskID, fileName, taskType, NReduce, NMap)
+
 		switch taskType {
 		case 0:
 			//map, ihash and store correspond intermediate files
@@ -166,6 +168,7 @@ func Worker(mapf func(string, string) []KeyValue,
 			kvs := mapf(fileName, string(fileContent))
 			mapTaskHelper(taskID, NReduce, kvs)
 
+			
 			updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
 			updateReply := UpdateReply{}
 			ok := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
