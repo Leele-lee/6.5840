@@ -36,6 +36,7 @@ func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error 
 	inProgressNum := 0
 	for i, t := range c.mapl {
 		if t.State == "idle" {
+			// don't direct change t.State, it just a copy!
 			c.mapl[i].State = "in-progress"
 			c.mapl[i].WorkerID = args.WorkerID
 			c.mapl[i].StartTime = time.Now()
@@ -50,6 +51,7 @@ func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error 
 			inProgressNum++
 		}
 	}
+	// still has map didn't done, wait
 	if (inProgressNum != 0) {
 		reply.TaskType = 2
 		return nil
@@ -72,6 +74,15 @@ func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error 
 			inProgressNum++
 		}
 	}
+	// still has reduce worker is in-progress, wait
+	if inProgressNum != 0{
+		reply.TaskType = 2
+		return nil
+	}
+
+	// job is totally done, so you(worker) can die
+	// if not have this exit type, the worker will receive all reply has default value:0 
+	// and thought still has unfinished job, so must explicit tell worker to die
 	reply.TaskType = 3
 	return nil
 }
@@ -153,19 +164,18 @@ func (c *Coordinator) Done() bool {
 	defer c.mu.Unlock()
 	// Your code here.
 	for _, t := range c.mapl {
-		if t.State == "idle" || t.State == "in-progress" {
+		if t.State != "completed" {
 			return ret
 		}
 	}
 
 	for _, t := range c.reducel {
-		if t.State == "idle" || t.State == "in-progress" {
+		if t.State != "completed" {
 			return ret
 		}
 	}
 	fmt.Printf("coodrdinator is done!\n")
-	ret = true
-	return ret
+	return true
 }
 
 func (c *Coordinator) CheckTimeout() {
@@ -173,9 +183,18 @@ func (c *Coordinator) CheckTimeout() {
 		time.Sleep(500 * time.Millisecond)
 		c.mu.Lock()
 
-		for _, t := range c.mapl {
+		for i, t := range c.mapl {
 			if t.State == "in-progress" && time.Since(t.StartTime) >= 10 * time.Second {
-				t.State = "idle"
+				// don't direct change t.State, it just a copy!
+				c.mapl[i].State = "idle"
+				c.mapl[i].WorkerID = -1
+			}
+	    }
+
+		for i, t := range c.reducel {
+			if t.State == "in-progress" && time.Since(t.StartTime) >= 10 * time.Second {
+				c.reducel[i].State = "idle"
+				c.reducel[i].WorkerID = -1
 			}
 	    }
 		c.mu.Unlock()

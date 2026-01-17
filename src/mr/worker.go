@@ -174,6 +174,9 @@ func Worker(mapf func(string, string) []KeyValue,
 		ok := call("Coordinator.RequestTask", &requestArgs, &requestReply)
 		if !ok {
 			fmt.Printf("call failed!\n")
+			// Coordinator might have finished or is temporarily down.
+            // In the crash test, it's safest to exit the worker here.
+            return 
 		}
 		taskID := requestReply.TaskID
 		fileName := requestReply.FileName
@@ -201,6 +204,9 @@ func Worker(mapf func(string, string) []KeyValue,
 			ok := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
 			if !ok {
 				fmt.Printf("call failed!\n")
+				// Coordinator might have finished or is temporarily down.
+            	// In the crash test, it's safest to exit the worker here.
+            	return 
 			}
 		case 1:
 			//reduce, for each intermediate files in a certain reduceID sort pairs, for loop each pairs in current reduceID
