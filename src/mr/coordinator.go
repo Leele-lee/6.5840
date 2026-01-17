@@ -20,13 +20,15 @@ func (c *Coordinator) printTask() {
 		fmt.Printf("{TaskID: %d, TaskType: %d, FileName: %s, State: %s, NReduce: %d, NMap: %d}\n", 
 		t.TaskID, t.TaskType, t.FileName, t.State, t.NReduce, t.NMap)
 	}
+	for _, t := range c.reducel {
+		fmt.Printf("{TaskID: %d, TaskType: %d, FileName: %s, State: %s, NReduce: %d, NMap: %d}\n", 
+		t.TaskID, t.TaskType, t.FileName, t.State, t.NReduce, t.NMap)
+	}
 }
 
 // Your code here -- RPC handlers for the worker to call.
 func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error {
-	//log.Printf("Handler: RequestTask started") // LOG 1
 	c.mu.Lock()
-	//log.Printf("Handler: RequestTask acquired lock") // LOG 2
 	defer c.mu.Unlock()
 	fmt.Printf("Coordinator begin deal with request!\n")
 	c.printTask()
@@ -61,13 +63,16 @@ func (c *Coordinator) RequestTask(args *RequestArgs, reply *RequestReply) error 
 			c.reducel[i].StartTime = time.Now()
 
 			reply.TaskType = t.TaskType
-			reply.TaskID = i
+			reply.TaskID = t.TaskID
 			reply.FileName = t.FileName
+			reply.NReduce = t.NReduce
+			reply.NMap = t.NMap
 			return nil
 		} else if t.State == "in-progress" {
 			inProgressNum++
 		}
 	}
+	reply.TaskType = 3
 	return nil
 }
 
@@ -77,8 +82,15 @@ func (c *Coordinator) UpdateTask(args *UpdateArgs, reply *UpdateReply) error {
 	taskID := args.TaskID
 	workerID := args.WorkerID
 
-	fmt.Printf("In updateTask has taskID: %d, workerID from list: %d, workerID from arg: %d, state: %s, time: %v\n",
-	 taskID, c.mapl[taskID].WorkerID , workerID, c.mapl[taskID].State, c.mapl[taskID].StartTime)
+	//debug
+	if args.TaskType == 0 {
+		fmt.Printf("In updateTask has Map taskID: %d, workerID from list: %d, workerID from arg: %d, state: %s, time: %v\n",
+	 	taskID, c.mapl[taskID].WorkerID , workerID, c.mapl[taskID].State, c.mapl[taskID].StartTime)
+
+	} else if args.TaskType == 1{
+		fmt.Printf("In updateTask has Reduce taskID: %d, workerID from list: %d, workerID from arg: %d, state: %s, time: %v\n",
+	 	taskID, c.reducel[taskID].WorkerID , workerID, c.reducel[taskID].State, c.reducel[taskID].StartTime)
+	}
 
 	switch args.TaskType {
 	case 0: // map

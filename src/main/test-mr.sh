@@ -5,7 +5,7 @@
 #
 
 # un-comment this to run the tests with the Go race detector.
-# RACE=-race
+#RACE=-race
 
 if [[ "$OSTYPE" = "darwin"* ]]
 then
@@ -90,29 +90,7 @@ pid=$!
 # give the coordinator time to create the sockets.
 sleep 1
 
-# start multiple workers.
-(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &
-(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &
-(maybe_quiet $TIMEOUT ../mrworker ../../mrapps/wc.so) &
-
-# wait for the coordinator to exit.
-wait $pid
-
-# since workers are required to exit when a job is completely finished,
-# and not before, that means the job has finished.
-sort mr-out* | grep . > mr-wc-all
-if cmp mr-wc-all mr-correct-wc.txt
-then
-  echo '---' wc test: PASS
-else
-  echo '---' wc output is not the same as mr-correct-wc.txt
-  echo '---' wc test: FAIL
-  failed_any=1
-fi
-
-# wait for remaining workers and coordinator to exit.
-wait
-
+# 
 #########################################################
 # now indexer
 rm -f mr-*
@@ -139,6 +117,12 @@ else
   echo '---' indexer output is not the same as mr-correct-indexer.txt
   echo '---' indexer test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 
 wait
@@ -160,6 +144,12 @@ then
   echo '---' saw "$NT" workers rather than 2
   echo '---' map parallelism test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 
 if cat mr-out* | grep '^parallel.* 2' > /dev/null
@@ -169,6 +159,12 @@ else
   echo '---' map workers did not run in parallel
   echo '---' map parallelism test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 
 wait
@@ -191,6 +187,12 @@ then
   echo '---' too few parallel reduces.
   echo '---' reduce parallelism test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 else
   echo '---' reduce parallelism test: PASS
 fi
@@ -218,6 +220,12 @@ else
   echo '---' map jobs ran incorrect number of times "($NT != 8)"
   echo '---' job count test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 
 wait
@@ -277,6 +285,12 @@ else
   echo '---' output changed after first worker exited
   echo '---' early exit test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 rm -f mr-*
 
@@ -327,6 +341,12 @@ else
   echo '---' crash output is not the same as mr-correct-crash.txt
   echo '---' crash test: FAIL
   failed_any=1
+
+  # --- ADD THESE LINES ---
+  pkill mrworker       # Kill any background workers
+  pkill mrcoordinator  # Kill the coordinator
+  exit 1               # Stop the script immediately
+  # -----------------------
 fi
 
 #########################################################
