@@ -15,6 +15,8 @@ type Coordinator struct {
 	mapl []Task
 	reducel []Task
 }
+
+// using debug, print all task information in map list and reduce list
 func (c *Coordinator) printTask() {
 	for _, t := range c.mapl {
 		fmt.Printf("{TaskID: %d, TaskType: %d, FileName: %s, State: %s, NReduce: %d, NMap: %d}\n", 
@@ -156,7 +158,7 @@ func (c *Coordinator) server() {
 //
 // main/mrcoordinator.go calls Done() periodically to find out
 // if the entire job has finished.
-//
+// only return true when all task in map list and reduce list is completed
 func (c *Coordinator) Done() bool {
 	ret := false
 
@@ -178,8 +180,11 @@ func (c *Coordinator) Done() bool {
 	return true
 }
 
+// every 0.5s check the worker's heartbeating, if task's worker in progress state beyond 10s
+// set the state to idle so it can assign to new worker
 func (c *Coordinator) CheckTimeout() {
 	for {
+		// time.sleep is a lock never put it in another lock
 		time.Sleep(500 * time.Millisecond)
 		c.mu.Lock()
 

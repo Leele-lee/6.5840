@@ -34,13 +34,11 @@ func ihash(key string) int {
 	return int(h.Sum32() & 0x7fffffff)
 }
 
-// each worker produce at max NResuce intermediate files 
-// first using temperory files "mr-tmp-* record" all kv pairs stores in one bucket
+// for loop each kv pairs that mapf result from, put them into properly buckets
+// then iterate all kv pairs in a reduceID list to a tmp file
 // after writen done, close the file and rename it to "mr-mapTaskID-reduceID"
 func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 	buckets := make([][]KeyValue, nReduce) 
-
-	// in case of 
 
 	for _, kv := range kvs {
 		bID := ihash(kv.Key) % nReduce
@@ -54,6 +52,7 @@ func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 		reduceID := i
 		// make temporary files in case of error fail
 		//pattern := fmt.Sprintf("")
+		// using temperory files "mr-tmp-* record" all kv pairs stores in one bucket
 		tmpFile, err := os.CreateTemp(".", "mr-tmp-*")
 		if err != nil {
 			panic(err)
@@ -75,15 +74,9 @@ func mapTaskHelper(mapTaskID int, nReduce int, kvs []KeyValue) {
 	}
 }
 
-//debug function print all key and value pairs in a list
-func printKV(kv []KeyValue) {
-	for _, v := range kv {
-		fmt.Printf("{%s, %s}", v.Key, v.Value)
-	}
-	fmt.Printf("\n")
-}
-
+// put all intermediate files belong to the reduceID together into a kv list
 func aggreagateIntermediateFiles(nMap int, reduceID int) []KeyValue {
+	// kva initial is not nil, it's length is 0
 	kva := []KeyValue{}
 	for x := 0; x < nMap; x++ {
 		//read relate intermediate files to this reduce worker
@@ -115,17 +108,20 @@ func aggreagateIntermediateFiles(nMap int, reduceID int) []KeyValue {
 // reducef accept a key and a list containning all his value, and put the output in a file
 func reduceAndOutputOneline(preKey string, valList []string,
 	 tmpFile *os.File, reducef func(string, []string) string) {
+
+	// reducef return the number of occurrences of this word
 	outPut := reducef(preKey, valList)
 
 	line := fmt.Sprintf("%v %v\n", preKey, outPut)
 	tmpFile.WriteString(line)
 }
 
+// iterate sorted kv list, put all kv's value that have same key to the same list
+// after that using reduceAndOutput function pass the key and value list to reducef 
+// and put the output of the reducef (one line per key) to a tmp file
+// at last close and rename file to "mr-out-reduceID"
 func reduceHelper(intermediate []KeyValue, tmpFile *os.File, 
 	reducef func(string, []string) string, reduceID int) {
-	// loop all kv pairs in list, for every single key build a []keyValue
-	// which stores all the value for this key, and pass the key and list to reducef
-	// at last write "key reduceOutput" to the file tmp-out-reduceID
 	tmpOutName := tmpFile.Name()
 	valList := []string{}
 	preKey := intermediate[0].Key
@@ -134,15 +130,8 @@ func reduceHelper(intermediate []KeyValue, tmpFile *os.File,
 		key := kv.Key
 		val := kv.Value
 
-		//preValList := valList
 		if key != preKey {
-			// reducef return the number of occurrences of this word
-			//outPut := reducef(preKey, valList)
-
-			//line := fmt.Sprintf("%v %v\n", preKey, outPut)
-			//tmpFile.WriteString(line)
 			reduceAndOutputOneline(preKey, valList, tmpFile, reducef)
-
 			valList = []string{val}
 			preKey = key
 		} else {
@@ -156,12 +145,12 @@ func reduceHelper(intermediate []KeyValue, tmpFile *os.File,
 	finalName := fmt.Sprintf("mr-out-%d",reduceID)
 	//atomic rename
 	os.Rename(tmpOutName, finalName)
-
 }
 
 //
 // main/mrworker.go calls this function.
 //
+// Each worker process will, in a loop, ask the coordinator for a task
 func Worker(mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
 	// Your worker implementation here.
@@ -184,7 +173,6 @@ func Worker(mapf func(string, string) []KeyValue,
 		NReduce := requestReply.NReduce
 		NMap := requestReply.NMap
 
-
 		fmt.Printf("taskID is: %d, fileName is: %s, taskType is : %d, NReduce is: %d, NMap is: %d\n",
 		 taskID, fileName, taskType, NReduce, NMap)
 
@@ -198,7 +186,6 @@ func Worker(mapf func(string, string) []KeyValue,
 			kvs := mapf(fileName, string(fileContent))
 			mapTaskHelper(taskID, NReduce, kvs)
 
-
 			updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
 			updateReply := UpdateReply{}
 			ok := call("Coordinator.UpdateTask", &updateArgs, &updateReply)
@@ -209,21 +196,21 @@ func Worker(mapf func(string, string) []KeyValue,
             	return 
 			}
 		case 1:
-			//reduce, for each intermediate files in a certain reduceID sort pairs, for loop each pairs in current reduceID
+			//reduce, for each intermediate files in a certain reduceID sort pairs, iterate each pairs in current reduceID
 			// aggreagate all values belong to the same key to a list, and pass key and list 
-			// to reducel get one line %v, %v output, save the line in mr-out-reduceID
+			// to reducef get one line %v, %v output, save the line in mr-out-reduceID
 			// after file close rename filename]
 
 			// read all files into a list, and sort this list
 			intermediate := aggreagateIntermediateFiles(NMap, taskID)
+			// current reduceID don't have task, continue ask other task from coordinator
 			if len(intermediate) == 0 {
 				i++
 				continue
 			}
 			sort.Sort(ByKey(intermediate))
 
-			//printKV(intermediate)
-
+			// create tmp output file for reduce Worker
 			tmpFile, err := os.CreateTemp(".", "mrout-tmp-*")
 			if err != nil {
 				panic(err)
@@ -231,7 +218,7 @@ func Worker(mapf func(string, string) []KeyValue,
 
 			fmt.Printf("intermediate list length is: %d!\n", len(intermediate))
 
-			// save the output of reducef on intermediate pairs to files
+			// save the output of reducef to tmp files and rename it after close
 			reduceHelper(intermediate, tmpFile, reducef, taskID)
 
 			updateArgs := UpdateArgs{TaskID: taskID, TaskType: taskType, WorkerID: i}
