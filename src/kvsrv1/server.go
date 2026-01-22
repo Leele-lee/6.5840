@@ -20,7 +20,7 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 
 type VersionValue struct {
 	Value string
-	Version string
+	Version rpc.Tversion
 }
 
 type KVServer struct {
@@ -32,7 +32,7 @@ type KVServer struct {
 func MakeKVServer() *KVServer {
 	kv := &KVServer{}
 	// Your code here.
-	kv.m := make(map[string]VersionValue)
+	kv.m = make(map[string]VersionValue)
 	return kv
 }
 
@@ -40,14 +40,18 @@ func MakeKVServer() *KVServer {
 // exists. Otherwise, Get returns ErrNoKey.
 func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here.
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
 	key := args.Key
-	verVal, ok := m[key]
+	verVal, ok := kv.m[key]
 	if !ok {
-		reply.Err = ErrNoKey
+		reply.Err = rpc.ErrNoKey
 		return
 	}
 	reply.Value = verVal.Value
 	reply.Version = verVal.Version
+	reply.Err = rpc.OK
 	return
 }
 
@@ -57,20 +61,24 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 // args.Version is 0, and returns ErrNoKey otherwise.
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// Your code here.
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
 	ver := args.Version
 	key := args.Key
 	val := args.Value
-	verVal, ok = m[key]
-	if !ok && ver != 0 !{
-		reply.Err = ErrNoKey
+	verVal, ok := kv.m[key]
+	if !ok && ver != 0 {
+		reply.Err = rpc.ErrNoKey
 		return
 	}
 	// If versions don't match, return ErrVersion.
 	if ver != verVal.Version {
-		reply.Err = ErrVersion
+		reply.Err = rpc.ErrVersion
 		return
 	}
-	reply.Err = OK
+	kv.m[key] = VersionValue{Version: ver + 1, Value: val}
+	reply.Err = rpc.OK
 	return
 }
 
