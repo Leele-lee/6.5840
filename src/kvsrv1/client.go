@@ -30,7 +30,30 @@ func MakeClerk(clnt *tester.Clnt, server string) kvtest.IKVClerk {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 	// You will have to modify this function.
-	return "", 0, rpc.ErrNoKey
+	for {
+		getArgs := GetArgs{Key: key}
+		getReply := GetReply{}
+		ok := ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
+		if !ok {
+			// ck.server.Call() returned false (the network dropped the packet)
+			// this error belong to all other errors, need forever loop
+			fmt.Printf("Call is failed!\n")
+			// We sleep for a few milliseconds and LOOP back to try again.
+       		time.Sleep(100 * time.Millisecond)
+			continue
+		}
+
+		val := getReply.Value
+		ver := getReply.Version
+		err := getReply.Err
+
+		if err == OK {
+			return val, ver, err
+		} else if err == ErrNoKey {
+			return "", 0, rpc.ErrNoKey
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }
 
 // Put updates key with value only if the version in the
@@ -52,5 +75,23 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 	// You will have to modify this function.
-	return rpc.ErrNoKey
+	args := PutArgs{
+		Key: key, 
+		Value: string, 
+		Version: version}
+	reply := PutReply{}
+	resent := 0
+
+	ok := ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
+	while !ok {
+		fmt.Printf("Call is failed!\n")
+		ok := ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
+		resent++
+	}
+	err := reply.Err
+
+	if resent != 0 && err == ErrVersion{
+		return ErrMaybe
+	}
+	return err
 }
