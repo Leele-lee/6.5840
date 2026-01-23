@@ -84,6 +84,8 @@ func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 	resent := 0
 
 	ok := ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
+
+	// if ok return false, it implies request lost or reply lost
 	for !ok {
 		fmt.Printf("Call is failed!\n")
 		ok = ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
@@ -92,6 +94,8 @@ func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 	err := reply.Err
 
 	if resent != 0 && err == rpc.ErrVersion{
+		// ErrMaybe implied the request/reply may lost or other go first, 
+		// you must determine in app
 		return rpc.ErrMaybe
 	}
 	return err
