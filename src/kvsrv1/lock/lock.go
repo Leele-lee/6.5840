@@ -57,20 +57,16 @@ func (lk *Lock) Acquire() {
 
 		nID, _, _ := lk.ck.Get(key)
 
-		// may return erro but success
+		// may return erro(ErrVersion, ErrMaybe) but actual success
 		if nID == cID {
 			return
 		}
+		// be procced by others, wait and continue
 		time.Sleep(50 * time.Millisecond)
 	}
 }
 
-// Check the current value of the key.
-// If the value is already empty, treat it as a Success.
-// If the value is someone else's ID, treat it as a Success 
-// (because the lock is no longer yours, which was the goal).
-// Only retry the Put if the value is still your ID
-// but the version number moved for some reason.
+
 func (lk *Lock) Release() {
 	// Your code here
 	key := lk.keyl
@@ -97,11 +93,13 @@ func (lk *Lock) Release() {
 		}
 		nID, _, _ := lk.ck.Get(key)
 
-		// if ID is empty or be locked by other client ID, though we may 
-		// get error from put but we actual success!
+		// if ID is empty or be locked by other client ID(all represent the lock
+		// has been released), though we may get error from put, but they are fake error,
+		// we actual success!
 		if nID == "" || nID != cID {
 			return
 		}
+		// proceed by other threads maybe, so wait and go on!
 		time.Sleep(50 * time.Millisecond)
 	}
 }

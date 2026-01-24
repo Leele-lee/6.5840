@@ -5,6 +5,7 @@ import (
 	"6.5840/kvtest1"
 	"6.5840/tester1"
 	"fmt"
+	"time"
 )
 
 
@@ -35,13 +36,12 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		getArgs := rpc.GetArgs{Key: key}
 		getReply := rpc.GetReply{}
 		ok := ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
-		if !ok {
+		for !ok {
 			// ck.server.Call() returned false (the network dropped the packet)
 			// this error belong to all other errors, need forever loop
-			fmt.Printf("Call is failed!\n")
+			ok = ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
 			// We sleep for a few milliseconds and LOOP back to try again.
-       		//time.Sleep(100 * time.Millisecond)
-			continue
+       		time.Sleep(100 * time.Millisecond)
 		}
 
 		val := getReply.Value
@@ -53,7 +53,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		} else if err == rpc.ErrNoKey {
 			return "", 0, rpc.ErrNoKey
 		}
-		//time.Sleep(100 * time.Millisecond)
+		time.Sleep(50 * time.Millisecond)
 	}
 }
 
@@ -87,9 +87,9 @@ func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 
 	// if ok return false, it implies request lost or reply lost
 	for !ok {
-		fmt.Printf("Call is failed!\n")
 		ok = ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
 		resent++
+		time.Sleep(100 * time.Millisecond)
 	}
 	err := reply.Err
 
