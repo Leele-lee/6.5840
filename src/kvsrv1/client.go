@@ -4,7 +4,6 @@ import (
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/tester1"
-	"fmt"
 	"time"
 )
 
@@ -38,7 +37,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		ok := ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
 		for !ok {
 			// ck.server.Call() returned false (the network dropped the packet)
-			// this error belong to all other errors, need forever loop
+			// keep re-sending an RPC until it receives a reply
 			ok = ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
 			// We sleep for a few milliseconds and LOOP back to try again.
        		time.Sleep(100 * time.Millisecond)
