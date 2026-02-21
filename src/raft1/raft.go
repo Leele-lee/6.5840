@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 	"fmt"
+	"sort"
 
 	//	"6.5840/labgob"
 	"6.5840/labrpc"
@@ -24,7 +25,7 @@ import (
 // and term when entry was received by leader (first index is 1)
 type LogEntry struct {
 	Term int
-	Command string
+	Command interface{}
 }
 
 type State int
@@ -55,6 +56,9 @@ type Raft struct {
 	// Your data here (3A, 3B, 3C).
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
+
+	applyCh chan raftapi.ApplyMsg
+	applyCond *sync.Cond // conditional varibale for Applier to pass commit to service/testser
 
 	// Persistent state on all servers
 	currentState State
@@ -373,7 +377,46 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		}
 
 		// Now signal the 'Applier' to push these to the applyCh
-    	//rf.applyCond.Signal() 
+    	rf.applyCond.Signal() 
+	}
+}
+
+// background goroutine, wake up when commitIndex is update and send new applyMsg to Applych
+// each time a new entry is committed to the log, each Raft peer 
+// should send an ApplyMsg to the service (or tester) through applych
+func (rf *Raft) applier() {
+	for rf.killed() == false {
+		time.Sleep(15 * time.Millisecond)
+		rf.mu.Lock()
+		// check commitIndex is update or not
+		// must using for loop to check instead of if 
+		// bc "Spurious Wakeup", conditional variable can occasionally wake up even if nobody called Signal()
+		for rf.commitIndex <= rf.lastApplied {
+			rf.applyCond.Wait() // This atomics: Releases Lock + Sleeps
+		}
+
+		// We woke up and we have the lock! 
+        // Grab all the committed messages.
+		var msgs []raftapi.ApplyMsg
+		for rf.commitIndex > rf.lastApplied {
+			rf.lastApplied++
+			newMsg := raftapi.ApplyMsg {
+				CommandValid: true,
+				Command: rf.logs[rf.lastApplied].Command,
+				CommandIndex: rf.lastApplied,
+			}
+			msgs = append(msgs, newMsg)
+		}
+
+		// must unlock before send ApplyMsg to the applyCh
+		rf.mu.Unlock()
+
+		// Send messages to the service. 
+        // If the channel blocks here, we DON'T hold the Raft lock!
+        // Heartbeats and elections can still happen in the background.
+		for _, msg := range msgs {
+			rf.applyCh <- msg
+		}
 	}
 }
 
@@ -401,7 +444,22 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	isLeader := true
 
 	// Your code here (3B).
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 
+	if rf.currentState != Leader {
+		isLeader = false
+		return index, term, isLeader
+	}
+
+	// append command to our local log entry
+	term = rf.currentTerm
+	newLogEntry := LogEntry{Term: term, Command: command}
+	rf.logs = append(rf.logs, newLogEntry)
+	index = len(rf.logs) - 1
+
+	// broadcast logs to followers
+	go rf.broadcastAppendEntries(0)
 
 	return index, term, isLeader
 }
@@ -425,6 +483,28 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
+// If there exists an N such that N > commitIndex, a majority of matchIndex[i] ≥ N, 
+// and log[N].term == currentTerm: set commitIndex = N (§5.3, §5.4)" 
+// this check also need a conditional varibale
+// N is median
+func (rf *Raft) updateCommitIndex() {
+	// copy logs to a newlist matchIndexList and replace matchIndexList[me] to the 
+	// last index in rf.logs
+	matchIndexList := make([]int, len(rf.peers))
+	copy(matchIndexList, rf.matchIndex)
+	matchIndexList[rf.me] = len(rf.logs) - 1
+
+	// sort the list from smallest to largest
+	sort.Ints(matchIndexList)
+
+	// find the median in list -- N
+	medianIndex := (len(matchIndexList) - 1)/2
+	N := matchIndexList[medianIndex]
+
+	if N > rf.commitIndex && rf.logs[N].Term == rf.currentTerm {
+		rf.commitIndex = N
+	}
+}
 
 // can be used by leader to send heartbeats and logs to peers
 // if need to send log instead of heartbeat you should change the code
@@ -492,22 +572,32 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 		if rf.nextIndex[i] < 1 {
 			rf.nextIndex[i] = 1
 		}
-		// if false, retry immedaitly
-		//go rf.sendAppendEntriesToPeer(i, term, heartbeat)
+		// if false, retry immedaitly?
+		go rf.sendAppendEntriesToPeer(i, term, heartbeat)
 	} else {
 		// if AppendEntry success, you should update matchIndex
 		newMatchIndex := args.PreLogIndex + len(args.Entries)
 		if newMatchIndex > rf.matchIndex[i] {
 			rf.matchIndex[i] = newMatchIndex
 		}
+		// update nextIndex
 		rf.nextIndex[i] = rf.matchIndex[i] + 1
+
+		// must check success in majority or not
+		// if yes, update commitIndex and signal
+		// reply to client after the job is done(this done in server.go)
+		oldCommitIndex := rf.commitIndex
+        rf.updateCommitIndex()
+        if rf.commitIndex > oldCommitIndex {
+             rf.applyCond.Signal()
+       }
 	}
 }
 
 // Once a candidate wins an election, it becomes leader. 
 // It then sends heartbeat messages to all of the other servers 
 // to establish its authority and prevent new elections.
-func (rf *Raft) sendHeartBeats() {
+func (rf *Raft) broadcastAppendEntries(isHeartbeat int) {
 	rf.mu.Lock()
 
 	// don't check term here, bc if you check term, you will effect efficiency
@@ -533,7 +623,7 @@ func (rf *Raft) sendHeartBeats() {
 		if i == rf.me {
 			continue
 		}
-		go rf.sendAppendEntriesToPeer(i, term, 1)
+		go rf.sendAppendEntriesToPeer(i, term, isHeartbeat)
 	}
 	rf.mu.Unlock()
 }
@@ -555,7 +645,8 @@ func (rf *Raft) becomeLeader() {
 		rf.matchIndex[i] = 0
 	}
 	rf.lastHeartbeatTime = time.Now()
-	go rf.sendHeartBeats()
+	// send heartbeats
+	go rf.broadcastAppendEntries(1)
 }
 
 // A candidate continues in candidate state until one of three things happens: 
@@ -687,10 +778,10 @@ func (rf *Raft) ticker() {
 				go rf.startElection()
 			}
 		case Leader:
-			// send heaertbeat periodically
+			// send heartbeat periodically
 			if time.Since(rf.lastHeartbeatTime) >= heartbeatInterval {
 				rf.lastHeartbeatTime = time.Now()
-				go rf.sendHeartBeats()
+				go rf.broadcastAppendEntries(1)
 			}
 		}
 		rf.mu.Unlock()
@@ -717,6 +808,12 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.persister = persister
 	rf.me = me
 
+	//used for applier()
+	rf.applyCh = applyCh
+
+	// bind lock to the condition
+	rf.applyCond = sync.NewCond(&rf.mu)
+
 	// Your initialization code here (3A, 3B, 3C).
 
 	// when servers start up, they begin as followers
@@ -740,6 +837,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// start ticker goroutine to start elections
 	go rf.ticker()
+	go rf.applier()
 
 
 	return rf
