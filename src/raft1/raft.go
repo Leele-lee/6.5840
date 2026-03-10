@@ -157,6 +157,22 @@ func (rf *Raft) readPersist(data []byte) {
 	//   rf.xxx = xxx
 	//   rf.yyy = yyy
 	// }
+
+	r := bytes.NewBuffer(data)
+	d := labgob.NewDecoder(r)
+
+	var savedState PersistState
+
+	if d.Decode(&savedState) != nil {
+		panic("readPersist: failed to decode Raft state")
+	} else {
+		rf.currentState = savedState.CurrentState
+		rf.votedFor = savedState.VotedFor
+
+		rf.logs = make([]LogEntry, len(savedState.Logs))
+		copy(rf.logs, savedState.Logs)
+	}
+
 }
 
 // how many bytes in Raft's persisted log?
