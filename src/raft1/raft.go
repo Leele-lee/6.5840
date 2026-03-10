@@ -572,7 +572,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 		if rf.nextIndex[i] < 1 {
 			rf.nextIndex[i] = 1
 		}
-		// if false, retry immedaitly?
+		// if false, retry immedaitly
 		go rf.sendAppendEntriesToPeer(i, term, heartbeat)
 	} else {
 		// if AppendEntry success, you should update matchIndex
@@ -639,6 +639,7 @@ func (rf *Raft) becomeLeader() {
     tester.Annotate(fmt.Sprintf("S%d", rf.me), "Becoming Leader", fmt.Sprintf("For term: %d", rf.currentTerm))
 
 	// nextIndex[] and matchIndex[] need to be reinitialized after election
+	// lastLogIndex need change to rf.lastIncludedIndex + len(rf.logs) - 1 in 3C
 	lastLogIndex := len(rf.logs) - 1
 	for i, _ := range rf.peers {
 		rf.nextIndex[i] = lastLogIndex + 1
