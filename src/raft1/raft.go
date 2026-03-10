@@ -81,6 +81,15 @@ type Raft struct {
 	matchIndex []int 
 }
 
+type PersistState struct {
+	CurrentTerm int
+	VotedFor int
+	Logs []LogEntry
+
+	//snapshot should also be persisted
+
+}
+
 // return currentTerm and whether this server
 // believes it is the leader.
 func (rf *Raft) GetState() (int, bool) {
@@ -113,6 +122,20 @@ func (rf *Raft) persist() {
 	// e.Encode(rf.yyy)
 	// raftstate := w.Bytes()
 	// rf.persister.Save(raftstate, nil)
+
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+
+	var ps PersistState
+	ps.CurrentTerm = rf.currentTerm
+	ps.VotedFor = rf.votedFor
+	ps.Logs = rf.logs
+
+	e.Encode(rf.CurrentTerm)
+	e.Encode(rf.VotedFor)
+	e.Encode(rf.logs)
+	raftState := w.Bytes()
+	rf.persister.Save(raftState, nil)
 }
 
 
