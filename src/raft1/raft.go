@@ -329,6 +329,9 @@ type AppendEntriesArgs struct {
 type AppendEntriesReply struct {
 	Term int
 	Success bool
+	XTerm int
+	XIndex int
+	XLen int
 }
 
 // appendEntry handler
