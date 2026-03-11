@@ -329,9 +329,9 @@ type AppendEntriesArgs struct {
 type AppendEntriesReply struct {
 	Term int
 	Success bool
-	XTerm int
-	XIndex int
-	XLen int
+	XTerm int    // term in the conflicting entry (if any)
+	XIndex int   // index of first entry with that term (if any)
+	XLen int 	 // log length
 }
 
 // appendEntry handler
@@ -357,20 +357,30 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
         oldTerm, args.Term, args.LeaderID))
 	}
 
+	reply.XLen = len(rf.logs) - 1
 	// perform check. If that check fails, you return Success = false and you stop immediately. 
 	// You do not perform the deletion or the appending
 
 	if len(rf.logs) - 1 < args.PreLogIndex {
 		// receiver log's length smaller than leader log's length
+		// c. follower's log is too short
 		// so need add lacking entry
+		reply.Xterm = -1
+		reply.XIndex = -1
 		reply.Success = false
 		return
 	} else {
 		// receiver log's length >= leader log's length
-
 		// Reply false if log doesn’t contain an entry at prevLogIndex whose term matches prevLogTerm
 		if rf.logs[args.PreLogIndex].Term != args.PreLogTerm {
 			reply.Success = false
+			reply.XTerm = rf.logs[args.PreLogIndex].Term
+			// find the XIndex, index of first entry with that conflict term
+			i := args.PreLogIndex
+			for i > 0 && rf.logs[i].currentTerm == reply.XTerm {
+				i--;
+			}
+			reply.XIndex  = i
 			return
 		} else {
 			// If an existing entry conflicts with a new one (same index but different terms), 
