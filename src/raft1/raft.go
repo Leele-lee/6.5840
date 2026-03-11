@@ -7,7 +7,7 @@ package raft
 // Make() creates a new raft peer that implements the raft interface.
 
 import (
-	//	"bytes"
+	"bytes"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"sort"
 
-	//	"6.5840/labgob"
+	"6.5840/labgob"
 	"6.5840/labrpc"
 	"6.5840/raftapi"
 	"6.5840/tester1"
@@ -131,8 +131,8 @@ func (rf *Raft) persist() {
 	ps.VotedFor = rf.votedFor
 	ps.Logs = rf.logs
 
-	e.Encode(rf.CurrentTerm)
-	e.Encode(rf.VotedFor)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.votedFor)
 	e.Encode(rf.logs)
 	raftState := w.Bytes()
 	rf.persister.Save(raftState, nil)
@@ -161,18 +161,17 @@ func (rf *Raft) readPersist(data []byte) {
 	r := bytes.NewBuffer(data)
 	d := labgob.NewDecoder(r)
 
-	var savedState PersistState
+	var ps PersistState
 
-	if d.Decode(&savedState) != nil {
+	if d.Decode(&ps) != nil {
 		panic("readPersist: failed to decode Raft state")
 	} else {
-		rf.currentState = savedState.CurrentState
-		rf.votedFor = savedState.VotedFor
+		rf.currentTerm = ps.CurrentTerm
+		rf.votedFor = ps.VotedFor
 
-		rf.logs = make([]LogEntry, len(savedState.Logs))
-		copy(rf.logs, savedState.Logs)
+		rf.logs = make([]LogEntry, len(ps.Logs))
+		copy(rf.logs, ps.Logs)
 	}
-
 }
 
 // how many bytes in Raft's persisted log?
