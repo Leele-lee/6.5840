@@ -365,7 +365,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// receiver log's length smaller than leader log's length
 		// c. follower's log is too short
 		// so need add lacking entry
-		reply.Xterm = -1
+		reply.XTerm = -1
 		reply.XIndex = -1
 		reply.Success = false
 		return
@@ -377,7 +377,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			reply.XTerm = rf.logs[args.PreLogIndex].Term
 			// find the XIndex, index of first entry with that conflict term
 			i := args.PreLogIndex
-			for i > 0 && rf.logs[i].currentTerm == reply.XTerm {
+			for i > 0 && rf.logs[i].Term == reply.XTerm {
 				i--;
 			}
 			reply.XIndex  = i
@@ -606,6 +606,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
+	// handle AppendEntries reply
 	// Critical: Check if the world changed while we were waiting
 	if rf.currentState != Leader || rf.currentTerm != term {
 		return
@@ -619,12 +620,28 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 	}
 
 	if reply.Success == false {
-		rf.nextIndex[i]--
+		// first check follower's log is too short or not
+		// case c: (follower's log is too short): nextIndex = XLen
+		if reply.XTerm == -1 {
+			rf.nextIndex[i] = reply.XLen
+		} else {  // then check the leader has conflict term or not
+			j := args.PreLogIndex
+			for j > 0 && rf.logs[j].Term != reply.XTerm {
+				j--
+			}
+			if j == 0 {  // case a: (leader doesn't have XTerm): nextIndex = XIndex
+				rf.nextIndex[i] = reply.XIndex
+			} else {   // Case b: (leader has XTerm): nextIndex = leader's last entry for XTerm
+				rf.nextIndex[i] = j
+			}
+		}
 		if rf.nextIndex[i] < 1 {
 			rf.nextIndex[i] = 1
 		}
+
 		// if false, retry immedaitly
 		go rf.sendAppendEntriesToPeer(i, term, heartbeat)
+
 	} else {
 		// if AppendEntry success, you should update matchIndex
 		newMatchIndex := args.PreLogIndex + len(args.Entries)
