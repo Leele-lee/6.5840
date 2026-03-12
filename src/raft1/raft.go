@@ -131,9 +131,8 @@ func (rf *Raft) persist() {
 	ps.VotedFor = rf.votedFor
 	ps.Logs = rf.logs
 
-	e.Encode(rf.currentTerm)
-	e.Encode(rf.votedFor)
-	e.Encode(rf.logs)
+	e.Encode(ps)
+
 	raftState := w.Bytes()
 	rf.persister.Save(raftState, nil)
 }
@@ -228,6 +227,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		rf.currentState = Follower
 		rf.votedFor = -1
 
+		rf.persist()
+
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Step Down", 
 		fmt.Sprintf("Term %d -> %d. Found higher term from candidate S%d in RequestVote", 
@@ -270,6 +271,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		}
 
 		rf.votedFor = args.CandidateId
+		rf.persist()
 
 		// ADD ANNOTATION HERE
         tester.Annotate(fmt.Sprintf("S%d", rf.me), "Vote Granted", 
@@ -368,6 +370,11 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		reply.XTerm = -1
 		reply.XIndex = -1
 		reply.Success = false
+
+		// ADD ANNOTATION HERE
+    	tester.Annotate(fmt.Sprintf("S%d", rf.me), "follower's log too short", 
+        fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
+
 		return
 	} else {
 		// receiver log's length >= leader log's length
@@ -381,6 +388,11 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 				i--;
 			}
 			reply.XIndex  = i
+
+			// ADD ANNOTATION HERE
+    		tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE false mesg", 
+        	fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
+
 			return
 		} else {
 			// If an existing entry conflicts with a new one (same index but different terms), 
@@ -391,8 +403,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			rf.resetElectionTimer()
 
 			// ADD ANNOTATION HERE
-    		tester.Annotate(fmt.Sprintf("S%d", rf.me), "Reset Election Timeout", 
-        	fmt.Sprintf("Success receive AE from %d", args.LeaderID))
+    		//tester.Annotate(fmt.Sprintf("S%d", rf.me), "Reset Election Timeout", 
+        	//fmt.Sprintf("Success receive AE from %d", args.LeaderID))
 
 			// The Log Cleanup & Append.
 			// append log entries, can not direct append bc of disorder rpc arrive
@@ -407,10 +419,12 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 						rf.logs = rf.logs[:checkConflictIndex]
 						// append
 						rf.logs = append(rf.logs, args.Entries[i:]...)
+						rf.persist()
 						break
 					}
 				} else {
 					rf.logs = append(rf.logs, args.Entries[i:]...)
+					rf.persist()
 					break
 				}
 			}
@@ -507,6 +521,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	term = rf.currentTerm
 	newLogEntry := LogEntry{Term: term, Command: command}
 	rf.logs = append(rf.logs, newLogEntry)
+	rf.persist()
 	index = len(rf.logs) - 1
 
 	// broadcast logs to followers
@@ -576,15 +591,20 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 	}
 
 	// ADD ANNOTATION HERE
-    tester.Annotate(fmt.Sprintf("S%d", rf.me), "Sending Heartbeats", 
-	fmt.Sprintf("To S%d at term %d", i, term))
+    //tester.Annotate(fmt.Sprintf("S%d", rf.me), "Sending Heartbeats", 
+	//fmt.Sprintf("To S%d at term %d", i, term))
 
 	preLogIndex := rf.nextIndex[i] - 1
 	preLogTerm := rf.logs[preLogIndex].Term
-	if heartbeat == 1 {
-		entry = nil
-	} else {
+	//if heartbeat == 1 {
+	//	entry = nil
+	//} else {
+	//	entry = rf.logs[rf.nextIndex[i]:]
+	//}
+	if len(rf.logs) > rf.nextIndex[i] {
 		entry = rf.logs[rf.nextIndex[i]:]
+	} else {
+		entry = nil
 	}
 
 	args := AppendEntriesArgs {
@@ -597,6 +617,18 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
     }
 	rf.mu.Unlock()
 	reply := AppendEntriesReply {}
+
+	// ADD ANNOTATION HERE
+	if heartbeat == 0 {
+		tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send AppendEntries", 
+    	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
+	}
+
+	if heartbeat == 1 {
+		tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send Heartbeats", 
+    	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
+	}
+
 
 	ok := rf.sendAppendEntries(i, &args, &reply)
 	if !ok {
@@ -616,6 +648,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 		rf.currentState = Follower
 		rf.currentTerm = reply.Term
 		rf.votedFor = -1
+		rf.persist()
 		return
 	}
 
@@ -639,10 +672,20 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 			rf.nextIndex[i] = 1
 		}
 
+		// ADD ANNOTATION HERE
+    	tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE false", 
+        fmt.Sprintf("Set nextIndex[%d]: %d", i, rf.nextIndex[i]))
+
 		// if false, retry immedaitly
 		go rf.sendAppendEntriesToPeer(i, term, heartbeat)
 
 	} else {
+		// ADD ANNOTATION HERE
+		if heartbeat == 0 {
+			tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE success", 
+			fmt.Sprintf("to server: %d", i))
+		}
+
 		// if AppendEntry success, you should update matchIndex
 		newMatchIndex := args.PreLogIndex + len(args.Entries)
 		if newMatchIndex > rf.matchIndex[i] {
@@ -747,6 +790,7 @@ func (rf *Raft) handleVoteReply(termStartAtElection int, voteNum *int, reply *Re
 		rf.currentState = Follower
 		rf.votedFor = -1
 		//rf.mu.Unlock()
+		rf.persist()
 		return
 	}
 	// (a) it wins the election
@@ -798,6 +842,8 @@ func (rf *Raft) startElection() {
 
 	// vote for itself
 	rf.votedFor = rf.me;
+
+	rf.persist()
 
 	// reset election timer
 	rf.resetElectionTimer()
