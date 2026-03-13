@@ -491,6 +491,7 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
+// append new command from client to leader logs and replicate to followers
 // the service using Raft (e.g. a k/v server) wants to start
 // agreement on the next command to be appended to Raft's log. if this
 // server isn't the leader, returns false. otherwise start the
@@ -525,7 +526,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index = len(rf.logs) - 1
 
 	// broadcast logs to followers
-	go rf.broadcastAppendEntries(0)
+	go rf.broadcastAppendEntries()
 
 	return index, term, isLeader
 }
@@ -575,8 +576,8 @@ func (rf *Raft) updateCommitIndex() {
 // can be used by leader to send heartbeats and logs to peers
 // if need to send log instead of heartbeat you should change the code
 // the Entry can not be direct set to nil
-// i represent peer id, heartbeat = 1 represent is heartbeat
-func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
+// i represent peer id
+func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 	rf.mu.Lock()
 
 	var entry []LogEntry
@@ -590,17 +591,9 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 		return
 	}
 
-	// ADD ANNOTATION HERE
-    //tester.Annotate(fmt.Sprintf("S%d", rf.me), "Sending Heartbeats", 
-	//fmt.Sprintf("To S%d at term %d", i, term))
-
 	preLogIndex := rf.nextIndex[i] - 1
 	preLogTerm := rf.logs[preLogIndex].Term
-	//if heartbeat == 1 {
-	//	entry = nil
-	//} else {
-	//	entry = rf.logs[rf.nextIndex[i]:]
-	//}
+
 	if len(rf.logs) > rf.nextIndex[i] {
 		entry = rf.logs[rf.nextIndex[i]:]
 	} else {
@@ -619,15 +612,15 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 	reply := AppendEntriesReply {}
 
 	// ADD ANNOTATION HERE
-	if heartbeat == 0 {
-		tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send AppendEntries", 
-    	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
-	}
+	//if heartbeat == 0 {
+	//	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send AppendEntries", 
+    //	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
+	//}
 
-	if heartbeat == 1 {
-		tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send Heartbeats", 
-    	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
-	}
+	//if heartbeat == 1 {
+	//	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send Heartbeats", 
+    //	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
+	//}
 
 
 	ok := rf.sendAppendEntries(i, &args, &reply)
@@ -672,20 +665,10 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 			rf.nextIndex[i] = 1
 		}
 
-		// ADD ANNOTATION HERE
-    	tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE false", 
-        fmt.Sprintf("Set nextIndex[%d]: %d", i, rf.nextIndex[i]))
-
 		// if false, retry immedaitly
-		go rf.sendAppendEntriesToPeer(i, term, heartbeat)
+		go rf.sendAppendEntriesToPeer(i, term)
 
 	} else {
-		// ADD ANNOTATION HERE
-		if heartbeat == 0 {
-			tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE success", 
-			fmt.Sprintf("to server: %d", i))
-		}
-
 		// if AppendEntry success, you should update matchIndex
 		newMatchIndex := args.PreLogIndex + len(args.Entries)
 		if newMatchIndex > rf.matchIndex[i] {
@@ -708,7 +691,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int, heartbeat int) {
 // Once a candidate wins an election, it becomes leader. 
 // It then sends heartbeat messages to all of the other servers 
 // to establish its authority and prevent new elections.
-func (rf *Raft) broadcastAppendEntries(isHeartbeat int) {
+func (rf *Raft) broadcastAppendEntries() {
 	rf.mu.Lock()
 
 	// don't check term here, bc if you check term, you will effect efficiency
@@ -734,7 +717,7 @@ func (rf *Raft) broadcastAppendEntries(isHeartbeat int) {
 		if i == rf.me {
 			continue
 		}
-		go rf.sendAppendEntriesToPeer(i, term, isHeartbeat)
+		go rf.sendAppendEntriesToPeer(i, term)
 	}
 	rf.mu.Unlock()
 }
@@ -758,7 +741,7 @@ func (rf *Raft) becomeLeader() {
 	}
 	rf.lastHeartbeatTime = time.Now()
 	// send heartbeats
-	go rf.broadcastAppendEntries(1)
+	go rf.broadcastAppendEntries()
 }
 
 // A candidate continues in candidate state until one of three things happens: 
@@ -896,7 +879,7 @@ func (rf *Raft) ticker() {
 			// send heartbeat periodically
 			if time.Since(rf.lastHeartbeatTime) >= heartbeatInterval {
 				rf.lastHeartbeatTime = time.Now()
-				go rf.broadcastAppendEntries(1)
+				go rf.broadcastAppendEntries()
 			}
 		}
 		rf.mu.Unlock()
