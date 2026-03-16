@@ -259,9 +259,9 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
         oldTerm, args.Term, args.CandidateId))
 	}
 
-	currentLastLogIndex := len(rf.logs) - 1
-	currentLastLogEntry := rf.logs[currentLastLogIndex]
-	
+	currentLastLogIndex := rf.getLastIndex()
+	currentLastLogEntry := rf.getLogEntry(currentLastLogIndex)
+
 	// If votedFor is null or candidateId, and candidate’s log is at least as up-to-date 
 	// as receiver’s log, grant vote
     // Raft determines which of two logs is more up-to-date by comparing the index
@@ -403,12 +403,12 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	} else {
 		// receiver log's length >= leader log's length
 		// Reply false if log doesn’t contain an entry at prevLogIndex whose term matches prevLogTerm
-		if rf.logs[args.PreLogIndex].Term != args.PreLogTerm {
+		if rf.getLogEntry(args.PreLogIndex).Term != args.PreLogTerm {
 			reply.Success = false
-			reply.XTerm = rf.logs[args.PreLogIndex].Term
+			reply.XTerm = rf.getLogEntry(args.PreLogIndex).Term
 			// find the XIndex, index of first entry with that conflict term
 			i := args.PreLogIndex
-			for i > 0 && rf.logs[i].Term == reply.XTerm {
+			for i > 0 && rf.getLogEntry(i).Term == reply.XTerm {
 				i--;
 			}
 			reply.XIndex  = i
@@ -438,9 +438,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			for i, entry := range args.Entries {
 				checkConflictIndex := args.PreLogIndex + 1 + i
 				if len(rf.logs) > checkConflictIndex {
-					if rf.logs[checkConflictIndex].Term != entry.Term {
+					if rf.getLogEntry(checkConflictIndex).Term != entry.Term {
 						// truant
-						rf.logs = rf.logs[:checkConflictIndex]
+						rf.logs = rf.logs[:rf.getPhysicalIndex(checkConflictIndex)]
 						// append
 						rf.logs = append(rf.logs, args.Entries[i:]...)
 						rf.persist()
@@ -491,7 +491,7 @@ func (rf *Raft) applier() {
 			rf.lastApplied++
 			newMsg := raftapi.ApplyMsg {
 				CommandValid: true,
-				Command: rf.logs[rf.lastApplied].Command,
+				Command: rf.getLogEntry(rf.lastApplied).Command,
 				CommandIndex: rf.lastApplied,
 			}
 			msgs = append(msgs, newMsg)
@@ -592,7 +592,7 @@ func (rf *Raft) updateCommitIndex() {
 	medianIndex := (len(matchIndexList) - 1)/2
 	N := matchIndexList[medianIndex]
 
-	if N > rf.commitIndex && rf.logs[N].Term == rf.currentTerm {
+	if N > rf.commitIndex && rf.getLogEntry(N).Term == rf.currentTerm {
 		rf.commitIndex = N
 	}
 }
@@ -616,10 +616,10 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 	}
 
 	preLogIndex := rf.nextIndex[i] - 1
-	preLogTerm := rf.logs[preLogIndex].Term
+	preLogTerm := rf.getLogEntry(preLogIndex).Term
 
 	if len(rf.logs) > rf.nextIndex[i] {
-		entry = rf.logs[rf.nextIndex[i]:]
+		entry = rf.logs[rf.getPhysicalIndex(rf.nextIndex[i]):]
 	} else {
 		entry = nil
 	}
@@ -676,7 +676,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 			rf.nextIndex[i] = reply.XLen
 		} else {  // then check the leader has conflict term or not
 			j := args.PreLogIndex
-			for j > 0 && rf.logs[j].Term != reply.XTerm {
+			for j > 0 && rf.getLogEntry(j).Term != reply.XTerm {
 				j--
 			}
 			if j == 0 {  // case a: (leader doesn't have XTerm): nextIndex = XIndex
@@ -854,8 +854,9 @@ func (rf *Raft) startElection() {
 
 	// reset election timer
 	rf.resetElectionTimer()
-	lastLogIndex := len(rf.logs) - 1
-	LastLogTerm := rf.logs[lastLogIndex].Term
+
+	lastLogIndex := rf.getLastIndex()
+	LastLogTerm := rf.getLastTerm()
 
 	voteNum := 1
 	// issues RequestVote RPCs in parallel to each of the other servers in the cluster
@@ -951,6 +952,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	rf.nextIndex = make([]int, len(peers));
 	rf.matchIndex = make([]int, len(peers));
+
+	rf.lastIncludedIndex = 0
+	rf.lastIncludedTerm  = 0
 
 	// initialize from state persisted before a crash
 	// When the tester restarts a crashed server, it calls Make() again. 
