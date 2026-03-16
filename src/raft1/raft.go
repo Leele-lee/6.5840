@@ -79,6 +79,30 @@ type Raft struct {
 	//for each server, index of highest log entry known to be replicated 
 	// on server (initialized to 0, increases monotonically)
 	matchIndex []int 
+
+	// for snapshot
+	lastIncludedIndex int
+	lastIncludedTerm int
+}
+
+// translate raft index to a physical slice index in remaining logs
+func (rf *Raft) getPhysicalIndex(raftIndex int) int {
+	return raftIndex - rf.lastIncludedIndex
+}
+
+// get the entry for raft index in logs slice
+func (rf *Raft) getLogEntry(raftIndex int) LogEntry {
+	return rf.logs[rf.getPhysicalIndex(raftIndex)]
+}
+
+// get the raft index of the last entry
+func (rf *Raft) getLastIndex() int {
+	return rf.lastIncludedIndex + len(rf.logs) - 1
+}
+
+// get the term in the logs
+func (rf *Raft) getLastTerm() int {
+	return rf.logs[len(rf.logs) - 1].Term
 }
 
 type PersistState struct {
