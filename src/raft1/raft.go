@@ -441,6 +441,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		reply.Term = rf.currentTerm
 		reply.XTerm = -1
 		reply.XIndex = -1
+		// be used as nextIndex in sendAppendEntries reply handler
 		reply.XLen = rf.lastIncludedIndex + 1
 		return
 	}
@@ -545,6 +546,13 @@ func (rf *Raft) applier() {
 		for rf.commitIndex <= rf.lastApplied {
 			rf.applyCond.Wait() // This atomics: Releases Lock + Sleeps
 		}
+		
+		// --- ADD THIS GUARD ---
+        // If a snapshot was installed while we were sleeping,
+        // our lastApplied might be way behind the new physical log start.
+        if rf.lastApplied < rf.lastIncludedIndex {
+            rf.lastApplied = rf.lastIncludedIndex
+        }
 
 		// We woke up and we have the lock! 
         // Grab all the committed messages.
@@ -759,9 +767,35 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 }
 
 
-func (rf *Raft) sendSnapshot(server int, args *InstallSnapshotArgs, reply *InstallSnapshotReply) bool {
+func (rf *Raft) sendSnapshot(server int, args *InstallSnapshotArgs, 
+	reply *InstallSnapshotReply) bool {
 	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
 	return ok
+}
+
+func (rf *Raft) handleSendInstallSnapshotReply(i int, args *InstallSnapshotArgs, 
+	reply *InstallSnapshotReply, term int) {
+		rf.mu.Lock()
+		defer rf.mu.Unlock()
+		// handler sendSnapshot reply
+		// Critical: Check if the world changed while we were waiting
+		if rf.currentState != Leader || rf.currentTerm != term {
+			return
+		}
+
+		if reply.Term > rf.currentTerm {
+			rf.currentState = Follower
+			rf.currentTerm = reply.Term
+			rf.votedFor = -1
+			rf.persist()
+			return
+		}
+		// SUCCESS! Update the follower's progress
+		// The follower is now exactly at the snapshot index
+		if args.LastIncludedIndex > rf.matchIndex[i] {
+			rf.matchIndex[i] = args.LastIncludedIndex
+			rf.nextIndex[i] = rf.matchIndex[i] + 1
+		}
 }
 
 func (rf *Raft) sendInstallSnapshotToPeer(i int, term int) {
@@ -781,28 +815,14 @@ func (rf *Raft) sendInstallSnapshotToPeer(i int, term int) {
 	}
 
 	reply := InstallSnapshotReply {}
+
 	rf.mu.Unlock()
 
 	ok := rf.sendSnapshot(i, &args, &reply)
 	if !ok {
 		return
 	}
-
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	// handler sendSnapshot reply
-	// Critical: Check if the world changed while we were waiting
-	if rf.currentState != Leader || rf.currentTerm != term {
-		return
-	}
-
-	if reply.Term > rf.currentTerm {
-		rf.currentState = Follower
-		rf.currentTerm = reply.Term
-		rf.votedFor = -1
-		rf.persist()
-		return
-	}
+	rf.handleSendInstallSnapshotReply(i, &args, &reply, term)
 }
 
 // can be used by leader to send heartbeats and logs to peers
@@ -827,7 +847,7 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
     if rf.nextIndex[i] <= rf.lastIncludedIndex {
 		// We can't use AppendEntries! We MUST send a snapshot instead.
 		rf.mu.Unlock()
-		rf.sendInstallSnapshotToPeer(i, term)
+		go rf.sendInstallSnapshotToPeer(i, term)
 		return
     }
 
