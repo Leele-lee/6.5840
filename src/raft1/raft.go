@@ -214,6 +214,9 @@ func (rf *Raft) readPersist(data []byte) {
 
 		rf.lastIncludedIndex = ps.LastIncludedIndex
 		rf.lastIncludedTerm = ps.LastIncludedTerm
+		
+		rf.lastApplied = ps.LastIncludedIndex
+		rf.commitIndex = ps.LastIncludedIndex
 	}
 }
 
@@ -546,7 +549,7 @@ func (rf *Raft) applier() {
 		for rf.commitIndex <= rf.lastApplied {
 			rf.applyCond.Wait() // This atomics: Releases Lock + Sleeps
 		}
-		
+
 		// --- ADD THIS GUARD ---
         // If a snapshot was installed while we were sleeping,
         // our lastApplied might be way behind the new physical log start.
@@ -621,7 +624,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.logs = append(rf.logs, newLogEntry)
 	rf.persist()
 	// len(rf.logs) - 1 is physical index
-	index = rf.lastIncludedIndex + len(rf.logs) - 1
+	index = rf.getLastIndex()
 
 	// broadcast logs to followers
 	go rf.broadcastAppendEntries()
@@ -703,13 +706,6 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
         tester.Annotate(fmt.Sprintf("S%d", rf.me), "Step Down", 
         fmt.Sprintf("Term %d -> %d. Found higher term from leader S%d in IS", 
         oldTerm, args.Term, args.LeaderID))
-	}
-
-	// discard any exsiting snapshot with a smaller index
-	// if exsiting snapshot has bigger index, just direct return
-	if rf.lastIncludedIndex >= args.LastIncludedIndex {
-		rf.mu.Unlock()
-		return
 	}
 
 	// reject stale snapshot
@@ -872,18 +868,6 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 	rf.mu.Unlock()
 	reply := AppendEntriesReply {}
 
-	// ADD ANNOTATION HERE
-	//if heartbeat == 0 {
-	//	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send AppendEntries", 
-    //	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
-	//}
-
-	//if heartbeat == 1 {
-	//	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Send Heartbeats", 
-    //	fmt.Sprintf("To server: %d, preLogIndex: %d, preLogTerm: %d", i, args.PreLogIndex, args.PreLogTerm))
-	//}
-
-
 	ok := rf.sendAppendEntries(i, &args, &reply)
 	if !ok {
 		return
@@ -995,7 +979,7 @@ func (rf *Raft) becomeLeader() {
 
 	// nextIndex[] and matchIndex[] need to be reinitialized after election
 	// lastLogIndex need change to rf.lastIncludedIndex + len(rf.logs) - 1 in 3C
-	lastLogIndex := len(rf.logs) - 1 + rf.lastIncludedIndex
+	lastLogIndex := rf.getLastIndex()
 	for i, _ := range rf.peers {
 		rf.nextIndex[i] = lastLogIndex + 1
 		rf.matchIndex[i] = 0
