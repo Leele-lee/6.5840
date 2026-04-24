@@ -25,7 +25,6 @@ type Op struct {
 
 	ClientID int64
 	SeqNum int
-
 }
 
 type Result struct {
@@ -61,7 +60,6 @@ type RSM struct {
 // 2. should hand each committed operation to DoOp()
 // 3. if raft size is bigger than maxraftstate bytes should call snapshot
 func (rsm *RSM) applier() {
-
 	for msg := range rsm.applyCh {
 		// 1. check msg contains command or not
 		if msg.CommandValid {
@@ -77,7 +75,6 @@ func (rsm *RSM) applier() {
 				ch <- res
 			}
 		}
-
 	}
 
 }
