@@ -647,7 +647,7 @@ func (rf *Raft) Kill() {
 	atomic.StoreInt32(&rf.dead, 1)
 	// Your code here, if desired.
 	// add for kvraft rsm.go
-	close(rf.Applych)
+	close(rf.applyCh)
 }
 
 func (rf *Raft) killed() bool {
@@ -763,7 +763,7 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	}
 
 	rf.mu.Unlock()
-	if !rk.killed() {
+	if !rf.killed() {
 		rf.applyCh <- msg
 	}
 }
