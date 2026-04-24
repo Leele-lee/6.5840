@@ -577,7 +577,9 @@ func (rf *Raft) applier() {
         // If the channel blocks here, we DON'T hold the Raft lock!
         // Heartbeats and elections can still happen in the background.
 		for _, msg := range msgs {
-			rf.applyCh <- msg
+			if !rf.killed() {
+				rf.applyCh <- msg
+			}
 		}
 	}
 }
@@ -644,6 +646,8 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 func (rf *Raft) Kill() {
 	atomic.StoreInt32(&rf.dead, 1)
 	// Your code here, if desired.
+	// add for kvraft rsm.go
+	close(rf.Applych)
 }
 
 func (rf *Raft) killed() bool {
@@ -759,7 +763,9 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 	}
 
 	rf.mu.Unlock()
-	rf.applyCh <- msg
+	if !rk.killed() {
+		rf.applyCh <- msg
+	}
 }
 
 

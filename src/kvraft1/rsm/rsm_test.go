@@ -110,15 +110,15 @@ func TestLeaderPartition4A(t *testing.T) {
 		// raft.Start()'s, but none should commit and be executed.
 		var wg sync.WaitGroup
 		for i := 0; i < NSUBMIT; i++ {
-			wg.Add(1)
+			wg.Add(1)  // wg counter increment 1
 			go func(i int) {
-				defer wg.Done()
+				defer wg.Done() // wg counter decrement 1
 				if err, rep := ts.srvs[l].rsm.Submit(Dec{}); err == rpc.OK {
 					t.Fatalf("Submit %d in minority completed %v", i, rep)
 				}
 			}(i)
 		}
-		wg.Wait()
+		wg.Wait() // only can continue when counter = 0, after all 100 goroutines done
 		done <- struct{}{}
 	}()
 
@@ -130,6 +130,8 @@ func TestLeaderPartition4A(t *testing.T) {
 
 	select {
 	case err := <-done:
+		// ERROR PATH: If we get here, it means all 100 requests finished 
+    	// while the leader was still isolated!
 		text := fmt.Sprintf("Dec's in minority completed; Submit returns %v", err)
 		tester.AnnotateCheckerFailure(text, text)
 		ts.Fatalf(text)

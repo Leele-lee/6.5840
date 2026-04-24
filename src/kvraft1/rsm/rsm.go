@@ -2,6 +2,7 @@ package rsm
 
 import (
 	"sync"
+	"time"
 
 	"6.5840/kvsrv1/rpc"
 	"6.5840/labrpc"
@@ -18,8 +19,19 @@ type Op struct {
 	// Your definitions here.
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
+	Operation string // Get, Put
+	Key string
+	Value string
+
+	ClientID int64
+	SeqNum int
+
 }
 
+type Result struct {
+	Value string
+	Err string
+}
 
 // A server (i.e., ../server.go) that wants to replicate itself calls
 // MakeRSM and must implement the StateMachine interface.  This
@@ -41,6 +53,33 @@ type RSM struct {
 	maxraftstate int // snapshot if log grows this big
 	sm           StateMachine
 	// Your definitions here.
+	waitCh       map[int]chan any  // commit index in log -> commit chan waitting reply from GoOp
+}
+
+// reader goroutine listen from raft
+// 1. reads the applyCh , 
+// 2. should hand each committed operation to DoOp()
+// 3. if raft size is bigger than maxraftstate bytes should call snapshot
+func (rsm *RSM) applier() {
+
+	for msg := range rsm.applyCh {
+		// 1. check msg contains command or not
+		if msg.CommandValid {
+			// 2. pass the operation to service to operate
+			res := rsm.sm.DoOp(msg.Command)
+		
+			// 3. pass the result to the correspond request channel
+			rsm.mu.Lock()
+			ch, ok := rsm.waitCh[msg.CommandIndex]
+			rsm.mu.Unlock()
+
+			if ok {
+				ch <- res
+			}
+		}
+
+	}
+
 }
 
 // servers[] contains the ports of the set of
@@ -64,10 +103,14 @@ func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, m
 		maxraftstate: maxraftstate,
 		applyCh:      make(chan raftapi.ApplyMsg),
 		sm:           sm,
+		waitCh:      make(map[int]chan any),
 	}
 	if !useRaftStateMachine {
 		rsm.rf = raft.Make(servers, me, persister, rsm.applyCh)
 	}
+
+	// use reader goroutine listen from raft
+	go rsm.applier()
 	return rsm
 }
 
@@ -86,5 +129,37 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	// is the argument to Submit and id is a unique id for the op.
 
 	// your code here
-	return rpc.ErrWrongLeader, nil // i'm dead, try another server.
+
+	// 2. call rf.Start
+	index, term, isLeader := rsm.rf.Start(req)
+	if !isLeader {
+		// not leader, try another server
+		return rpc.ErrWrongLeader, nil 
+	}
+
+	// is leader
+	// build the map waitCh
+	ch := make(chan any, 1) // the channel can only transmit Result type, and buffered has size 1
+	rsm.mu.Lock()
+	rsm.waitCh[index] = ch
+	rsm.mu.Unlock()
+
+	defer func() {
+		rsm.mu.Lock()
+		delete(rsm.waitCh, index)
+		rsm.mu.Unlock()
+	}()
+
+	// 3. wait for reply from DoOp or timeout
+	select {
+	case res := <- ch:
+		// Lost leadership before commit by checking term
+		currentTerm, currIsLeader := rsm.rf.GetState()
+		if !currIsLeader || currentTerm != term {
+			return rpc.ErrWrongLeader, nil
+		}
+		return rpc.OK, res
+	case <- time.After(2000 * time.Millisecond):
+		return rpc.ErrWrongLeader, nil
+	}
 }

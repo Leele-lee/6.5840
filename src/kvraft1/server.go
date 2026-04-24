@@ -11,12 +11,22 @@ import (
 
 )
 
+
 type KVServer struct {
 	me   int
 	dead int32 // set by Kill()
 	rsm  *rsm.RSM
 
 	// Your definitions here.
+	mu           sync.Mutex
+	db map[string]string             // datebase contains key/value pair
+	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
+	lastOpResult map[int64]Result	 // clientID -> Result
+
+}
+
+func (kv *KVServer) isDuplicate(clientID int64, seqNum int) bool {
+
 }
 
 // To type-cast req to the right type, take a look at Go's type switches or type
@@ -26,7 +36,48 @@ type KVServer struct {
 // https://go.dev/tour/methods/15
 func (kv *KVServer) DoOp(req any) any {
 	// Your code here
-	return nil
+	// argument and return value should be Op struct in order to consistent with
+	// submit function in rsm.go
+	op, ok := req.(Op)
+
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
+	// 1. type assertion, if not ok return
+	if !ok {
+		fmt.Println("type assertion failed")
+		return
+	}
+	// 2. check duplicate
+	if kv.isDuplicate(op.ClientID, op.SeqNum) {
+		if (op.Operation != "Get") {
+			// if the request is duplicate, just return the lastest result
+			return kv.lastOpResult[op.clientID]
+		}
+	}
+
+	// 3. do operation in service database
+	res := Result{}
+	switch op.Operation {
+	case "Get":
+		val, ok := kv.db[op.Key]
+		if !ok {
+			res.Err = rpc.ErrNoKey
+		}
+		res.Val = val
+		res.Err = rpc.OK
+	case "Put":
+		kv.db[op.Key] = op.Val
+		res.Err = rpc.OK
+	}
+
+	// 4. record the result to kv
+	if (op.Operation != "Get") {
+		kv.lastAppliedSeq[op.ClientID] = op.SeqNum
+		kv.lastOpResult[op.ClientID] = res 
+	}
+
+	return res
 }
 
 func (kv *KVServer) Snapshot() []byte {
@@ -42,6 +93,7 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
+
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
@@ -82,5 +134,6 @@ func StartKVServer(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persist
 
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
 	// You may need initialization code here.
+	kv.m = make(map[string]string)
 	return []tester.IService{kv, kv.rsm.Raft()}
 }
