@@ -11,11 +11,15 @@ type Clerk struct {
 	clnt    *tester.Clnt
 	servers []string
 	// You will have to modify this struct.
+	clientID int64
+	seqNum int
 }
 
 func MakeClerk(clnt *tester.Clnt, servers []string) kvtest.IKVClerk {
 	ck := &Clerk{clnt: clnt, servers: servers}
 	// You'll have to add code here.
+	ck.clientID = nrand()
+	ck.seqNum = 0
 	return ck
 }
 

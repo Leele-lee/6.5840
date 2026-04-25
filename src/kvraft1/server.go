@@ -51,7 +51,7 @@ func (kv *KVServer) DoOp(req any) any {
 	// 2. check duplicate
 	if kv.isDuplicate(op.ClientID, op.SeqNum) {
 		if (op.Operation != "Get") {
-			// if the request is duplicate, just return the lastest result
+			// if the request is put and duplicate, just return the lastest result
 			return kv.lastOpResult[op.clientID]
 		}
 	}
@@ -63,20 +63,17 @@ func (kv *KVServer) DoOp(req any) any {
 		val, ok := kv.db[op.Key]
 		if !ok {
 			res.Err = rpc.ErrNoKey
+			return res
 		}
 		res.Val = val
 		res.Err = rpc.OK
 	case "Put":
 		kv.db[op.Key] = op.Val
 		res.Err = rpc.OK
-	}
-
-	// 4. record the result to kv
-	if (op.Operation != "Get") {
+		// 4. record the result to kv
 		kv.lastAppliedSeq[op.ClientID] = op.SeqNum
-		kv.lastOpResult[op.ClientID] = res 
+		kv.lastOpResult[op.ClientID] = res
 	}
-
 	return res
 }
 
@@ -93,6 +90,16 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
+	op := Op{
+		Operation: Get, 
+		Key: args.Key, 
+		ClientID: args.ClientID
+		SeqNum: args.SeqNum
+	}
+	
+	ok, res := kv.rsm.Submit(op)
+
+	reply.
 
 }
 
