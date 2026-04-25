@@ -98,15 +98,24 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	}
 	
 	ok, res := kv.rsm.Submit(op)
-
-	reply.
-
+	reply.Err = ok
+	reply.Value = res.(Result).Value
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a PutReply: rep.(rpc.PutReply)
+	op := Op{
+		Operation: Put,
+		Key: args.Key
+		Value: args.Value
+		ClientID: args.ClientID
+		SeqNum: args.SeqNum
+	}
+
+	ok.res := kv.rsm.Submit(op)
+	reply.Err = ok
 }
 
 // the tester calls Kill() when a KVServer instance won't
@@ -141,6 +150,9 @@ func StartKVServer(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persist
 
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
 	// You may need initialization code here.
-	kv.m = make(map[string]string)
+	kv.db = make(map[string]string)
+	kv.lastAppliedSeq = make(map[int64]int)
+	kv.lastOpResult = make(map[int64]int)
+
 	return []tester.IService{kv, kv.rsm.Raft()}
 }
