@@ -2,6 +2,8 @@ package kvraft
 
 import (
 	"sync/atomic"
+	"sync"
+	"fmt"
 
 	"6.5840/kvraft1/rsm"
 	"6.5840/kvsrv1/rpc"
@@ -11,6 +13,17 @@ import (
 
 )
 
+type Result struct {
+	Value string
+	Err string
+	Version rpc.Tversion
+}
+
+type DBValue struct {
+	Value string
+	Version rpc.Tversion
+}
+
 
 type KVServer struct {
 	me   int
@@ -19,13 +32,9 @@ type KVServer struct {
 
 	// Your definitions here.
 	mu           sync.Mutex
-	db map[string]string             // datebase contains key/value pair
+	db map[string]DBValue             // datebase contains key/value pair
 	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
 	lastOpResult map[int64]Result	 // clientID -> Result
-
-}
-
-func (kv *KVServer) isDuplicate(clientID int64, seqNum int) bool {
 
 }
 
@@ -38,7 +47,7 @@ func (kv *KVServer) DoOp(req any) any {
 	// Your code here
 	// argument and return value should be Op struct in order to consistent with
 	// submit function in rsm.go
-	op, ok := req.(Op)
+	op, ok := req.(rsm.Op)
 
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
@@ -46,31 +55,41 @@ func (kv *KVServer) DoOp(req any) any {
 	// 1. type assertion, if not ok return
 	if !ok {
 		fmt.Println("type assertion failed")
-		return
 	}
 	// 2. check duplicate
-	if kv.isDuplicate(op.ClientID, op.SeqNum) {
-		if (op.Operation != "Get") {
-			// if the request is put and duplicate, just return the lastest result
-			return kv.lastOpResult[op.clientID]
-		}
+	if op.Operation != "Get" && kv.lastAppliedSeq[op.ClientID] >= op.SeqNum {
+		// if the request is put and duplicate, just return the lastest result
+		return kv.lastOpResult[op.clientID]
 	}
 
 	// 3. do operation in service database
 	res := Result{}
 	switch op.Operation {
 	case "Get":
-		val, ok := kv.db[op.Key]
+		verVal, ok := kv.db[op.Key]
 		if !ok {
 			res.Err = rpc.ErrNoKey
 			return res
 		}
-		res.Val = val
+		res.Val = verVal.Value
+		res.Version = verVal.Version
 		res.Err = rpc.OK
+
 	case "Put":
-		kv.db[op.Key] = op.Val
+		verVal, ok := kv.db[op.Key]
+		if !ok && verVal.Version != 0 {
+			res.Err = rpc.ErrNoKey
+			return res
+		}
+		// If versions don't match, return ErrVersion.
+		if op.Version != verVal.Version {
+			res.Err = rpc.ErrVersion
+			return res
+		}
+		// success, modify database
+		kv.db[op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
 		res.Err = rpc.OK
-		// 4. record the result to kv
+		// record the result to kv
 		kv.lastAppliedSeq[op.ClientID] = op.SeqNum
 		kv.lastOpResult[op.ClientID] = res
 	}
@@ -93,13 +112,29 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	op := Op{
 		Operation: Get, 
 		Key: args.Key, 
-		ClientID: args.ClientID
-		SeqNum: args.SeqNum
+		ClientID: args.ClientID,
+		SeqNum: args.SeqNum,
 	}
 	
-	ok, res := kv.rsm.Submit(op)
-	reply.Err = ok
-	reply.Value = res.(Result).Value
+	err, result := kv.rsm.Submit(op)
+
+	// if server is not leader
+    if err != rpc.OK {
+        reply.Err = err
+        return
+    }
+
+	res := result.(Result)
+    // if database is not contain this key, return rpc.ErrNoKey
+    if res.Err != rpc.ok {
+        reply.Err = res.Err
+        return
+    }
+    // success find the key value
+    reply.Err = res.Err
+    reply.Value = res.Value
+	reply.Version = res.Version
+    return
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
@@ -108,14 +143,20 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// of Submit() into a PutReply: rep.(rpc.PutReply)
 	op := Op{
 		Operation: Put,
-		Key: args.Key
-		Value: args.Value
-		ClientID: args.ClientID
-		SeqNum: args.SeqNum
+		Key: args.Key,
+		Value: args.Value,
+		ClientID: args.ClientID,
+		SeqNum: args.SeqNum,
+		Version: args.Version,
 	}
 
-	ok.res := kv.rsm.Submit(op)
-	reply.Err = ok
+	err, result := kv.rsm.Submit(op)
+	if err != rpc.OK {
+		reply.Err = err
+		return
+	}
+	res := result.(Result)
+	reply.Err = res.Err
 }
 
 // the tester calls Kill() when a KVServer instance won't
@@ -150,7 +191,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persist
 
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
 	// You may need initialization code here.
-	kv.db = make(map[string]string)
+	kv.db = make(map[string]DBValue)
 	kv.lastAppliedSeq = make(map[int64]int)
 	kv.lastOpResult = make(map[int64]int)
 

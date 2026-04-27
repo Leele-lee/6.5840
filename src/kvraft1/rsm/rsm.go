@@ -10,6 +10,7 @@ import (
 	"6.5840/raftapi"
 	"6.5840/tester1"
 
+
 )
 
 var useRaftStateMachine bool // to plug in another raft besided raft1
@@ -25,12 +26,9 @@ type Op struct {
 
 	ClientID int64
 	SeqNum int
+	Version rpc.Tversion
 }
 
-type Result struct {
-	Value string
-	Err string
-}
 
 // A server (i.e., ../server.go) that wants to replicate itself calls
 // MakeRSM and must implement the StateMachine interface.  This
