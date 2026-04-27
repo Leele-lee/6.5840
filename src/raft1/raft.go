@@ -508,12 +508,16 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 						// truant
 						rf.logs = rf.logs[:rf.getPhysicalIndex(checkConflictIndex)]
 						// append
-						rf.logs = append(rf.logs, args.Entries[i:]...)
+						newEntries := make([]LogEntry, len(args.Entries[i:]))
+						copy(newEntries, args.Entries[i:])
+						rf.logs = append(rf.logs, newEntries...)
 						rf.persist()
 						break
 					}
 				} else {
-					rf.logs = append(rf.logs, args.Entries[i:]...)
+					newEntries := make([]LogEntry, len(args.Entries[i:]))
+					copy(newEntries, args.Entries[i:])
+					rf.logs = append(rf.logs, newEntries...)
 					rf.persist()
 					break
 				}
