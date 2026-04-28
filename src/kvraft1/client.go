@@ -2,13 +2,21 @@ package kvraft
 
 import (
 	"math/big"
-	"time"
+	"log"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/tester1"
 	"crypto/rand"
 )
 
+const Debug = false // Set to false to turn off logs when you are done
+
+func DPrintf(format string, a ...interface{}) {
+	if Debug {
+		log.Printf(format, a...)
+	}
+	return
+}
 
 type Clerk struct {
 	clnt    *tester.Clnt
@@ -57,15 +65,19 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		ClientID: ck.clientID,
 		SeqNum: ck.seqNum,
 	}
+
+	DPrintf("C%d retrying...", ck.clientID)
+
 	for {
+		DPrintf("C%d retrying...", ck.clientID)
+
 		reply := rpc.GetReply{}
 		ok := ck.clnt.Call(ck.servers[serverId], "KVServer.Get", &args, &reply)
-		for !ok {
+
+		if !ok {
 			// ck.server.Call() returned false (the network dropped the packet)
-			// keep re-sending an RPC until it receives a reply
-			ok = ck.clnt.Call(ck.servers[serverId], "KVServer.Get", &args, &reply)
-			// We sleep for a few milliseconds and LOOP back to try again.
-       		time.Sleep(100 * time.Millisecond)
+			serverId = (serverId + 1) % len(ck.servers)
+			continue
 		}
 
 		val := reply.Value
@@ -76,13 +88,16 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 			ck.recentLeader = serverId
 			return val, ver, err
 		} else if err == rpc.ErrNoKey {
+			ck.recentLeader = serverId
 			return "", 0, rpc.ErrNoKey
 		} else if err == rpc.ErrWrongLeader {
 			// Not the leader or Server is down
         	// Move to the NEXT server (Round Robin)
         	serverId = (serverId + 1) % len(ck.servers)
+			continue
+		} else {
+			serverId = (serverId + 1) % len(ck.servers)
 		}
-		time.Sleep(50 * time.Millisecond)
 	}
 }
 
@@ -111,32 +126,56 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 	args := rpc.PutArgs{
 		Key: key, 
 		Value: value, 
-		Version: version}
-	reSent := 0
+		Version: version,
+		ClientID: ck.clientID,
+		SeqNum: ck.seqNum,
+	}
+
+	isRetransmission := false
 
 	for {
+		DPrintf("C%d retrying...", ck.clientID)
+
 		reply := rpc.PutReply{}
 		ok := ck.clnt.Call(ck.servers[serverId], "KVServer.Put", &args, &reply)
 		// if ok return false, it implies request lost or reply lost
-		for !ok {
-			ok = ck.clnt.Call(ck.servers[serverId], "KVServer.Put", &args, &reply)
-			reSent++
-			time.Sleep(100 * time.Millisecond)
+		if !ok {
+			// isduplicate only return true if the first reply lost and make second try
+			// Network failure, the next attempt will be a retransmission
+			isRetransmission = true
+			serverId = (serverId + 1) % len(ck.servers)
+			continue
 		}
+		if reply.Err == rpc.OK {
+			ck.recentLeader = serverId
+			return rpc.OK
 
-		ck.recentLeader = serverId
-		err := reply.Err
-		if reSent != 0 && err == rpc.ErrVersion{
-			// ErrMaybe implied the request/reply may lost or other go first, 
-			// you must determine in app
-			return rpc.ErrMaybe
-		} else if err == rpc.ErrWrongLeader {
-			// Not the leader or Server is down
-        	// Move to the NEXT server (Round Robin)
+		} else if reply.Err == rpc.ErrVersion || reply.Err == rpc.ErrNoKey{
+			ck.recentLeader = serverId
+			// if this not the first attempt, when we got this error about ErrVersion, we can not sure
+			// whether the first attempt is success or not, there are two situation:
+			// a. the first attempt is success but reply lost, the second retry got ErrVersion
+			// b. the first attempt and second are both failed, other clients exceeded them and success, the second
+			//    retry also got ErrVersion
+			// we can not distinguished these two situation, so we instead direct return ErrVersion, we return ErrMaybe
+			if isRetransmission == true {
+				return rpc.ErrMaybe
+			}
+			return reply.Err // rpc.ErrVersion or rpc.ErrNoKey
+
+		} else if reply.Err == rpc.ErrWrongLeader {
+			// the request don't execute by service, 
+			// so there is no chance that the first attempt success when the second attempt return ErrVersion
+			serverId = (serverId + 1) % len(ck.servers)
+			continue
+
+		} else {
+			// For any other unexpected error (like a server-side timeout)
+			// the request is done by service, it may be successed already, so the next attempt should worry about 
+			// tha if it return ErrVersion, is there a chance the first attempt is success, so should return ErrMaybe, 
+			// so we should set isRetransmission to true for next attempt
+			isRetransmission = true
         	serverId = (serverId + 1) % len(ck.servers)
-		} else if err == rpc.OK {
-			return err
 		}
-		time.Sleep(50 * time.Millisecond)
 	}
 }

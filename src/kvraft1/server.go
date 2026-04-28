@@ -15,7 +15,7 @@ import (
 
 type Result struct {
 	Value string
-	Err string
+	Err rpc.Err
 	Version rpc.Tversion
 }
 
@@ -52,6 +52,8 @@ func (kv *KVServer) DoOp(req any) any {
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
 
+	DPrintf("S%d Applying %v", kv.me, op)
+
 	// 1. type assertion, if not ok return
 	if !ok {
 		fmt.Println("type assertion failed")
@@ -59,7 +61,7 @@ func (kv *KVServer) DoOp(req any) any {
 	// 2. check duplicate
 	if op.Operation != "Get" && kv.lastAppliedSeq[op.ClientID] >= op.SeqNum {
 		// if the request is put and duplicate, just return the lastest result
-		return kv.lastOpResult[op.clientID]
+		return kv.lastOpResult[op.ClientID]
 	}
 
 	// 3. do operation in service database
@@ -71,7 +73,7 @@ func (kv *KVServer) DoOp(req any) any {
 			res.Err = rpc.ErrNoKey
 			return res
 		}
-		res.Val = verVal.Value
+		res.Value = verVal.Value
 		res.Version = verVal.Version
 		res.Err = rpc.OK
 
@@ -109,13 +111,15 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
-	op := Op{
-		Operation: Get, 
+	op := rsm.Op{
+		Operation: "Get", 
 		Key: args.Key, 
 		ClientID: args.ClientID,
 		SeqNum: args.SeqNum,
 	}
 	
+	DPrintf("S%d received %v", kv.me, op)
+
 	err, result := kv.rsm.Submit(op)
 
 	// if server is not leader
@@ -125,30 +129,25 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
     }
 
 	res := result.(Result)
-    // if database is not contain this key, return rpc.ErrNoKey
-    if res.Err != rpc.ok {
-        reply.Err = res.Err
-        return
-    }
-    // success find the key value
     reply.Err = res.Err
     reply.Value = res.Value
 	reply.Version = res.Version
-    return
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a PutReply: rep.(rpc.PutReply)
-	op := Op{
-		Operation: Put,
+	op := rsm.Op{
+		Operation: "Put",
 		Key: args.Key,
 		Value: args.Value,
 		ClientID: args.ClientID,
 		SeqNum: args.SeqNum,
 		Version: args.Version,
 	}
+
+	DPrintf("S%d received %v", kv.me, op)
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
@@ -170,6 +169,7 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 func (kv *KVServer) Kill() {
 	atomic.StoreInt32(&kv.dead, 1)
 	// Your code here, if desired.
+	kv.rf.Kill()
 }
 
 func (kv *KVServer) killed() bool {
@@ -193,7 +193,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persist
 	// You may need initialization code here.
 	kv.db = make(map[string]DBValue)
 	kv.lastAppliedSeq = make(map[int64]int)
-	kv.lastOpResult = make(map[int64]int)
+	kv.lastOpResult = make(map[int64]Result)
 
 	return []tester.IService{kv, kv.rsm.Raft()}
 }

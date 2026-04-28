@@ -45,7 +45,7 @@ type StateMachine interface {
 type RSM struct {
 	mu           sync.Mutex
 	me           int
-	rf           raftapi.Raft
+	Rf           raftapi.Raft
 	applyCh      chan raftapi.ApplyMsg
 	maxraftstate int // snapshot if log grows this big
 	sm           StateMachine
@@ -58,10 +58,11 @@ type RSM struct {
 // 2. should hand each committed operation to DoOp()
 // 3. if raft size is bigger than maxraftstate bytes should call snapshot
 func (rsm *RSM) applier() {
+
 	for msg := range rsm.applyCh {
 		// 1. check msg contains command or not
 		if msg.CommandValid {
-			// 2. pass the operation to service to operate
+			 //2. pass the operation to service to operate
 			res := rsm.sm.DoOp(msg.Command)
 		
 			// 3. pass the result to the correspond request channel
@@ -101,7 +102,7 @@ func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, m
 		waitCh:      make(map[int]chan any),
 	}
 	if !useRaftStateMachine {
-		rsm.rf = raft.Make(servers, me, persister, rsm.applyCh)
+		rsm.Rf = raft.Make(servers, me, persister, rsm.applyCh)
 	}
 
 	// use reader goroutine listen from raft
@@ -110,7 +111,7 @@ func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, m
 }
 
 func (rsm *RSM) Raft() raftapi.Raft {
-	return rsm.rf
+	return rsm.Rf
 }
 
 
@@ -126,7 +127,7 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	// your code here
 
 	// 2. call rf.Start
-	index, term, isLeader := rsm.rf.Start(req)
+	index, term, isLeader := rsm.Rf.Start(req)
 	if !isLeader {
 		// not leader, try another server
 		return rpc.ErrWrongLeader, nil 
@@ -149,7 +150,7 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	select {
 	case res := <- ch:
 		// Lost leadership before commit by checking term
-		currentTerm, currIsLeader := rsm.rf.GetState()
+		currentTerm, currIsLeader := rsm.Rf.GetState()
 		if !currIsLeader || currentTerm != term {
 			return rpc.ErrWrongLeader, nil
 		}
