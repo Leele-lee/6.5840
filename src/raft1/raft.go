@@ -550,9 +550,14 @@ func (rf *Raft) applier() {
 		// check commitIndex is update or not
 		// must using for loop to check instead of if 
 		// bc "Spurious Wakeup", conditional variable can occasionally wake up even if nobody called Signal()
-		for rf.commitIndex <= rf.lastApplied {
+		for !rf.killed() && rf.commitIndex <= rf.lastApplied {
 			rf.applyCond.Wait() // This atomics: Releases Lock + Sleeps
 		}
+
+		if rf.killed() {
+            rf.mu.Unlock()
+            break 
+        }
 
 		// --- ADD THIS GUARD ---
         // If a snapshot was installed while we were sleeping,
@@ -581,9 +586,10 @@ func (rf *Raft) applier() {
         // If the channel blocks here, we DON'T hold the Raft lock!
         // Heartbeats and elections can still happen in the background.
 		for _, msg := range msgs {
-			if !rf.killed() {
-				rf.applyCh <- msg
+			if rf.killed() {
+				return
 			}
+			rf.applyCh <- msg
 		}
 	}
 }
