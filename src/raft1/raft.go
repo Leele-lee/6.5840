@@ -59,6 +59,7 @@ type Raft struct {
 
 	applyCh chan raftapi.ApplyMsg
 	applyCond *sync.Cond // conditional varibale for Applier to pass commit to service/testser
+	closeOnce  sync.Once 
 
 	// Persistent state on all servers
 	currentState State
@@ -587,11 +588,15 @@ func (rf *Raft) applier() {
         // Heartbeats and elections can still happen in the background.
 		for _, msg := range msgs {
 			if rf.killed() {
-				return
+				break
 			}
 			rf.applyCh <- msg
 		}
 	}
+	// This is the "Close the door" logic
+    rf.closeOnce.Do(func() {
+    	close(rf.applyCh)
+    })
 }
 
 //appendEntry rpc to server
@@ -657,7 +662,10 @@ func (rf *Raft) Kill() {
 	atomic.StoreInt32(&rf.dead, 1)
 	// Your code here, if desired.
 	// add for kvraft rsm.go
-	close(rf.applyCh)
+	// close(rf.applyCh)
+	rf.mu.Lock()
+    defer rf.mu.Unlock()
+    rf.applyCond.Broadcast() // Wake up applier to see the dead flag
 }
 
 func (rf *Raft) killed() bool {
