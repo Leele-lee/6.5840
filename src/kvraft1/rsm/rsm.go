@@ -45,7 +45,7 @@ type StateMachine interface {
 type RSM struct {
 	mu           sync.Mutex
 	me           int
-	Rf           raftapi.Raft
+	rf           raftapi.Raft
 	applyCh      chan raftapi.ApplyMsg
 	maxraftstate int // snapshot if log grows this big
 	sm           StateMachine
@@ -102,7 +102,7 @@ func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, m
 		waitCh:      make(map[int]chan any),
 	}
 	if !useRaftStateMachine {
-		rsm.Rf = raft.Make(servers, me, persister, rsm.applyCh)
+		rsm.rf = raft.Make(servers, me, persister, rsm.applyCh)
 	}
 
 	// use reader goroutine listen from raft
@@ -111,7 +111,7 @@ func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, m
 }
 
 func (rsm *RSM) Raft() raftapi.Raft {
-	return rsm.Rf
+	return rsm.rf
 }
 
 
@@ -127,7 +127,7 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	// your code here
 
 	// 2. call rf.Start
-	index, term, isLeader := rsm.Rf.Start(req)
+	index, term, isLeader := rsm.rf.Start(req)
 	if !isLeader {
 		// not leader, try another server
 		return rpc.ErrWrongLeader, nil 
@@ -150,7 +150,7 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	select {
 	case res := <- ch:
 		// Lost leadership before commit by checking term
-		currentTerm, currIsLeader := rsm.Rf.GetState()
+		currentTerm, currIsLeader := rsm.rf.GetState()
 		if !currIsLeader || currentTerm != term {
 			return rpc.ErrWrongLeader, nil
 		}
