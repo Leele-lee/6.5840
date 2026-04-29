@@ -169,7 +169,8 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 func (kv *KVServer) Kill() {
 	atomic.StoreInt32(&kv.dead, 1)
 	// Your code here, if desired.
-	kv.rf.Kill()
+	//kv.rsm.Kill()
+	//kv.rsm.Rf.Kill()
 }
 
 func (kv *KVServer) killed() bool {
