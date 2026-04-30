@@ -73,6 +73,19 @@ func (rsm *RSM) applier() {
 			if ok {
 				ch <- res
 			}
+
+			// 4. check we need snapshot or not
+			if rsm.maxraftstate != -1 && rsm.rf.PersistBytes() >= rsm.maxraftstate {
+				// invoke server.snapshot and wait return
+				snapshot := rsm.sm.Snapshot()
+				// invoke raft.snapshot and pass the snap to it
+				commitIndex := msg.CommandIndex
+				rsm.rf.Snapshot(commitIndex, snapshot)
+			}
+		} else if msg.SnapshotValid {
+			// if receive snapshot from raft
+			// should call restore in server.go
+			rsm.sm.Restore(msg.Snapshot)
 		}
 	}
 

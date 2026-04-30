@@ -876,7 +876,10 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 
 	// if leader has more entry than follower, send AE otherwise send hearbeat(no entry)
 	if len(rf.logs) - 1 + rf.lastIncludedIndex >= rf.nextIndex[i] {
-		entry = rf.logs[rf.getPhysicalIndex(rf.nextIndex[i]):]
+		remainingLogs := rf.logs[rf.getPhysicalIndex(rf.nextIndex[i]):]
+		entry = make([]LogEntry, len(remainingLogs))
+		copy(entry, remainingLogs)
+		//entry = rf.logs[rf.getPhysicalIndex(rf.nextIndex[i]):]
 	} else {
 		entry = nil
 	}

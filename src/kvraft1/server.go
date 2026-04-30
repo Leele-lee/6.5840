@@ -4,6 +4,7 @@ import (
 	"sync/atomic"
 	"sync"
 	"fmt"
+	"bytes"
 
 	"6.5840/kvraft1/rsm"
 	"6.5840/kvsrv1/rpc"
@@ -36,6 +37,12 @@ type KVServer struct {
 	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
 	lastOpResult map[int64]Result	 // clientID -> Result
 
+}
+
+type persistState struct {
+	db map[string]DBValue
+	lastAppliedSeq map[int64]int
+	lastOpResult map[int64]Result
 }
 
 // To type-cast req to the right type, take a look at Go's type switches or type
@@ -100,11 +107,45 @@ func (kv *KVServer) DoOp(req any) any {
 
 func (kv *KVServer) Snapshot() []byte {
 	// Your code here
-	return nil
+	// lock before serialize in case of panaic when the data is writing by other goroutines
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+
+	var ps persistState
+	ps.db = kv.db
+	ps.lastAppliedSeq = kv.lastAppliedSeq
+	ps.lastOpResult = kv.lastOpResult
+
+	e.Encode(ps)
+	
+	return w.Bytes()
 }
 
 func (kv *KVServer) Restore(data []byte) {
 	// Your code here
+	// while rsm invoke restore(), may have other clients change the data eg. kv.db
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
+	if data == nil || len(data) < 1 { // bootstrap without any state?
+		return
+	}
+
+	r := bytes.NewBuffer(data)
+	d := labgob.NewDecoder(r)
+
+	var ps persistState
+
+	if d.Decode(&ps) != nil {
+		panic("resetore Persist: failed to decode server state")
+	} else {
+		kv.db = ps.db
+		kv.lastAppliedSeq = ps.lastAppliedSeq
+		kv.lastOpResult = ps.lastOpResult
+	}
 }
 
 func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
