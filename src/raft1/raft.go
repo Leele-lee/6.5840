@@ -475,7 +475,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			reply.XTerm = rf.getLogEntry(args.PreLogIndex).Term
 			// find the XIndex, index of first entry with that conflict term
 			i := args.PreLogIndex
-			for i > 0 && rf.getLogEntry(i).Term == reply.XTerm {
+			// CRITICAL: Stop the loop at lastIncludedIndex
+    		// We cannot look at i-1 if it's smaller than lastIncludedIndex
+			for i > rf.lastIncludedIndex && rf.getLogEntry(i).Term == reply.XTerm {
 				i--;
 			}
 			reply.XIndex  = i
@@ -924,13 +926,20 @@ func (rf *Raft) sendAppendEntriesToPeer(i int, term int) {
 			rf.nextIndex[i] = reply.XLen
 		} else {  // then check the leader has conflict term or not
 			j := args.PreLogIndex
-			for j > 0 && rf.getLogEntry(j).Term != reply.XTerm {
+
+			for j > rf.lastIncludedIndex && rf.getLogEntry(j).Term != reply.XTerm {
 				j--
 			}
-			if j == 0 {  // case a: (leader doesn't have XTerm): nextIndex = XIndex
-				rf.nextIndex[i] = reply.XIndex
-			} else {   // Case b: (leader has XTerm): nextIndex = leader's last entry for XTerm
-				rf.nextIndex[i] = j
+
+			// Ensure j doesn't go below the part of the log we still have in memory
+			if j > rf.lastIncludedIndex {
+    			// We found the term in our log!
+    			rf.nextIndex[i] = j
+			} else {
+				// Case b: (leader doesn't have XTerm): nextIndex = XIndex
+    			// We didn't find the term before hitting the snapshot.
+    			// Just use the follower's suggestion or the snapshot index.
+    			rf.nextIndex[i] = reply.XIndex
 			}
 		}
 		if rf.nextIndex[i] < 1 {
