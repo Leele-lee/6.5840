@@ -89,8 +89,8 @@ func (rsm *RSM) applier() {
 				// invoke server.snapshot and wait return
 				snapshot := rsm.sm.Snapshot()
 				// invoke raft.snapshot and pass the snap to it
-				commitIndex := msg.CommandIndex
-				rsm.rf.Snapshot(commitIndex, snapshot)
+				commandIndex := msg.CommandIndex
+				rsm.rf.Snapshot(commandIndex, snapshot)
 			}
 		} else if msg.SnapshotValid {
 			// CRITICAL: Only restore if the snapshot is NEWER than our current state
