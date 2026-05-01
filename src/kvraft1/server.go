@@ -39,10 +39,10 @@ type KVServer struct {
 
 }
 
-type persistState struct {
-	db map[string]DBValue
-	lastAppliedSeq map[int64]int
-	lastOpResult map[int64]Result
+type PersistState struct {
+	Db map[string]DBValue
+	LastAppliedSeq map[int64]int
+	LastOpResult map[int64]Result
 }
 
 // To type-cast req to the right type, take a look at Go's type switches or type
@@ -114,10 +114,10 @@ func (kv *KVServer) Snapshot() []byte {
 	w := new(bytes.Buffer)
 	e := labgob.NewEncoder(w)
 
-	var ps persistState
-	ps.db = kv.db
-	ps.lastAppliedSeq = kv.lastAppliedSeq
-	ps.lastOpResult = kv.lastOpResult
+	var ps PersistState
+	ps.Db = kv.db
+	ps.LastAppliedSeq = kv.lastAppliedSeq
+	ps.LastOpResult = kv.lastOpResult
 
 	e.Encode(ps)
 	
@@ -137,14 +137,14 @@ func (kv *KVServer) Restore(data []byte) {
 	r := bytes.NewBuffer(data)
 	d := labgob.NewDecoder(r)
 
-	var ps persistState
+	var ps PersistState
 
 	if d.Decode(&ps) != nil {
 		panic("resetore Persist: failed to decode server state")
 	} else {
-		kv.db = ps.db
-		kv.lastAppliedSeq = ps.lastAppliedSeq
-		kv.lastOpResult = ps.lastOpResult
+		kv.db = ps.Db
+		kv.lastAppliedSeq = ps.LastAppliedSeq
+		kv.lastOpResult = ps.LastOpResult
 	}
 }
 

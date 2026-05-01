@@ -51,6 +51,7 @@ type RSM struct {
 	sm           StateMachine
 	// Your definitions here.
 	waitCh       map[int]chan any  // commit index in log -> commit chan waitting reply from GoOp
+	lastApplied  int // last applied index in raft, it used for conditional invoke DoOp and Restore
 }
 
 // reader goroutine listen from raft
@@ -62,10 +63,19 @@ func (rsm *RSM) applier() {
 	for msg := range rsm.applyCh {
 		// 1. check msg contains command or not
 		if msg.CommandValid {
-			 //2. pass the operation to service to operate
+			// CRITICAL: Ignore commands that are already applied 
+            // (though Raft usually ensures this, it's good practice)
+			if msg.CommandIndex <= rsm.lastApplied {
+				continue
+			}
+
+			//2. update rsm.lastApplied
+			rsm.lastApplied = msg.CommandIndex
+
+			//3. pass the operation to service to operate
 			res := rsm.sm.DoOp(msg.Command)
 		
-			// 3. pass the result to the correspond request channel
+			// 4. pass the result to the correspond request channel
 			rsm.mu.Lock()
 			ch, ok := rsm.waitCh[msg.CommandIndex]
 			rsm.mu.Unlock()
@@ -83,8 +93,15 @@ func (rsm *RSM) applier() {
 				rsm.rf.Snapshot(commitIndex, snapshot)
 			}
 		} else if msg.SnapshotValid {
-			// if receive snapshot from raft
-			// should call restore in server.go
+			// CRITICAL: Only restore if the snapshot is NEWER than our current state
+			if msg.SnapshotIndex <= rsm.lastApplied {
+				continue
+			}
+
+			// update the index to the snapshot's index
+			rsm.lastApplied = msg.SnapshotIndex
+		
+			// restore sate machine server
 			rsm.sm.Restore(msg.Snapshot)
 		}
 	}
