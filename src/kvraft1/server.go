@@ -52,7 +52,7 @@ type PersistState struct {
 // https://go.dev/tour/methods/15
 func (kv *KVServer) DoOp(req any) any {
 	// Your code here
-	// argument and return value should be Op struct in order to consistent with
+	// argument should be Op struct in order to consistent with
 	// submit function in rsm.go
 	op, ok := req.(rsm.Op)
 
