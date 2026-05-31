@@ -247,6 +247,22 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
 
 	// Your code here
+	// You may need initialization code here.
+	// 1. Initialize the maps first (so Restore has something to fill)
+	kv.db = make(map[string]DBValue)
+	kv.lastAppliedSeq = make(map[int64]int)
+	kv.lastOpResult = make(map[int64]Result)
+
+	// 2. Read the existing snapshot from the persister
+	snapshotData := persister.ReadSnapshot()
+
+	// 3. Restore the state if a snapshot exists
+    // (This before RSM starts, make sure the KV maps are ready)
+	kv.Restore(snapshotData)
+
+	// 4. Start the RSM/Raft
+	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
+
 
 	return []tester.IService{kv, kv.rsm.Raft()}
 }
