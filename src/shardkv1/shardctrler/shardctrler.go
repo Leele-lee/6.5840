@@ -6,7 +6,10 @@ package shardctrler
 
 import (
 
+	"log"
+	"fmt"
 	"6.5840/kvsrv1"
+	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/shardkv1/shardcfg"
 	"6.5840/tester1"
@@ -21,6 +24,7 @@ type ShardCtrler struct {
 	killed int32 // set by Kill()
 
 	// Your data here.
+	latestConfig int // the latest configure version number
 }
 
 // Make a ShardCltler, which stores its state in a kvsrv.
@@ -45,6 +49,23 @@ func (sck *ShardCtrler) InitController() {
 // lists shardgrp shardcfg.Gid1 for all shards.
 func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 	// Your code here
+
+	// convert confifgure to string
+	configString := cfg.String()
+
+	// Choose a key that represents "Version 0"
+    // (Ensure your Query() logic knows how to find this key later)
+	key := "config-0"
+
+	// put k/v pairs to kvsrv
+	err := sck.IKVClerk.Put(key, configString, 0)
+
+	if err != rpc.OK {
+		log.Fatalf("Has trouble when put configure to kvsrv")
+	}
+
+	// update the latest configure version number
+	sck.latestConfig = 0
 }
 
 // Called by the tester to ask the controller to change the
@@ -59,6 +80,12 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 // Return the current configuration
 func (sck *ShardCtrler) Query() *shardcfg.ShardConfig {
 	// Your code here.
-	return nil
-}
 
+	key := fmt.Sprintf("config-%d", sck.latestConfig)
+	// get version number from kvsrv and turn to ShardConfig
+	val, _, err := sck.IKVClerk.Get(key)
+	if err != rpc.OK {
+		log.Fatalf("no configure for current version: %d", sck.latestConfig)
+	}
+	return shardcfg.FromString(val)
+}
