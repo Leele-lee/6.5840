@@ -2,6 +2,9 @@ package shardgrp
 
 import (
 	"sync/atomic"
+	"sync"
+	"fmt"
+	"bytes"
 
 
 	"6.5840/kvraft1/rsm"
@@ -27,7 +30,7 @@ type KVServer struct {
 	me   int
 	dead int32 // set by Kill()
 	rsm  *rsm.RSM
-	gid  tester.Tgid
+	gid  tester.Tgid // the groupID for this specific group
 
 	// Your code here
 	mu           sync.Mutex

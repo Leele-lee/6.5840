@@ -2,10 +2,23 @@ package shardgrp
 
 import (
 
+	"math/big"
+	"log"
+
 	"6.5840/kvsrv1/rpc"
 	"6.5840/shardkv1/shardcfg"
 	"6.5840/tester1"
+	"crypto/rand"
 )
+
+const Debug = false // Set to false to turn off logs when you are done
+
+func DPrintf(format string, a ...interface{}) {
+	if Debug {
+		log.Printf(format, a...)
+	}
+	return
+}
 
 type Clerk struct {
 	clnt    *tester.Clnt
@@ -24,10 +37,12 @@ func nrand() int64 {
 }
 
 func MakeClerk(clnt *tester.Clnt, servers []string) *Clerk {
-	ck := &Clerk{clnt: clnt, servers: servers}
-	ck.clientID = nrand()
-	ck.seqNum = 0
-	ck.recentLeader = 0
+	ck := &Clerk{clnt: clnt, 
+		servers: servers,
+		clientID: nrand(),
+		seqNum: 0,
+		recentLeader: 0,
+	}
 	return ck
 }
 

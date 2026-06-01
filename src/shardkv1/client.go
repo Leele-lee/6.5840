@@ -10,16 +10,29 @@ package shardkv
 
 import (
 
+	"sync"
+	"time"
+
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/shardkv1/shardctrler"
 	"6.5840/tester1"
+
+	"6.5840/shardkv1/shardgrp" 
+	"6.5840/shardkv1/shardcfg"
 )
 
 type Clerk struct {
 	clnt *tester.Clnt
 	sck  *shardctrler.ShardCtrler
 	// You will have to modify this struct.
+
+	// every group has a specific shardgrp.clerk
+	// Map Group ID -> specific group clerk
+	groupClerks map[shardcfg.Tshid]*shardgrp.Clerk
+
+	// You might need a mutex if your client is multi-threaded
+    mu sync.Mutex 
 }
 
 // The tester calls MakeClerk and passes in a shardctrler so that
@@ -28,6 +41,7 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 	ck := &Clerk{
 		clnt: clnt,
 		sck:  sck,
+		groupClerks: make(map[shardcfg.Tshid]*shardgrp.Clerk),
 	}
 	// You'll have to add code here.
 	return ck
@@ -41,11 +55,90 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 // calling shardgrp.MakeClerk(ck.clnt, servers).
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 	// You will have to modify this function.
-	return "", 0, ""
+	for {
+		// find which shard has this key
+		shard := shardcfg.Key2Shard(key)
+		
+		// To put/get a key from a shardgrp, the shardkv clerk should create a 
+		// shardgrp clerk for the shardgrp by calling shardgrp.MakeClerk , 
+		// passing in the servers found in the configuration and the shardkv clerk's ck.clnt . 
+		// Use the GidServers()  method from ShardConfig  to get the group for a shard
+
+		// bc make shardgrp.clerk need current servers in group which could change at anytime
+		// so we makeclerk lazily when we need, not at the shardkv.makeClerk
+
+		// get current config
+		config := ck.sck.Query()
+
+		// find the group ID and servers for this shard in configuration
+		_, servers, ok := config.GidServers(shard)
+		if !ok {
+			// If we reach here, the shard isn't assigned yet (gid 0)
+        	// or there's a temporary failure. Wait and retry.
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+
+		// Get (or create) the clerk for this specific group
+		ck.mu.Lock()
+		gClerk, ok := ck.groupClerks[shard]
+		if !ok {
+			// not exsit shargrp clerk for current shargrp ID, so we create one
+			gClerk = shardgrp.MakeClerk(ck.clnt, servers)
+		}
+		ck.mu.Unlock()
+		
+		// ask that group for the key
+		val, ver, err := gClerk.Get(key)
+		
+		// handle the result
+		if err == rpc.ErrWrongGroup {
+			// The config changed while we were talking to them!
+            // Loop again to Query() the new config.
+			continue
+		} else {
+			return val, ver, err
+		}
+	}
 }
 
 // Put a key to a shard group.
 func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 	// You will have to modify this function.
-	return ""
+
+	for {
+		//  which shard is a key in?
+		shard := shardcfg.Key2Shard(key)
+
+		// get current config
+		config := ck.sck.Query()
+
+		// find the group ID and servers for this shard in configuration
+		_, servers, ok := config.GidServers(shard)
+		if !ok {
+			// If we reach here, the shard isn't assigned yet (gid 0)
+        	// or there's a temporary failure. Wait and retry.
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+
+		// Get (or create) the clerk for this specific group
+
+		ck.mu.Lock()
+		gClerk, ok := ck.groupClerks[shard]
+		if !ok {
+			// not exsit shargrp clerk for current shargrp ID, so we create one
+			gClerk = shardgrp.MakeClerk(ck.clnt, servers)
+		}
+		ck.mu.Unlock()
+
+		// put key to that group
+		err := gClerk.Put(key, value, version)
+
+		if err == rpc.ErrWrongGroup {
+			continue
+		} else {
+			return err
+		}
+	}
 }
