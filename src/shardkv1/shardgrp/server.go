@@ -11,6 +11,7 @@ import (
 	"6.5840/kvsrv1/rpc"
 	"6.5840/labgob"
 	"6.5840/labrpc"
+	"6.5840/shardkv1/shardcfg"
 	"6.5840/shardkv1/shardgrp/shardrpc"
 	"6.5840/tester1"
 )
@@ -34,9 +35,19 @@ type KVServer struct {
 
 	// Your code here
 	mu           sync.Mutex
-	db map[string]DBValue             // datebase contains key/value pair
+	db map[string]DBValue            // datebase contains key/value pair
 	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
 	lastOpResult map[int64]Result	 // clientID -> Result
+
+	// You need a way to track which shards this group currently owns
+    // There are usually 12 shards (shardcfg.NShards)
+	// servingShards[i] is true if this group is responsible for Shard i
+	serveringShards [shardcfg.NShards]bool
+
+	// shardConfigNums tracks the version (Num) of the config that 
+	// most recently updated the status of this specific shard.
+	// shardgrps must remember the largest Num  they have seen for each shard.
+	shardConfigNums [shardcfg.NShards]shardcfg.Tnum
 }
 
 type PersistState struct {
@@ -262,6 +273,22 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// 3. Restore the state if a snapshot exists
     // (This before RSM starts, make sure the KV maps are ready)
 	kv.Restore(snapshotData)
+
+	// 3.5  APPLY THE HINT HERE:
+    // Check if this server belongs to the very first group (Gid1)
+	if kv.gid == shardcfg.Gid1 {
+		// If we are Group 1, we start by owning EVERYTHING.
+		for i := 0; i < shardcfg.NShards; i++ {
+			kv.serveringShards[i] = true
+		}
+	} else {
+		// Any other group (Group 2, 3, etc.) starts with nothing.
+        // They only get shards when the controller tells them to.
+		// actually no need initialized here bc the default value is false
+		for i:= 0; i < shardcfg.NShards; i++ {
+			kv.serveringShards[i] = false
+		}
+	}
 
 	// 4. Start the RSM/Raft
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
