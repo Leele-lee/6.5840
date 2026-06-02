@@ -171,6 +171,22 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	
 	DPrintf("S%d received %v", kv.me, op)
 
+	// for a key whose shard is not assigned to the shardgrp
+	// return rpc.ErrWrongGroup
+
+	// find which shard has this key
+	shard := shardcfg.Key2Shard(key)
+
+	kv.mu.Lock()
+	
+	// this shardgrp didn't respond for this shard
+	if !kv.serveringShards[shard] {
+		reply.Err = rpc.ErrWrongGroup
+		kv.mu.Unlock()
+		return 
+	}
+	kv.mu.Unlock()
+
 	err, result := kv.rsm.Submit(op)
 
 	// if server is not leader
@@ -186,7 +202,21 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
-	// Your code here
+	// Your code here	
+
+	// find which shard has this key
+	shard := shardcfg.Key2Shard(key)
+
+	kv.mu.Lock()
+	// this shardgrp didn't respond for this shard
+	if !kv.serveringShards[shard] {
+		reply.Err = rpc.ErrWrongGroup
+		kv.mu.Unlock()
+		return 
+	}
+
+	kv.mu.Unlock()
+
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a PutReply: rep.(rpc.PutReply)
 	op := rsm.Op{

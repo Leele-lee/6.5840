@@ -97,6 +97,9 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
         	// Move to the NEXT server (Round Robin)
         	serverId = (serverId + 1) % len(ck.servers)
 			continue
+		} else if err == rpc.ErrWrongGroup {
+			ck.recentLeader = serverId
+			return val, ver, err
 		} else {
 			serverId = (serverId + 1) % len(ck.servers)
 		}
@@ -171,6 +174,10 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 			serverId = (serverId + 1) % len(ck.servers)
 			continue
 
+		} else if err == rpc.ErrWrongGroup {
+			ck.recentLeader = serverId
+			return val, ver, err
+			
 		} else {
 			// For any other unexpected error (like a server-side timeout)
 			// the request is done by service, it may be successed already, so the next attempt should worry about 
