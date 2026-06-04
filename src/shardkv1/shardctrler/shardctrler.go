@@ -90,10 +90,6 @@ func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 	//err2 := sck.IKVClerk.Put("current-config", configString, 0)
 	safeUpdate(key, configString)
 	safeUpdate(currConfigKey, configString)
-
-
-	// update the latest configure version number
-	sck.currConfigKey = cfg
 }
 
 // get current version and put version in new put, if superseded by another controller 

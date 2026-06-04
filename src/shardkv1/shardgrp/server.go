@@ -35,7 +35,6 @@ type KVServer struct {
 
 	// Your code here
 	mu           sync.Mutex
-	db map[string]DBValue            // datebase contains key/value pair
 	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
 	lastOpResult map[int64]Result	 // clientID -> Result
 
@@ -48,6 +47,11 @@ type KVServer struct {
 	// most recently updated the status of this specific shard.
 	// shardgrps must remember the largest Num  they have seen for each shard.
 	shardConfigNums [shardcfg.NShards]shardcfg.Tnum
+
+	// maintain all kv data for every shard in this group
+	// We use an array of maps, one for each Shard ID. 
+	// This makes migration (Freeze/Install) much easier
+	shardsData [shardcfg.NShards]map[string]DBValue
 }
 
 type PersistState struct {
@@ -82,7 +86,13 @@ func (kv *KVServer) DoOp(req any) any {
 	res := Result{}
 	switch op.Operation {
 	case "Get":
-		verVal, ok := kv.db[op.Key]
+		// if current group don't have this shard, return err ErrwrongGroup
+		shard := shardcfg.Key2Shard(op.Key)
+		if !kv.serveringShards[shard] {
+			res.Err = rpc.ErrWrongGroup
+			return
+		}
+		verVal, ok := kv.shardsData[shard][op.Key]
 		if !ok {
 			res.Err = rpc.ErrNoKey
 			return res
@@ -92,7 +102,13 @@ func (kv *KVServer) DoOp(req any) any {
 		res.Err = rpc.OK
 
 	case "Put":
-		verVal, ok := kv.db[op.Key]
+		// if current group don't have this shard, return err ErrwrongGroup
+		shard := shardcfg.Key2Shard(op.Key)
+		if !kv.serveringShards[shard] {
+			res.Err = rpc.ErrWrongGroup
+			return
+		}
+		verVal, ok := kv.shardsData[shard][op.Key]
 		if !ok && verVal.Version != 0 {
 			res.Err = rpc.ErrNoKey
 			return res
@@ -103,7 +119,7 @@ func (kv *KVServer) DoOp(req any) any {
 			return res
 		}
 		// success, modify database
-		kv.db[op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
+		kv.shardsData[shard][op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
 		res.Err = rpc.OK
 		// record the result to kv
 		kv.lastAppliedSeq[op.ClientID] = op.SeqNum
@@ -124,7 +140,7 @@ func (kv *KVServer) Snapshot() []byte {
 	e := labgob.NewEncoder(w)
 
 	var ps PersistState
-	ps.Db = kv.db
+	//ps.Db = kv.db
 	ps.LastAppliedSeq = kv.lastAppliedSeq
 	ps.LastOpResult = kv.lastOpResult
 
@@ -243,6 +259,28 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 // shard) and return the key/values stored in that shard.
 func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.FreezeShardReply) {
 	// Your code here
+	
+	shardID := args.Shard
+	configNumForShard := args.Num
+
+	kv.mu.Lock()
+	defer kv.mu.Unlock()
+
+	// reject old config version num
+	// If we are ALREADY at a higher version, we might have already deleted the data!
+	if configNumForShard < kv.shardConfigNums[shardID] {
+		// if the data is gone, we cann't request this old request
+		if kv.shardsData[shardID] == nil {
+			reply.Err = roc.ErrNoKey
+			return
+		}
+		// if we still have the data, return it
+		// let executeMoves to check the installShard is done or not
+		reply.State 
+
+	}
+
+
 }
 
 // Install the supplied state for the specified shard.
@@ -293,16 +331,21 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// Your code here
 	// You may need initialization code here.
 	// 1. Initialize the maps first (so Restore has something to fill)
-	kv.db = make(map[string]DBValue)
+	//kv.db = make(map[string]DBValue)
 	kv.lastAppliedSeq = make(map[int64]int)
 	kv.lastOpResult = make(map[int64]Result)
 
-	// 2. Read the existing snapshot from the persister
-	snapshotData := persister.ReadSnapshot()
+	// iterate through all shard to initialize
+	for i := 0; i < shardcfg.NShards; i++ {
+		// important, must initialize kv data map for each shard
+		kv.shardsData[i] = make(map[string]DBValue)
 
-	// 3. Restore the state if a snapshot exists
-    // (This before RSM starts, make sure the KV maps are ready)
-	kv.Restore(snapshotData)
+		// in default, the biggest config version num for all shard is 0
+		kv.shardConfigNums[i] = 0
+
+		// in default, the group don't have any shard
+		kv.serveringShards[i] = false
+	}
 
 	// 3.5  APPLY THE HINT HERE:
     // Check if this server belongs to the very first group (Gid1)
@@ -311,14 +354,14 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 		for i := 0; i < shardcfg.NShards; i++ {
 			kv.serveringShards[i] = true
 		}
-	} else {
-		// Any other group (Group 2, 3, etc.) starts with nothing.
-        // They only get shards when the controller tells them to.
-		// actually no need initialized here bc the default value is false
-		for i:= 0; i < shardcfg.NShards; i++ {
-			kv.serveringShards[i] = false
-		}
-	}
+	} 
+
+	// 2. Read the existing snapshot from the persister
+	snapshotData := persister.ReadSnapshot()
+
+	// 3. Restore the state if a snapshot exists
+    // (This before RSM starts, make sure the KV maps are ready)
+	kv.Restore(snapshotData)
 
 	// 4. Start the RSM/Raft
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
