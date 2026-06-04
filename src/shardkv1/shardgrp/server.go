@@ -55,9 +55,11 @@ type KVServer struct {
 }
 
 type PersistState struct {
-	Db map[string]DBValue
 	LastAppliedSeq map[int64]int
 	LastOpResult map[int64]Result
+	ServeringShards [shardcfg.NShards]bool
+	ShardConfigNums [shardcfg.NShards]shardcfg.Tnum
+	ShardsData [shardcfg.NShards]map[string]DBValue
 }
 
 
@@ -143,6 +145,9 @@ func (kv *KVServer) Snapshot() []byte {
 	//ps.Db = kv.db
 	ps.LastAppliedSeq = kv.lastAppliedSeq
 	ps.LastOpResult = kv.lastOpResult
+	ps.ServeringShards = kv.serveringShards
+	ps.ShardConfigNums = kv.shardConfigNums
+	ps.ShardsData = kv.shardsData
 
 	e.Encode(ps)
 	
@@ -170,6 +175,9 @@ func (kv *KVServer) Restore(data []byte) {
 		kv.db = ps.Db
 		kv.lastAppliedSeq = ps.LastAppliedSeq
 		kv.lastOpResult = ps.LastOpResult
+		kv.serveringShards = ps.ServeringShards
+		kv.shardConfigNums = ps.ShardConfigNums
+		kv.shardsData = ps.ShardsData
 	}
 }
 
@@ -331,7 +339,6 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// Your code here
 	// You may need initialization code here.
 	// 1. Initialize the maps first (so Restore has something to fill)
-	//kv.db = make(map[string]DBValue)
 	kv.lastAppliedSeq = make(map[int64]int)
 	kv.lastOpResult = make(map[int64]Result)
 
