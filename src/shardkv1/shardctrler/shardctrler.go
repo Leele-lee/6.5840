@@ -16,8 +16,8 @@ import (
 )
 
 const {
-	currConfigKey = "current-config"
-	nextConfigKey = "next-config"
+	CurrConfigKey = "current-config"
+	NextConfigKey = "next-config"
 }
 
 // ShardCtrler for the controller and kv clerk.
@@ -28,8 +28,8 @@ type ShardCtrler struct {
 	killed int32 // set by Kill()
 
 	// Your data here.
-	//currConfigKeyNum shardgrp.Tnum // the latest configure version number
-	//currConfigKey sharddcfg.ShardConfig
+	//CurrConfigKeyNum shardgrp.Tnum // the latest configure version number
+	//CurrConfigKey sharddcfg.ShardConfig
 }
 
 // Make a ShardCltler, which stores its state in a kvsrv.
@@ -47,8 +47,8 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 func (sck *ShardCtrler) InitController() {
 	// first check if there is a stored next configuration with 
 	// a TASK higher configuration number than the current one
-	nextStr, _, _ := sck.IKVClerk.Get(nextConfigKey)
-	currStr, _, _ := sck.IKVClerk.Get(currConfigKey)
+	nextStr, _, _ := sck.IKVClerk.Get(NextConfigKey)
+	currStr, _, _ := sck.IKVClerk.Get(CurrConfigKey)
 
 	if currStr == "" { return }
 	currConfig := shardcfg.FromString(currStr)
@@ -64,7 +64,7 @@ func (sck *ShardCtrler) InitController() {
 			sck.executeMoves(currConfig, nextConfig)
 
 			// 2. FINALLY POST the new configuration
-			safeUpdate(nextConfigKey, nextStr)
+			safeUpdate(NextConfigKey, nextStr)
 		}
 	}
 }
@@ -89,7 +89,7 @@ func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 	//err := sck.IKVClerk.Put(key, configString, 0)
 	//err2 := sck.IKVClerk.Put("current-config", configString, 0)
 	safeUpdate(key, configString)
-	safeUpdate(currConfigKey, configString)
+	safeUpdate(CurrConfigKey, configString)
 }
 
 // get current version and put version in new put, if superseded by another controller 
@@ -150,13 +150,24 @@ func (sck *ShardCltler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		
 		// 1. else first freeze changed shards in old shardgrp
 		// pass shardID and configNum ID
-		data, err := oldGrpClerk.FreezeShard(i, oldConfig.Num)
+		data, lastOpResult, lastAppliedSeq, err := oldGrpClerk.FreezeShard(i, config.Num)
+		// the current request has been operate
+		if err == rpc.OK {
+			// 2. copy (install) the shard to the destination shardgrp
+			err = newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, conifg.Num)
 
-		// 2. copy (install) the shard to the destination shardgrp
-		err = newGrpClerk.InstallShard(i, data, conifg.Num)
+			// 3. then delete the frozen shard
+			err = oldGrpClerk.DeleteShard(i, config.Num)
+		} else if err == rpc.ErrNoKey {
+			// THIS IS THE FIX:
+			// If the old group says "I don't have this key," it means 
+			// someone else (a previous controller) already finished this move!
+			// We can safely assume the data is already at the destination.
+			log.Printf("Shard %d already moved, skipping...", shardID)
+			continue
+		}
 
-		// 3. then delete the frozen shard
-		err = oldGrpClerk.DeleteShard(i, oldConfig.Num)
+
 	}
 
 }
@@ -172,7 +183,7 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
     // We store the "Next" config so if we crash, the next controller knows what to do
 	// put new config as k/v pairs into kvsrv
 	//err := sck.IKVClerk.Put("next-conifg", configString, 0)
-	safeUpdate(nextConfigKey, newConfigString)
+	safeUpdate(NextConfigKey, newConfigString)
 
  	// STEP 2: EXECUTE (Move the data)
 	oldConfig := sck.Query() // get the current/old config
@@ -187,7 +198,7 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// using "next-config" as key
 	// (Ensure your Query() logic knows how to find this key later)
 	// succeesed, update current-configure
-	safeUpdate(currConfigKey, newConfigString)
+	safeUpdate(CurrConfigKey, newConfigString)
 }
 
 
@@ -196,7 +207,7 @@ func (sck *ShardCtrler) Query() *shardcfg.ShardConfig {
 	// Your code here.
 
 	// get version number from kvsrv and turn to ShardConfig
-	val, _, err := sck.IKVClerk.Get(currConfigKey)
+	val, _, err := sck.IKVClerk.Get(CurrConfigKey)
 	if err != rpc.OK {
 		log.Fatalf("no configure for current version")
 	}

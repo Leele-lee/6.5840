@@ -3,6 +3,7 @@ package shardrpc
 import (
 	"6.5840/kvsrv1/rpc"
 	"6.5840/shardkv1/shardcfg"
+	"6.5840/shardgrp"
 )
 
 type FreezeShardArgs struct {
@@ -11,14 +12,20 @@ type FreezeShardArgs struct {
 }
 
 type FreezeShardReply struct {
-	State []byte
+	//State []byte
+	Data map[string]shardgrp.DBValue
+	LastOpResult map[int64]shardgrp.Result
+	lastAppliedSeq map[int64]int
 	Num   shardcfg.Tnum
 	Err   rpc.Err
 }
 
 type InstallShardArgs struct {
 	Shard shardcfg.Tshid
-	State []byte
+	//State []byte
+	Data map[string]shardgrp.DBValue
+	LastOpResult map[int64]shardgrp.Result
+	lastAppliedSeq map[int64]int
 	Num   shardcfg.Tnum
 }
 

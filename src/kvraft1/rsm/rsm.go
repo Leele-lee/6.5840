@@ -9,7 +9,7 @@ import (
 	"6.5840/raft1"
 	"6.5840/raftapi"
 	"6.5840/tester1"
-
+	"6.5840/shardkv1/shardcfg"
 
 )
 
@@ -27,6 +27,12 @@ type Op struct {
 	ClientID int64
 	SeqNum int
 	Version rpc.Tversion
+
+	// must add fields for lab5 shardkvsrv
+	ShardID shardcfg.Tshid
+	ConfigNum shardcfg.Tnum
+
+	//Data map[string]DBValue // the kv data in shard, used by installShard
 }
 
 

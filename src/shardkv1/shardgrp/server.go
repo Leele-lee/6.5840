@@ -35,8 +35,6 @@ type KVServer struct {
 
 	// Your code here
 	mu           sync.Mutex
-	lastAppliedSeq map[int64]int     // clientID -> the last applied sequence number
-	lastOpResult map[int64]Result	 // clientID -> Result
 
 	// You need a way to track which shards this group currently owns
     // There are usually 12 shards (shardcfg.NShards)
@@ -46,28 +44,71 @@ type KVServer struct {
 	// shardConfigNums tracks the version (Num) of the config that 
 	// most recently updated the status of this specific shard.
 	// shardgrps must remember the largest Num  they have seen for each shard.
+	// update when get installShard
 	shardConfigNums [shardcfg.NShards]shardcfg.Tnum
 
 	// maintain all kv data for every shard in this group
 	// We use an array of maps, one for each Shard ID. 
 	// This makes migration (Freeze/Install) much easier
 	shardsData [shardcfg.NShards]map[string]DBValue
+
+	// Store deduplication information for each shard! 
+	// Each shard has its own independent ClientID -> Result mapping.
+	lastOpResult [shardcfg.NShards]map[int64]Result
+	// each shard has its own last applied put seq num
+	lastAppliedSeq [shardcfg.NShards]map[int64]int
 }
 
 type PersistState struct {
-	LastAppliedSeq map[int64]int
-	LastOpResult map[int64]Result
 	ServeringShards [shardcfg.NShards]bool
 	ShardConfigNums [shardcfg.NShards]shardcfg.Tnum
 	ShardsData [shardcfg.NShards]map[string]DBValue
+	lastOpResult [shardcfg.NShards]map[int64]Result
+	lastAppliedSeq [shardcfg.NShards]map[int64]int
 }
 
+func (kv *KVServer) executeOp(op Op) Result {
+	shard := op.Shard
+	var res Result
+
+	switch op.Operation {
+	case "Get":
+		verVal, ok := kv.shardsData[shard][op.Key]
+		if !ok {
+			res.Err = rpc.ErrNoKey
+			return res
+		}
+		res.Value = verVal.Value
+		res.Version = verVal.Version
+		res.Err = rpc.OK
+		return res
+
+	case "Put":
+		verVal, ok := kv.shardsData[shard][op.Key]
+		if !ok && verVal.Version != 0 {
+			res.Err = rpc.ErrNoKey
+			return res
+		}
+		// If versions don't match, return ErrVersion.
+		if op.Version != verVal.Version {
+			res.Err = rpc.ErrVersion
+			return res
+		}
+		// success, modify database
+		kv.shardsData[shard][op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
+		res.Err = rpc.OK
+		// record the result to kv
+		kv.lastAppliedSeq[shard][op.ClientID] = op.SeqNum
+		kv.lastOpResult[shard][op.ClientID] = res
+	}
+}
 
 func (kv *KVServer) DoOp(req any) any {
 	// Your code here
 	// argument should be Op struct in order to consistent with
 	// submit function in rsm.go
 	op, ok := req.(rsm.Op)
+	var res Result
 
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
@@ -78,8 +119,36 @@ func (kv *KVServer) DoOp(req any) any {
 	if !ok {
 		fmt.Println("type assertion failed")
 	}
+
+	switch op.Operation {
+	case "Put", "Get":
+		// first check to make sure:
+		// 1. the group still contains this shard
+		// 2. and the config Num is match
+		if !kv.serveringShards[op.ShardID] || op.ConfigNum != kv.shardConfigNums[op.ShardID] {
+			res.Err = rpc.ErrWrongGroup
+			return
+		}
+
+		// then check has duplicate put operations or not
+		if op.Operation != "Get" && kv.lastAppliedSeq[op.Shard][op.ClientID] >= op.SeqNum {
+			return kv.lastOpResult[op.Shard][op.ClientID]
+		}
+		// truly execute the operation
+		res = kv.executeOp(op)
+
+	case "FreezeShard":
+
+
+
+
+	}
+
+
+
+
 	// 2. check duplicate
-	if op.Operation != "Get" && kv.lastAppliedSeq[op.ClientID] >= op.SeqNum {
+	if op.Operation == "Put" && kv.lastAppliedSeq[op.ClientID] >= op.SeqNum {
 		// if the request is put and duplicate, just return the lastest result
 		return kv.lastOpResult[op.ClientID]
 	}
@@ -143,11 +212,12 @@ func (kv *KVServer) Snapshot() []byte {
 
 	var ps PersistState
 	//ps.Db = kv.db
-	ps.LastAppliedSeq = kv.lastAppliedSeq
-	ps.LastOpResult = kv.lastOpResult
+
 	ps.ServeringShards = kv.serveringShards
 	ps.ShardConfigNums = kv.shardConfigNums
 	ps.ShardsData = kv.shardsData
+	ps.LastOpResult = kv.lastOpResult
+	ps.lastAppliedSeq = kv.lastAppliedSeq
 
 	e.Encode(ps)
 	
@@ -172,12 +242,11 @@ func (kv *KVServer) Restore(data []byte) {
 	if d.Decode(&ps) != nil {
 		panic("resetore Persist: failed to decode server state")
 	} else {
-		kv.db = ps.Db
-		kv.lastAppliedSeq = ps.LastAppliedSeq
-		kv.lastOpResult = ps.LastOpResult
 		kv.serveringShards = ps.ServeringShards
 		kv.shardConfigNums = ps.ShardConfigNums
 		kv.shardsData = ps.ShardsData
+		kv.lastOpResult = ps.LastOpResult
+		kv.lastAppliedSeq = ps.lastAppliedSeq
 	}
 }
 
@@ -186,20 +255,23 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
+
+	// find which shard has this key
+	shard := shardcfg.Key2Shard(key)
+
 	op := rsm.Op{
 		Operation: "Get", 
 		Key: args.Key, 
 		ClientID: args.ClientID,
 		SeqNum: args.SeqNum,
+		ShardID: shard,
+		ConfigNum: kv.shardConfigNums[shard],
 	}
 	
 	DPrintf("S%d received %v", kv.me, op)
 
 	// for a key whose shard is not assigned to the shardgrp
 	// return rpc.ErrWrongGroup
-
-	// find which shard has this key
-	shard := shardcfg.Key2Shard(key)
 
 	kv.mu.Lock()
 	
@@ -250,6 +322,8 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 		ClientID: args.ClientID,
 		SeqNum: args.SeqNum,
 		Version: args.Version,
+		ShardID: shard,
+		ConfigNum: kv.shardConfigNums[shard]
 	}
 
 	DPrintf("S%d received %v", kv.me, op)
@@ -263,6 +337,30 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	reply.Err = res.Err
 }
 
+func copyMap(m map[string]DBValue) map[string]DBValue {
+	res := make(map[string]DBValue)
+	for k, v := range m {
+		res[k] = v
+	}
+	return res
+}
+
+func copyLastOpResult(m map[int64]Result) map[int64]Result {
+	res := make(map[int64]Result)
+	for clientID, commandResult := range m {
+		res[clientID] = commandResult
+	}
+	return res
+}
+
+func copyLastAppliedSeq(m map[int64]int) map[int64]int{
+	res := make(map[int64]int)
+	for clientID, seq := range m {
+		res[clientID] = seq
+	}
+	return
+}
+
 // Freeze the specified shard (i.e., reject future Get/Puts for this
 // shard) and return the key/values stored in that shard.
 func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.FreezeShardReply) {
@@ -272,23 +370,46 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 	configNumForShard := args.Num
 
 	kv.mu.Lock()
-	defer kv.mu.Unlock()
 
 	// reject old config version num
 	// If we are ALREADY at a higher version, we might have already deleted the data!
-	if configNumForShard < kv.shardConfigNums[shardID] {
-		// if the data is gone, we cann't request this old request
+	if configNumForShard <= kv.shardConfigNums[shardID] {
+		// if the data is gone, we can't request this old request
 		if kv.shardsData[shardID] == nil {
-			reply.Err = roc.ErrNoKey
+			reply.Err = rpc.ErrNoKey
+			kv.mu.Unlock()
 			return
 		}
 		// if we still have the data, return it
 		// let executeMoves to check the installShard is done or not
-		reply.State 
+		reply.Data = copyMap(kv.shardsData[shardID])
+		reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
+		reply.lastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
+		reply.Err = rpc.OK
+		reply.Num = kv.shardConfigNums[shardID]
+		kv.mu.Unlock()
+		return
+	}
+	kv.mu.Unlock()
 
+	op := rsm.Op{
+		Operation: "FreezeShard",
+		Key: args.Key,
+		Value: args.Value,
+		ShardID: shardID,
+		ConfigNum: configNumForShard
+		Data: copyMap(kv.shardsData[shardID])
 	}
 
+	DPrintf("S%d received freezeShard %v", kv.me, op)
 
+	err, result := kv.rsm.Submit(op)
+	if err != rpc.OK {
+		reply.Err = err
+		return
+	}
+	res := result.(Result)
+	reply.Err = res.Err
 }
 
 // Install the supplied state for the specified shard.
@@ -339,13 +460,12 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// Your code here
 	// You may need initialization code here.
 	// 1. Initialize the maps first (so Restore has something to fill)
-	kv.lastAppliedSeq = make(map[int64]int)
-	kv.lastOpResult = make(map[int64]Result)
-
 	// iterate through all shard to initialize
 	for i := 0; i < shardcfg.NShards; i++ {
 		// important, must initialize kv data map for each shard
 		kv.shardsData[i] = make(map[string]DBValue)
+		kv.lastOpResult[i] = make(map[int64]Result)
+		kv.lastAppliedSeq[i] = make(map[int64]Result)
 
 		// in default, the biggest config version num for all shard is 0
 		kv.shardConfigNums[i] = 0

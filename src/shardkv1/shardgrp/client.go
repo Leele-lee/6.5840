@@ -189,12 +189,14 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 	}
 }
 
-func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) ([]byte, rpc.Err) {
+func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) 
+(data map[string]shardgrp.DBValue, lastOpResult map[int64]shardgrp.Result, lastAppliedSeq map[int64]int, rpc.Err) {
 	// Your code here
 	return nil, ""
 }
 
-func (ck *Clerk) InstallShard(s shardcfg.Tshid, state []byte, num shardcfg.Tnum) rpc.Err {
+func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardgrp.DBValue, 
+	lastOpResult map[int64]shardgrp.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum) rpc.Err {
 	// Your code here
 	return ""
 }
