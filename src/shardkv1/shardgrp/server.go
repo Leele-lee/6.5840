@@ -190,8 +190,12 @@ func (kv *KVServer) DoOp(req any) any {
 			kv.lastAppliedSeq[shard] = nil
 			kv.lastOpResult[shard] = nil
 			kv.shardConfigNums[shard] = op.ConfigNum
+			DPrintf("SERVER %d GID %d: DeleteShard success for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+			kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		} else {
+			DPrintf("SERVER %d GID %d: REJECTED DeleteShard for Shard %d (Stale Num: %d <= %d)", 
+				kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		}
 	}
@@ -461,8 +465,10 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 	kv.mu.Lock()
 	// reject old config version num
 	// If we are ALREADY at a higher version, we might have already deleted the data!
-	if configNumForShard <= kv.shardConfigNums[shardID] {
+	// if is equal must also submit, bc freezeShard already update configNum for the shard
+	if configNumForShard < kv.shardConfigNums[shardID] {
 		reply.Err = rpc.OK
+		DPrintf("Reject old config version num for shard %d in DeleteShard rpc handler, request config num: %d, old num is: %d", shardID, configNumForShard,  kv.shardConfigNums[shardID])
 		kv.mu.Unlock()
 		return
 	}

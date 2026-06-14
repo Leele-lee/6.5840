@@ -105,7 +105,10 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 				// 3. then delete the frozen shard
 				shardgrp.DPrintf("ExecuteMoves: shard %d delete when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
 
-				oldGrpClerk.DeleteShard(i, new.Num)
+				errDelete := oldGrpClerk.DeleteShard(i, new.Num)
+				if errDelete != rpc.OK {
+					shardgrp.DPrintf("ExecuteMoves: shard %d delete failed: %s when move from old group %d to new group %d \n", i, errDelete, oldGrpID, newGrpID)
+				}
 			}
 		} else if err == rpc.ErrNoKey || data == nil {
 			// THIS IS THE FIX:
