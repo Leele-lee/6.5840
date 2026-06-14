@@ -101,14 +101,18 @@ func TestJoinBasic5A(t *testing.T) {
 	if !cfg1.IsMember(gid2) {
 		ts.t.Fatalf("TestJoinBasic5A: %d isn't a member of %v", gid2, cfg1)
 	}
-
+	
+	//ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group1, len(ka) is %d", len(ka))
 	ts.checkShutdownSharding(gid1, ka, va)
+	//ts.t.Logf("ANNOTATION: Finish checkShutdownSharding to group1")
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))
 	}
 
+	//ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group2")
 	ts.checkShutdownSharding(gid2, ka, va)
+	//ts.t.Logf("ANNOTATION: End checkShutdownSharding to group2")
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))

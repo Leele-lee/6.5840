@@ -10,7 +10,7 @@ import (
 	"6.5840/raftapi"
 	"6.5840/tester1"
 	"6.5840/shardkv1/shardcfg"
-
+	"6.5840/shardkv1/shardgrp/shardrpc"
 )
 
 var useRaftStateMachine bool // to plug in another raft besided raft1
@@ -32,7 +32,10 @@ type Op struct {
 	ShardID shardcfg.Tshid
 	ConfigNum shardcfg.Tnum
 
-	//Data map[string]DBValue // the kv data in shard, used by installShard
+	Data map[string]shardrpc.DBValue // the kv data in shard, used by installShard
+	LastOpResult map[int64]shardrpc.Result
+	LastAppliedSeq map[int64]int
+
 }
 
 

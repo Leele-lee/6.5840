@@ -12,6 +12,7 @@ import (
 
 	"sync"
 	"time"
+	//"fmt"
 
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
@@ -29,7 +30,7 @@ type Clerk struct {
 
 	// every group has a specific shardgrp.clerk
 	// Map Group ID -> specific group clerk
-	groupClerks map[shardcfg.Tshid]*shardgrp.Clerk
+	groupClerks map[tester.Tgid]*shardgrp.Clerk
 
 	// You might need a mutex if your client is multi-threaded
     mu sync.Mutex 
@@ -41,7 +42,7 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 	ck := &Clerk{
 		clnt: clnt,
 		sck:  sck,
-		groupClerks: make(map[shardcfg.Tshid]*shardgrp.Clerk),
+		groupClerks: make(map[tester.Tgid]*shardgrp.Clerk),
 	}
 	// You'll have to add code here.
 	return ck
@@ -71,7 +72,11 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		config := ck.sck.Query()
 
 		// find the group ID and servers for this shard in configuration
-		_, servers, ok := config.GidServers(shard)
+		gid, servers, ok := config.GidServers(shard)
+
+		shardgrp.DPrintf("DEBUG: Key %s belongs to Shard %d, group %d\n", key, shard, gid)
+
+
 		if !ok {
 			// If we reach here, the shard isn't assigned yet (gid 0)
         	// or there's a temporary failure. Wait and retry.
@@ -81,10 +86,11 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 
 		// Get (or create) the clerk for this specific group
 		ck.mu.Lock()
-		gClerk, ok := ck.groupClerks[shard]
+		gClerk, ok := ck.groupClerks[gid]
 		if !ok {
 			// not exsit shargrp clerk for current shargrp ID, so we create one
 			gClerk = shardgrp.MakeClerk(ck.clnt, servers)
+			ck.groupClerks[gid] = gClerk
 		}
 		ck.mu.Unlock()
 		
@@ -95,6 +101,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		if err == rpc.ErrWrongGroup {
 			// The config changed while we were talking to them!
             // Loop again to Query() the new config.
+			time.Sleep(100 * time.Millisecond)
 			continue
 		} else {
 			return val, ver, err
@@ -114,7 +121,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		config := ck.sck.Query()
 
 		// find the group ID and servers for this shard in configuration
-		_, servers, ok := config.GidServers(shard)
+		gid, servers, ok := config.GidServers(shard)
 		if !ok {
 			// If we reach here, the shard isn't assigned yet (gid 0)
         	// or there's a temporary failure. Wait and retry.
@@ -125,10 +132,11 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		// Get (or create) the clerk for this specific group
 
 		ck.mu.Lock()
-		gClerk, ok := ck.groupClerks[shard]
+		gClerk, ok := ck.groupClerks[gid]
 		if !ok {
 			// not exsit shargrp clerk for current shargrp ID, so we create one
 			gClerk = shardgrp.MakeClerk(ck.clnt, servers)
+			ck.groupClerks[gid] = gClerk
 		}
 		ck.mu.Unlock()
 

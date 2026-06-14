@@ -3,8 +3,18 @@ package shardrpc
 import (
 	"6.5840/kvsrv1/rpc"
 	"6.5840/shardkv1/shardcfg"
-	"6.5840/shardgrp"
 )
+
+type Result struct {
+	Value string
+	Err rpc.Err
+	Version rpc.Tversion
+}
+
+type DBValue struct {
+	Value string
+	Version rpc.Tversion
+}
 
 type FreezeShardArgs struct {
 	Shard shardcfg.Tshid
@@ -13,9 +23,9 @@ type FreezeShardArgs struct {
 
 type FreezeShardReply struct {
 	//State []byte
-	Data map[string]shardgrp.DBValue
-	LastOpResult map[int64]shardgrp.Result
-	lastAppliedSeq map[int64]int
+	Data map[string]DBValue
+	LastOpResult map[int64]Result
+	LastAppliedSeq map[int64]int
 	Num   shardcfg.Tnum
 	Err   rpc.Err
 }
@@ -23,9 +33,9 @@ type FreezeShardReply struct {
 type InstallShardArgs struct {
 	Shard shardcfg.Tshid
 	//State []byte
-	Data map[string]shardgrp.DBValue
-	LastOpResult map[int64]shardgrp.Result
-	lastAppliedSeq map[int64]int
+	Data map[string]DBValue
+	LastOpResult map[int64]Result
+	LastAppliedSeq map[int64]int
 	Num   shardcfg.Tnum
 }
 

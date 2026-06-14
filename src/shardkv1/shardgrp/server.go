@@ -5,6 +5,7 @@ import (
 	"sync"
 	"fmt"
 	"bytes"
+	//"log"
 
 
 	"6.5840/kvraft1/rsm"
@@ -16,16 +17,6 @@ import (
 	"6.5840/tester1"
 )
 
-type Result struct {
-	Value string
-	Err rpc.Err
-	Version rpc.Tversion
-}
-
-type DBValue struct {
-	Value string
-	Version rpc.Tversion
-}
 
 type KVServer struct {
 	me   int
@@ -50,26 +41,34 @@ type KVServer struct {
 	// maintain all kv data for every shard in this group
 	// We use an array of maps, one for each Shard ID. 
 	// This makes migration (Freeze/Install) much easier
-	shardsData [shardcfg.NShards]map[string]DBValue
+	shardsData [shardcfg.NShards]map[string]shardrpc.DBValue
 
 	// Store deduplication information for each shard! 
 	// Each shard has its own independent ClientID -> Result mapping.
-	lastOpResult [shardcfg.NShards]map[int64]Result
+	lastOpResult [shardcfg.NShards]map[int64]shardrpc.Result
 	// each shard has its own last applied put seq num
 	lastAppliedSeq [shardcfg.NShards]map[int64]int
+	// To avoid raft timeout and repeate send to DoOp
+	// shardID -> configNum snd type
+	//pendingMigration map[shardcfg.Tshid]MigrationTask
 }
 
-type PersistState struct {
+type KVPersistState struct {
 	ServeringShards [shardcfg.NShards]bool
 	ShardConfigNums [shardcfg.NShards]shardcfg.Tnum
-	ShardsData [shardcfg.NShards]map[string]DBValue
-	lastOpResult [shardcfg.NShards]map[int64]Result
-	lastAppliedSeq [shardcfg.NShards]map[int64]int
+	ShardsData [shardcfg.NShards]map[string]shardrpc.DBValue
+	LastOpResult [shardcfg.NShards]map[int64]shardrpc.Result
+	LastAppliedSeq [shardcfg.NShards]map[int64]int
 }
 
-func (kv *KVServer) executeOp(op Op) Result {
-	shard := op.Shard
-	var res Result
+type MigrationTask struct {
+	Num shardcfg.Tnum
+	OpType string // freeze, install, delete
+}
+
+func (kv *KVServer) executeOp(op rsm.Op) shardrpc.Result {
+	shard := op.ShardID
+	var res shardrpc.Result
 
 	switch op.Operation {
 	case "Get":
@@ -95,12 +94,13 @@ func (kv *KVServer) executeOp(op Op) Result {
 			return res
 		}
 		// success, modify database
-		kv.shardsData[shard][op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
+		kv.shardsData[shard][op.Key] = shardrpc.DBValue{Value: op.Value, Version: op.Version + 1}
 		res.Err = rpc.OK
 		// record the result to kv
 		kv.lastAppliedSeq[shard][op.ClientID] = op.SeqNum
 		kv.lastOpResult[shard][op.ClientID] = res
 	}
+	return res
 }
 
 func (kv *KVServer) DoOp(req any) any {
@@ -108,12 +108,11 @@ func (kv *KVServer) DoOp(req any) any {
 	// argument should be Op struct in order to consistent with
 	// submit function in rsm.go
 	op, ok := req.(rsm.Op)
-	var res Result
+	var res shardrpc.Result
+	shard := op.ShardID
 
 	kv.mu.Lock()
 	defer kv.mu.Unlock()
-
-	DPrintf("S%d Applying %v", kv.me, op)
 
 	// 1. type assertion, if not ok return
 	if !ok {
@@ -122,79 +121,79 @@ func (kv *KVServer) DoOp(req any) any {
 
 	switch op.Operation {
 	case "Put", "Get":
+
+		// 1. If the server is BEHIND the client's config, it's not "wrong," it's just "slow."
+    	//    Return a retry error (like ErrNoKey or a custom ErrRetry) or just return ErrWrongGroup 
+    	//    ONLY if the server's version is >= the client's version.
+    	if kv.shardConfigNums[shard] < op.ConfigNum {
+        	res.Err = rpc.ErrRetry // Tells the clerk to retry the SAME group
+        	return res
+    	}
+
 		// first check to make sure:
 		// 1. the group still contains this shard
 		// 2. and the config Num is match
-		if !kv.serveringShards[op.ShardID] || op.ConfigNum != kv.shardConfigNums[op.ShardID] {
+		if !kv.serveringShards[shard] {
+			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
+            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
 			res.Err = rpc.ErrWrongGroup
-			return
+			return res
 		}
 
 		// then check has duplicate put operations or not
-		if op.Operation != "Get" && kv.lastAppliedSeq[op.Shard][op.ClientID] >= op.SeqNum {
-			return kv.lastOpResult[op.Shard][op.ClientID]
+		if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
+			return kv.lastOpResult[shard][op.ClientID]
 		}
 		// truly execute the operation
 		res = kv.executeOp(op)
 
 	case "FreezeShard":
+		// first check Num, freeze only when request config num >= current config in grp
+		DPrintf("SERVER %d GID %d: APPLYING FreezeShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
-
-
-
-	}
-
-
-
-
-	// 2. check duplicate
-	if op.Operation == "Put" && kv.lastAppliedSeq[op.ClientID] >= op.SeqNum {
-		// if the request is put and duplicate, just return the lastest result
-		return kv.lastOpResult[op.ClientID]
-	}
-
-	// 3. do operation in service database
-	res := Result{}
-	switch op.Operation {
-	case "Get":
-		// if current group don't have this shard, return err ErrwrongGroup
-		shard := shardcfg.Key2Shard(op.Key)
-		if !kv.serveringShards[shard] {
-			res.Err = rpc.ErrWrongGroup
-			return
+		if op.ConfigNum >= kv.shardConfigNums[shard] {
+			kv.serveringShards[shard] = false
+			kv.shardConfigNums[shard] = op.ConfigNum
+			res.Err = rpc.OK
+		} else {
+			res.Err = rpc.OK
 		}
-		verVal, ok := kv.shardsData[shard][op.Key]
-		if !ok {
-			res.Err = rpc.ErrNoKey
-			return res
-		}
-		res.Value = verVal.Value
-		res.Version = verVal.Version
-		res.Err = rpc.OK
+	case "InstallShard":
+		// install only when request num greater than current config, in case of duplicate install
+		// only install when request num strictly greater than current num
+		DPrintf("SERVER %d GID %d: APPLYING InstallShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
-	case "Put":
-		// if current group don't have this shard, return err ErrwrongGroup
-		shard := shardcfg.Key2Shard(op.Key)
-		if !kv.serveringShards[shard] {
-			res.Err = rpc.ErrWrongGroup
-			return
+		if op.ConfigNum > kv.shardConfigNums[shard] {
+			kv.shardsData[shard] = copyMap(op.Data)
+			kv.lastAppliedSeq[shard] = copyLastAppliedSeq(op.LastAppliedSeq)
+			kv.lastOpResult[shard] = copyLastOpResult(op.LastOpResult)
+			kv.shardConfigNums[shard] = op.ConfigNum
+			kv.serveringShards[shard] = true
+
+			DPrintf("SERVER %d GID %d: Shard %d is now ACTIVE", kv.me, kv.gid, shard)
+			res.Err = rpc.OK
+		} else {
+			DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
+            	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+			res.Err = rpc.OK
 		}
-		verVal, ok := kv.shardsData[shard][op.Key]
-		if !ok && verVal.Version != 0 {
-			res.Err = rpc.ErrNoKey
-			return res
+
+	case "DeleteShard":
+		DPrintf("SERVER %d GID %d: APPLYING DeleteShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+
+		if op.ConfigNum >= kv.shardConfigNums[shard] {
+			kv.serveringShards[shard] = false
+			kv.shardsData[shard] = nil
+			kv.lastAppliedSeq[shard] = nil
+			kv.lastOpResult[shard] = nil
+			kv.shardConfigNums[shard] = op.ConfigNum
+			res.Err = rpc.OK
+		} else {
+			res.Err = rpc.OK
 		}
-		// If versions don't match, return ErrVersion.
-		if op.Version != verVal.Version {
-			res.Err = rpc.ErrVersion
-			return res
-		}
-		// success, modify database
-		kv.shardsData[shard][op.Key] = DBValue{Value: op.Value, Version: op.Version + 1}
-		res.Err = rpc.OK
-		// record the result to kv
-		kv.lastAppliedSeq[op.ClientID] = op.SeqNum
-		kv.lastOpResult[op.ClientID] = res
 	}
 	return res
 }
@@ -210,14 +209,14 @@ func (kv *KVServer) Snapshot() []byte {
 	w := new(bytes.Buffer)
 	e := labgob.NewEncoder(w)
 
-	var ps PersistState
+	var ps KVPersistState
 	//ps.Db = kv.db
 
 	ps.ServeringShards = kv.serveringShards
 	ps.ShardConfigNums = kv.shardConfigNums
 	ps.ShardsData = kv.shardsData
 	ps.LastOpResult = kv.lastOpResult
-	ps.lastAppliedSeq = kv.lastAppliedSeq
+	ps.LastAppliedSeq = kv.lastAppliedSeq
 
 	e.Encode(ps)
 	
@@ -237,7 +236,7 @@ func (kv *KVServer) Restore(data []byte) {
 	r := bytes.NewBuffer(data)
 	d := labgob.NewDecoder(r)
 
-	var ps PersistState
+	var ps KVPersistState
 
 	if d.Decode(&ps) != nil {
 		panic("resetore Persist: failed to decode server state")
@@ -246,7 +245,7 @@ func (kv *KVServer) Restore(data []byte) {
 		kv.shardConfigNums = ps.ShardConfigNums
 		kv.shardsData = ps.ShardsData
 		kv.lastOpResult = ps.LastOpResult
-		kv.lastAppliedSeq = ps.lastAppliedSeq
+		kv.lastAppliedSeq = ps.LastAppliedSeq
 	}
 }
 
@@ -256,8 +255,10 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
 
+
 	// find which shard has this key
-	shard := shardcfg.Key2Shard(key)
+	shard := shardcfg.Key2Shard(args.Key)
+	//fmt.Printf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
 
 	op := rsm.Op{
 		Operation: "Get", 
@@ -267,21 +268,6 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 		ShardID: shard,
 		ConfigNum: kv.shardConfigNums[shard],
 	}
-	
-	DPrintf("S%d received %v", kv.me, op)
-
-	// for a key whose shard is not assigned to the shardgrp
-	// return rpc.ErrWrongGroup
-
-	kv.mu.Lock()
-	
-	// this shardgrp didn't respond for this shard
-	if !kv.serveringShards[shard] {
-		reply.Err = rpc.ErrWrongGroup
-		kv.mu.Unlock()
-		return 
-	}
-	kv.mu.Unlock()
 
 	err, result := kv.rsm.Submit(op)
 
@@ -291,7 +277,7 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
         return
     }
 
-	res := result.(Result)
+	res := result.(shardrpc.Result)
     reply.Err = res.Err
     reply.Value = res.Value
 	reply.Version = res.Version
@@ -301,7 +287,7 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// Your code here	
 
 	// find which shard has this key
-	shard := shardcfg.Key2Shard(key)
+	shard := shardcfg.Key2Shard(args.Key)
 
 	kv.mu.Lock()
 	// this shardgrp didn't respond for this shard
@@ -323,30 +309,28 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 		SeqNum: args.SeqNum,
 		Version: args.Version,
 		ShardID: shard,
-		ConfigNum: kv.shardConfigNums[shard]
+		ConfigNum: kv.shardConfigNums[shard],
 	}
-
-	DPrintf("S%d received %v", kv.me, op)
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
 		reply.Err = err
 		return
 	}
-	res := result.(Result)
+	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 }
 
-func copyMap(m map[string]DBValue) map[string]DBValue {
-	res := make(map[string]DBValue)
+func copyMap(m map[string]shardrpc.DBValue) map[string]shardrpc.DBValue {
+	res := make(map[string]shardrpc.DBValue)
 	for k, v := range m {
 		res[k] = v
 	}
 	return res
 }
 
-func copyLastOpResult(m map[int64]Result) map[int64]Result {
-	res := make(map[int64]Result)
+func copyLastOpResult(m map[int64]shardrpc.Result) map[int64]shardrpc.Result {
+	res := make(map[int64]shardrpc.Result)
 	for clientID, commandResult := range m {
 		res[clientID] = commandResult
 	}
@@ -358,7 +342,7 @@ func copyLastAppliedSeq(m map[int64]int) map[int64]int{
 	for clientID, seq := range m {
 		res[clientID] = seq
 	}
-	return
+	return res
 }
 
 // Freeze the specified shard (i.e., reject future Get/Puts for this
@@ -370,6 +354,12 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 	configNumForShard := args.Num
 
 	kv.mu.Lock()
+
+	if !kv.serveringShards[shardID] {
+		reply.Err = rpc.ErrWrongGroup
+		kv.mu.Unlock()
+		return
+	}
 
 	// reject old config version num
 	// If we are ALREADY at a higher version, we might have already deleted the data!
@@ -384,42 +374,125 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		// let executeMoves to check the installShard is done or not
 		reply.Data = copyMap(kv.shardsData[shardID])
 		reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
-		reply.lastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
+		reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
 		reply.Err = rpc.OK
 		reply.Num = kv.shardConfigNums[shardID]
 		kv.mu.Unlock()
 		return
 	}
+	
+	reply.Data = copyMap(kv.shardsData[shardID])
+	reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
+	reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
+	reply.Num = kv.shardConfigNums[shardID]
+
+	// check the request is on raft or not, if yes retry later, don;t send to raft again
+	//if pendingTask, ok := kv.pendingMigration[shardID]; ok && pendingTask.OpType == "Freeze" && pendingTask.Num >= args.Num {
+	//	reply.Err = rpc.OK
+	//	kv.mu.Unlock()
+	//	return
+	//}
+	//kv.pendingMigration[shardID] = MigrationTask{Num: args.Num, OpType: "Freeze"}
+
 	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "FreezeShard",
-		Key: args.Key,
-		Value: args.Value,
 		ShardID: shardID,
-		ConfigNum: configNumForShard
-		Data: copyMap(kv.shardsData[shardID])
+		ConfigNum: configNumForShard,
+		Data: copyMap(reply.Data),
 	}
 
-	DPrintf("S%d received freezeShard %v", kv.me, op)
+	DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
 		reply.Err = err
 		return
 	}
-	res := result.(Result)
+
+	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 }
 
 // Install the supplied state for the specified shard.
 func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrpc.InstallShardReply) {
 	// Your code here
+	shardID := args.Shard
+	configNumForShard := args.Num
+
+	kv.mu.Lock()
+	// reject old config version num
+	// If we are ALREADY at a higher version, we might have already deleted the data!
+	if configNumForShard <= kv.shardConfigNums[shardID] {
+		reply.Err = rpc.OK
+		kv.mu.Unlock()
+		return
+	}
+
+	kv.mu.Unlock()
+
+	op := rsm.Op{
+		Operation: "InstallShard",
+		ShardID: shardID,
+		ConfigNum: configNumForShard,
+		Data: copyMap(args.Data),
+		LastAppliedSeq: copyLastAppliedSeq(args.LastAppliedSeq),
+		LastOpResult: copyLastOpResult(args.LastOpResult),
+	}
+
+	DPrintf("S%d received InstallShard for shard %d, %v", kv.me, shardID, op)
+
+	err, result := kv.rsm.Submit(op)
+	if err != rpc.OK {
+		reply.Err = err
+		return
+	}
+	res := result.(shardrpc.Result)
+	reply.Err = res.Err
 }
 
 // Delete the specified shard.
 func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.DeleteShardReply) {
 	// Your code here
+	shardID := args.Shard
+	configNumForShard := args.Num
+
+	kv.mu.Lock()
+	// reject old config version num
+	// If we are ALREADY at a higher version, we might have already deleted the data!
+	if configNumForShard <= kv.shardConfigNums[shardID] {
+		reply.Err = rpc.OK
+		kv.mu.Unlock()
+		return
+	}
+
+	// check the request is on raft or not, if yes retry later, don;t send to raft again
+	//if pendingTask, ok := kv.pendingMigration[shardID]; ok && pendingTask.OpType == "Delete" && pendingTask.Num >= args.Num {
+	//	reply.Err = rpc.OK
+	//	kv.mu.Unlock()
+	//	return
+	//}
+		
+	//kv.pendingMigration[shardID] = MigrationTask{Num: args.Num, OpType: "Delete"}
+
+	kv.mu.Unlock()
+
+	op := rsm.Op{
+		Operation: "DeleteShard",
+		ShardID: shardID,
+		ConfigNum: configNumForShard,
+	}
+
+	DPrintf("S%d received DeleteShard for shard %d, %v", kv.me, shardID, op)
+
+	err, result := kv.rsm.Submit(op)
+	if err != rpc.OK {
+		reply.Err = err
+		return
+	}
+	res := result.(shardrpc.Result)
+	reply.Err = res.Err
 }
 
 // the tester calls Kill() when a KVServer instance won't
@@ -455,7 +528,9 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	labgob.Register(rsm.Op{})
 
 	kv := &KVServer{gid: gid, me: me}
-	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
+	//kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
+
+	//kv.pendingMigration = make(map[shardcfg.Tshid]MigrationTask)
 
 	// Your code here
 	// You may need initialization code here.
@@ -463,12 +538,12 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// iterate through all shard to initialize
 	for i := 0; i < shardcfg.NShards; i++ {
 		// important, must initialize kv data map for each shard
-		kv.shardsData[i] = make(map[string]DBValue)
-		kv.lastOpResult[i] = make(map[int64]Result)
-		kv.lastAppliedSeq[i] = make(map[int64]Result)
+		kv.shardsData[i] = make(map[string]shardrpc.DBValue)
+		kv.lastOpResult[i] = make(map[int64]shardrpc.Result)
+		kv.lastAppliedSeq[i] = make(map[int64]int)
 
 		// in default, the biggest config version num for all shard is 0
-		kv.shardConfigNums[i] = 0
+		kv.shardConfigNums[i] = 1
 
 		// in default, the group don't have any shard
 		kv.serveringShards[i] = false

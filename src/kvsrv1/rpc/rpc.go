@@ -14,6 +14,9 @@ const (
 	// For future kvraft lab
 	ErrWrongLeader = "ErrWrongLeader"
 	ErrWrongGroup  = "ErrWrongGroup"
+
+	// for shardsrv delay
+	ErrRetry = "ErrRetry"
 )
 
 type Tversion uint64

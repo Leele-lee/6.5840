@@ -7,18 +7,21 @@ package shardctrler
 import (
 
 	"log"
-	"fmt"
+	"time"
+	//"fmt"
 	"6.5840/kvsrv1"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/shardkv1/shardcfg"
 	"6.5840/tester1"
+	"6.5840/shardkv1/shardgrp"
+	"6.5840/shardkv1/shardgrp/shardrpc"
 )
 
-const {
+const (
 	CurrConfigKey = "current-config"
 	NextConfigKey = "next-config"
-}
+)
 
 // ShardCtrler for the controller and kv clerk.
 type ShardCtrler struct {
@@ -40,6 +43,112 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 	// Your code here.
 	return sck
 }
+
+func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) {
+	// A temporary map to store clerks for the duration of this function
+	// using pointer instead copy clerk here, bc clerk variable changed instead of 
+	// only read operation, groupID -> group clerk
+	clerks := make(map[tester.Tgid]*shardgrp.Clerk)
+
+	// helper to get or create clerk
+	getClerk := func(gid tester.Tgid, config *shardcfg.ShardConfig) *shardgrp.Clerk {
+		if ck, ok := clerks[gid]; ok {
+			return ck
+		}
+		// If it doesn't exist, create it and store it
+		servers := config.Groups[gid]
+		ck := shardgrp.MakeClerk(sck.clnt, servers)
+		clerks[gid] = ck
+		return ck
+	}
+
+	// i is shardID
+	for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
+		oldGrpID := oldConfig.Shards[i]
+		newGrpID := new.Shards[i]
+		oldGrpClerk := getClerk(oldGrpID, oldConfig)
+		newGrpClerk := getClerk(newGrpID, new)
+
+		// If there was an old group, we must Freeze it
+        var data map[string]shardrpc.DBValue
+        var lastOpResult map[int64]shardrpc.Result
+        var lastAppliedSeq map[int64]int
+		err := rpc.OK
+
+		// shard's group not change or grp ID is 0(group no exist yet), ignore
+		if oldGrpID == newGrpID {
+			continue
+		}
+		
+		shardgrp.DPrintf("ExecuteMoves: shard %d move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
+
+		// 1. else first freeze changed shards in old shardgrp
+		// pass shardID and configNum ID
+		if oldGrpID != 0 {
+			shardgrp.DPrintf("ExecuteMoves: shard %d freeze when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
+
+			d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
+			if err == rpc.OK {
+				data, lastOpResult, lastAppliedSeq = d, r, s
+			}
+			//data, lastOpResult, lastAppliedSeq, err = oldGrpClerk.FreezeShard(i, new.Num)
+		}
+		
+		// the current request has been operate
+		if err == rpc.OK && newGrpID != 0 {
+			// 2. copy (install) the shard to the destination shardgrp
+			shardgrp.DPrintf("ExecuteMoves: shard %d install when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
+
+			errInstall := newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
+
+			if oldGrpID != 0 && errInstall == rpc.OK {
+				// 3. then delete the frozen shard
+				shardgrp.DPrintf("ExecuteMoves: shard %d delete when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
+
+				oldGrpClerk.DeleteShard(i, new.Num)
+			}
+		} else if err == rpc.ErrNoKey || data == nil {
+			// THIS IS THE FIX:
+			// If the old group says "I don't have this key," it means 
+			// someone else (a previous controller) already finished this move!
+			// We can safely assume the data is already at the destination.
+			shardgrp.DPrintf("Shard %d already moved, skipping...", i)
+			continue
+		}
+	}
+}
+
+// get current version and put version in new put, if superseded by another controller 
+// it will retry get version and put again
+func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
+	for {
+		// 1. get current version, if key not exist, the version will be default 0
+		val, ver, err := sck.IKVClerk.Get(key)
+		if err != rpc.OK && err != rpc.ErrNoKey {
+			// 如果网络报错，必须重试 Get，不能带着错误的 ver 去 Put
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+
+		// --- OPTIMIZATION (Important for idempotency) ---
+        // If the value is ALREADY what we want, we can stop! 
+        // This handles "Case A" (where we succeeded but got ErrMaybe).
+        if val == newValue {
+            return 
+        }
+
+		// 2. PUT: Attempt update
+        // If Get returned version 0 (key doesn't exist), we send 0.
+        // If Get returned version 5, we send 5.
+		putErr := sck.IKVClerk.Put(key, newValue, ver)
+		if putErr == rpc.OK {
+			return
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+
+}
+
 
 // The tester calls InitController() before starting a new
 // controller. In part A, this method doesn't need to do anything. In
@@ -63,8 +172,9 @@ func (sck *ShardCtrler) InitController() {
 			// 1. Re-run the moves (they must be idempotent!)
 			sck.executeMoves(currConfig, nextConfig)
 
+
 			// 2. FINALLY POST the new configuration
-			safeUpdate(NextConfigKey, nextStr)
+			sck.safeUpdate(CurrConfigKey, nextStr)
 		}
 	}
 }
@@ -88,89 +198,10 @@ func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 	// set version to 0 bc this was the first time to put, the key not exsit yet
 	//err := sck.IKVClerk.Put(key, configString, 0)
 	//err2 := sck.IKVClerk.Put("current-config", configString, 0)
-	safeUpdate(key, configString)
-	safeUpdate(CurrConfigKey, configString)
+	sck.safeUpdate(key, configString)
+	sck.safeUpdate(CurrConfigKey, configString)
 }
 
-// get current version and put version in new put, if superseded by another controller 
-// it will retry get version and put again
-func (sck *ShardCltler) safeUpdate(key String, newValue String) {
-	for {
-		// 1. get current version, if key not exist, the version will be default 0
-		val, ver, err := sck.IKVClerk.Get(key)
-
-		// --- OPTIMIZATION (Important for idempotency) ---
-        // If the value is ALREADY what we want, we can stop! 
-        // This handles "Case A" (where we succeeded but got ErrMaybe).
-        if val == newValue {
-            return 
-        }
-
-		// 2. PUT: Attempt update
-        // If Get returned version 0 (key doesn't exist), we send 0.
-        // If Get returned version 5, we send 5.
-		putErr := sck.IKVClerk.Put(key, newValue, ver)
-		if putErr = rpc.OK {
-			return
-		}
-		time.Sleep(100 * time.Millisecond)
-	}
-
-}
-
-func (sck *ShardCltler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) {
-	// A temporary map to store clerks for the duration of this function
-	// using pointer instead copy clerk here, bc clerk variable changed instead of 
-	// only read operation, groupID -> group clerk
-	clerks := make(map[Tester.Tgid]*shardgrp.Clerk)
-
-	// helper to get or create clerk
-	getClerk := func(gid Tester.Tgid, config *shargrp.ShardConfig ) *shardcfg.Clerk {
-		if ck, ok := clerks[gid]; ok {
-			return ck
-		}
-		// If it doesn't exist, create it and store it
-		servers := config.Groups[gid]
-		ck := shardgrp.makeClerk(sck.clnt, servers)
-		clerk[gid] = ck
-		return ck
-	}
-
-	// i is shardID
-	for i := 0; i < shardcfg.NShards; i++ {
-		oldGrpID := oldConfig.Shards[i]
-		newGrpID := new.Shards[i]
-		oldGrpClerk := getClerk(i, oldConfig)
-		newGrpClerk := getClerk(i, config)
-
-		// shard's group not change or grp ID is 0(group no exist yet), ignore
-		if oldGrpID == newGrpID || oldGrpID == 0{
-			continue
-		}
-		
-		// 1. else first freeze changed shards in old shardgrp
-		// pass shardID and configNum ID
-		data, lastOpResult, lastAppliedSeq, err := oldGrpClerk.FreezeShard(i, config.Num)
-		// the current request has been operate
-		if err == rpc.OK {
-			// 2. copy (install) the shard to the destination shardgrp
-			err = newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, conifg.Num)
-
-			// 3. then delete the frozen shard
-			err = oldGrpClerk.DeleteShard(i, config.Num)
-		} else if err == rpc.ErrNoKey {
-			// THIS IS THE FIX:
-			// If the old group says "I don't have this key," it means 
-			// someone else (a previous controller) already finished this move!
-			// We can safely assume the data is already at the destination.
-			log.Printf("Shard %d already moved, skipping...", shardID)
-			continue
-		}
-
-
-	}
-
-}
 
 // Called by the tester to ask the controller to change the
 // configuration from the current one to new.  While the controller
@@ -183,7 +214,8 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
     // We store the "Next" config so if we crash, the next controller knows what to do
 	// put new config as k/v pairs into kvsrv
 	//err := sck.IKVClerk.Put("next-conifg", configString, 0)
-	safeUpdate(NextConfigKey, newConfigString)
+	newConfigString := new.String()
+	sck.safeUpdate(NextConfigKey, newConfigString)
 
  	// STEP 2: EXECUTE (Move the data)
 	oldConfig := sck.Query() // get the current/old config
@@ -192,13 +224,10 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// STEP 3: COMMIT / POST (Make it official)
     // By updating "current-config", you are telling the whole world the moves are done
 
-	// convert confifgure to string
-	newConfigString := new.String()
-
 	// using "next-config" as key
 	// (Ensure your Query() logic knows how to find this key later)
 	// succeesed, update current-configure
-	safeUpdate(CurrConfigKey, newConfigString)
+	sck.safeUpdate(CurrConfigKey, newConfigString)
 }
 
 

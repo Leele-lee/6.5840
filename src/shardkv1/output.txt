@@ -1,0 +1,974 @@
+=== RUN   TestJoinBasic5A
+Test (5A): a group joins... (reliable network)...
+DEBUG: Key k0 belongs to Shard 10, group 1
+DEBUG: Key k1 belongs to Shard 9, group 1
+DEBUG: Key k2 belongs to Shard 0, group 1
+DEBUG: Key k3 belongs to Shard 11, group 1
+DEBUG: Key k4 belongs to Shard 6, group 1
+DEBUG: Key k5 belongs to Shard 5, group 1
+DEBUG: Key k6 belongs to Shard 8, group 1
+DEBUG: Key k7 belongs to Shard 7, group 1
+DEBUG: Key k8 belongs to Shard 6, group 1
+DEBUG: Key k9 belongs to Shard 5, group 1
+DEBUG: Key k10 belongs to Shard 7, group 1
+DEBUG: Key k11 belongs to Shard 8, group 1
+DEBUG: Key k12 belongs to Shard 5, group 1
+DEBUG: Key k13 belongs to Shard 6, group 1
+DEBUG: Key k14 belongs to Shard 3, group 1
+DEBUG: Key k15 belongs to Shard 4, group 1
+DEBUG: Key k16 belongs to Shard 1, group 1
+DEBUG: Key k17 belongs to Shard 2, group 1
+DEBUG: Key k18 belongs to Shard 11, group 1
+DEBUG: Key k19 belongs to Shard 0, group 1
+DEBUG: Key k20 belongs to Shard 4, group 1
+DEBUG: Key k21 belongs to Shard 3, group 1
+DEBUG: Key k22 belongs to Shard 2, group 1
+DEBUG: Key k23 belongs to Shard 1, group 1
+DEBUG: Key k24 belongs to Shard 0, group 1
+DEBUG: Key k25 belongs to Shard 11, group 1
+DEBUG: Key k26 belongs to Shard 10, group 1
+DEBUG: Key k27 belongs to Shard 9, group 1
+DEBUG: Key k28 belongs to Shard 0, group 1
+DEBUG: Key k29 belongs to Shard 11, group 1
+DEBUG: Key k30 belongs to Shard 9, group 1
+DEBUG: Key k31 belongs to Shard 10, group 1
+DEBUG: Key k32 belongs to Shard 11, group 1
+DEBUG: Key k33 belongs to Shard 0, group 1
+DEBUG: Key k34 belongs to Shard 5, group 1
+DEBUG: Key k35 belongs to Shard 6, group 1
+DEBUG: Key k36 belongs to Shard 7, group 1
+DEBUG: Key k37 belongs to Shard 8, group 1
+DEBUG: Key k38 belongs to Shard 5, group 1
+DEBUG: Key k39 belongs to Shard 6, group 1
+DEBUG: Key k40 belongs to Shard 10, group 1
+DEBUG: Key k41 belongs to Shard 9, group 1
+DEBUG: Key k42 belongs to Shard 0, group 1
+DEBUG: Key k43 belongs to Shard 11, group 1
+DEBUG: Key k44 belongs to Shard 6, group 1
+DEBUG: Key k45 belongs to Shard 5, group 1
+DEBUG: Key k46 belongs to Shard 8, group 1
+DEBUG: Key k47 belongs to Shard 7, group 1
+DEBUG: Key k48 belongs to Shard 6, group 1
+DEBUG: Key k49 belongs to Shard 5, group 1
+DEBUG: Key k50 belongs to Shard 3, group 1
+DEBUG: Key k51 belongs to Shard 4, group 1
+DEBUG: Key k52 belongs to Shard 1, group 1
+DEBUG: Key k53 belongs to Shard 2, group 1
+DEBUG: Key k54 belongs to Shard 7, group 1
+DEBUG: Key k55 belongs to Shard 8, group 1
+DEBUG: Key k56 belongs to Shard 5, group 1
+DEBUG: Key k57 belongs to Shard 6, group 1
+DEBUG: Key k58 belongs to Shard 11, group 1
+DEBUG: Key k59 belongs to Shard 0, group 1
+ExecuteMoves: shard 0 move from old group 1 to new group 2 
+ExecuteMoves: shard 0 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:36 C722288814607748745 calling FreezeShard for Shard 0, Num 2 to Group Leader 0
+2026/06/13 22:35:36 S0 received freezeShard for shard 0, {FreezeShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[] map[]}
+2026/06/13 22:35:36 C722288814607748745 FreezeShard received error: ErrWrongLeader
+2026/06/13 22:35:36 C722288814607748745 calling FreezeShard for Shard 0, Num 2 to Group Leader 1
+2026/06/13 22:35:36 S1 received freezeShard for shard 0, {FreezeShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[] map[]}
+2026/06/13 22:35:36 C722288814607748745 FreezeShard received error: ErrWrongLeader
+2026/06/13 22:35:36 C722288814607748745 calling FreezeShard for Shard 0, Num 2 to Group Leader 2
+2026/06/13 22:35:36 S2 received freezeShard for shard 0, {FreezeShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[] map[]}
+2026/06/13 22:35:36 SERVER 2 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:36 C722288814607748745 FreezeShard for shard 0, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 0 install when move from old group 1 to new group 2 
+2026/06/13 22:35:36 Data length return by freezeShard: 7, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:36 C3040995098020497456 calling InstallShard for Shard 0, Num 2 to Group Leader 0
+2026/06/13 22:35:36 S0 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:60]}
+2026/06/13 22:35:36 C3040995098020497456 InstallShard received error: ErrWrongLeader
+2026/06/13 22:35:36 SERVER 1 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:36 SERVER 0 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:36 C3040995098020497456 calling InstallShard for Shard 0, Num 2 to Group Leader 1
+2026/06/13 22:35:36 S1 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:60]}
+2026/06/13 22:35:36 C3040995098020497456 InstallShard received error: ErrWrongLeader
+2026/06/13 22:35:36 C3040995098020497456 calling InstallShard for Shard 0, Num 2 to Group Leader 2
+2026/06/13 22:35:36 S2 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:60]}
+2026/06/13 22:35:36 C3040995098020497456 InstallShard received error: ErrWrongLeader
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 0, Num 2 to Group Leader 0
+2026/06/13 22:35:37 S0 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:60]}
+2026/06/13 22:35:37 C3040995098020497456 InstallShard received error: ErrWrongLeader
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 0, Num 2 to Group Leader 1
+2026/06/13 22:35:37 S1 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{n741MofEvEe_AC8CF01g 1} k2:{9bzn-O9vyx3SYoD7K1io 1} k24:{AgqFgHdxlm7mY7FfqzDT 1} k28:{2APar_hCfgME_uQqQHY3 1} k33:{3E1eb4KHp2MehIrjUPbR 1} k42:{LwVcU9dSRYeNqGIRjNMK 1} k59:{K6J1dfB09Su8G5oMb8Wt 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:60]}
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 0, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 0 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 0, Num 2 to Group Leader 2
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 0, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 1 move from old group 1 to new group 2 
+ExecuteMoves: shard 1 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling FreezeShard for Shard 1, Num 2 to Group Leader 2
+2026/06/13 22:35:37 S2 received freezeShard for shard 1, {FreezeShard   0 0 0 1 2 map[k16:{hz81UdAJd18XMP3Mui9b 1} k23:{phyMN9VZp-T7E9fb7_UZ 1} k52:{jZC1MQzUQOYpil5qzUqw 1}] map[] map[]}
+2026/06/13 22:35:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C722288814607748745 FreezeShard for shard 1, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 1 install when move from old group 1 to new group 2 
+2026/06/13 22:35:37 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 1, Num 2 to Group Leader 1
+2026/06/13 22:35:37 S1 received InstallShard for shard 1, {InstallShard   0 0 0 1 2 map[k16:{hz81UdAJd18XMP3Mui9b 1} k23:{phyMN9VZp-T7E9fb7_UZ 1} k52:{jZC1MQzUQOYpil5qzUqw 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:53]}
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 1, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 1 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 1, Num 2 to Group Leader 2
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 1, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 2 move from old group 1 to new group 2 
+ExecuteMoves: shard 2 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling FreezeShard for Shard 2, Num 2 to Group Leader 2
+2026/06/13 22:35:37 S2 received freezeShard for shard 2, {FreezeShard   0 0 0 2 2 map[k17:{RFcKSNHQujmQCitOU7Wm 1} k22:{kUJpNSBZ5TR5f4SCNypC 1} k53:{aXXLmwyqLOSz7LrC-SCB 1}] map[] map[]}
+2026/06/13 22:35:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C722288814607748745 FreezeShard for shard 2, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 2 install when move from old group 1 to new group 2 
+2026/06/13 22:35:37 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 2, Num 2 to Group Leader 1
+2026/06/13 22:35:37 S1 received InstallShard for shard 2, {InstallShard   0 0 0 2 2 map[k17:{RFcKSNHQujmQCitOU7Wm 1} k22:{kUJpNSBZ5TR5f4SCNypC 1} k53:{aXXLmwyqLOSz7LrC-SCB 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:54]}
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 2, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 2 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 2, Num 2 to Group Leader 2
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 2, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 3 move from old group 1 to new group 2 
+ExecuteMoves: shard 3 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling FreezeShard for Shard 3, Num 2 to Group Leader 2
+2026/06/13 22:35:37 S2 received freezeShard for shard 3, {FreezeShard   0 0 0 3 2 map[k14:{9BAbgaeZSSSxU0drVswK 1} k21:{I0126FtaMg3cGO6n_V2y 1} k50:{1OPvwxH5Q291VMJRQHs7 1}] map[] map[]}
+2026/06/13 22:35:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C722288814607748745 FreezeShard for shard 3, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 3 install when move from old group 1 to new group 2 
+2026/06/13 22:35:37 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 3, Num 2 to Group Leader 1
+2026/06/13 22:35:37 S1 received InstallShard for shard 3, {InstallShard   0 0 0 3 2 map[k14:{9BAbgaeZSSSxU0drVswK 1} k21:{I0126FtaMg3cGO6n_V2y 1} k50:{1OPvwxH5Q291VMJRQHs7 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:51]}
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 3, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 3 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 3, Num 2 to Group Leader 2
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 3, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 4 move from old group 1 to new group 2 
+ExecuteMoves: shard 4 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling FreezeShard for Shard 4, Num 2 to Group Leader 2
+2026/06/13 22:35:37 S2 received freezeShard for shard 4, {FreezeShard   0 0 0 4 2 map[k15:{-RqtAnBAW8cL9tH9t_s0 1} k20:{or0fN1a_8lA-3T7YHxz4 1} k51:{h1lrVNAEQqf7wp274lyH 1}] map[] map[]}
+2026/06/13 22:35:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C722288814607748745 FreezeShard for shard 4, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 4 install when move from old group 1 to new group 2 
+2026/06/13 22:35:37 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 4, Num 2 to Group Leader 1
+2026/06/13 22:35:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 S1 received InstallShard for shard 4, {InstallShard   0 0 0 4 2 map[k15:{-RqtAnBAW8cL9tH9t_s0 1} k20:{or0fN1a_8lA-3T7YHxz4 1} k51:{h1lrVNAEQqf7wp274lyH 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:52]}
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 4, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 4 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 4, Num 2 to Group Leader 2
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 4, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 5 move from old group 1 to new group 2 
+ExecuteMoves: shard 5 freeze when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling FreezeShard for Shard 5, Num 2 to Group Leader 2
+2026/06/13 22:35:37 S2 received freezeShard for shard 5, {FreezeShard   0 0 0 5 2 map[k12:{jxYDxZcsH9Bvfu4rTqwf 1} k34:{lQ2aGt8DqxATJpIJ7fCN 1} k38:{cn2D26bRjZchUBpt_I2L 1} k45:{ntWfCKjq0_hV0u3AfyQ3 1} k49:{be0nmk-IPnRCtbraWl2a 1} k5:{vsPoMcVIP3hazOlXsSVO 1} k56:{aIwselrfnsKWqnUqP4Zb 1} k9:{XGcc4mnKozt_407ws6Nh 1}] map[] map[]}
+2026/06/13 22:35:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 C722288814607748745 FreezeShard for shard 5, Num 2 Success to Group Leader 2
+ExecuteMoves: shard 5 install when move from old group 1 to new group 2 
+2026/06/13 22:35:37 Data length return by freezeShard: 8, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/13 22:35:37 C3040995098020497456 calling InstallShard for Shard 5, Num 2 to Group Leader 1
+2026/06/13 22:35:37 S1 received InstallShard for shard 5, {InstallShard   0 0 0 5 2 map[k12:{jxYDxZcsH9Bvfu4rTqwf 1} k34:{lQ2aGt8DqxATJpIJ7fCN 1} k38:{cn2D26bRjZchUBpt_I2L 1} k45:{ntWfCKjq0_hV0u3AfyQ3 1} k49:{be0nmk-IPnRCtbraWl2a 1} k5:{vsPoMcVIP3hazOlXsSVO 1} k56:{aIwselrfnsKWqnUqP4Zb 1} k9:{XGcc4mnKozt_407ws6Nh 1}] map[4454435668412798976:{ OK 0}] map[4454435668412798976:57]}
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 1 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:37 C3040995098020497456 InstallShard for shard 5, Num 2 Success to Group Leader 1
+ExecuteMoves: shard 5 delete when move from old group 1 to new group 2 
+2026/06/13 22:35:37 C722288814607748745 calling DeleteShard for Shard 5, Num 2 to Group Leader 2
+2026/06/13 22:35:37 C722288814607748745 Delete for shard 5, Num 2 Success to Group Leader 2
+2026/06/13 22:35:37 SERVER 0 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:37 SERVER 2 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 2 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+    shardkv_test.go:105: ANNOTATION: Start checkShutdownSharding to group1, len(ka) is 60
+DEBUG: Key k0 belongs to Shard 10, group 1
+DEBUG: Key k1 belongs to Shard 9, group 1
+DEBUG: Key k2 belongs to Shard 0, group 2
+DEBUG: Key k59 belongs to Shard 0, group 2
+DEBUG: Key k5 belongs to Shard 5, group 2
+DEBUG: Key k46 belongs to Shard 8, group 1
+2026/06/13 22:35:37 Client 4373541597524088568 get detected wrong leader for key k5 in server 0
+DEBUG: Key k18 belongs to Shard 11, group 1
+DEBUG: Key k47 belongs to Shard 7, group 1
+DEBUG: Key k34 belongs to Shard 5, group 2
+DEBUG: Key k48 belongs to Shard 6, group 1
+DEBUG: Key k19 belongs to Shard 0, group 2
+DEBUG: Key k3 belongs to Shard 11, group 1
+2026/06/13 22:35:37 Client 2345131233152445952 get detected wrong leader for key k19 in server 0
+DEBUG: Key k35 belongs to Shard 6, group 1
+DEBUG: Key k10 belongs to Shard 7, group 1
+DEBUG: Key k20 belongs to Shard 4, group 2
+DEBUG: Key k49 belongs to Shard 5, group 2
+2026/06/13 22:35:37 Client 3493416539841822193 get detected wrong leader for key k20 in server 0
+2026/06/13 22:35:37 Client 2586151471613269120 get detected wrong leader for key k49 in server 0
+DEBUG: Key k37 belongs to Shard 8, group 1
+DEBUG: Key k12 belongs to Shard 5, group 2
+DEBUG: Key k50 belongs to Shard 3, group 2
+DEBUG: Key k21 belongs to Shard 3, group 2
+DEBUG: Key k32 belongs to Shard 11, group 1
+DEBUG: Key k8 belongs to Shard 6, group 1
+DEBUG: Key k36 belongs to Shard 7, group 1
+DEBUG: Key k33 belongs to Shard 0, group 2
+DEBUG: Key k52 belongs to Shard 1, group 2
+DEBUG: Key k6 belongs to Shard 8, group 1
+DEBUG: Key k7 belongs to Shard 7, group 1
+DEBUG: Key k51 belongs to Shard 4, group 2
+DEBUG: Key k29 belongs to Shard 11, group 1
+DEBUG: Key k11 belongs to Shard 8, group 1
+2026/06/13 22:35:37 Client 1969898350828473981 get detected wrong leader for key k51 in server 0
+DEBUG: Key k58 belongs to Shard 11, group 1
+DEBUG: Key k9 belongs to Shard 5, group 2
+DEBUG: Key k45 belongs to Shard 5, group 2
+2026/06/13 22:35:37 Client 1145346413675626842 get detected wrong leader for key k12 in server 0
+DEBUG: Key k28 belongs to Shard 0, group 2
+2026/06/13 22:35:37 Client 2769970282155643413 get detected wrong leader for key k33 in server 0
+DEBUG: Key k14 belongs to Shard 3, group 2
+DEBUG: Key k31 belongs to Shard 10, group 1
+2026/06/13 22:35:37 Client 2783509096889016173 get detected wrong leader for key k59 in server 0
+DEBUG: Key k16 belongs to Shard 1, group 2
+2026/06/13 22:35:37 Client 3791541310331361521 get detected wrong leader for key k14 in server 0
+2026/06/13 22:35:37 Client 1482778917840914064 get detected wrong leader for key k45 in server 0
+2026/06/13 22:35:37 Client 1178383280117667567 get detected wrong leader for key k9 in server 0
+2026/06/13 22:35:37 Client 899686848106864203 get detected wrong leader for key k16 in server 0
+DEBUG: Key k4 belongs to Shard 6, group 1
+DEBUG: Key k25 belongs to Shard 11, group 1
+2026/06/13 22:35:37 Client 2648581222524787857 get detected wrong leader for key k2 in server 0
+DEBUG: Key k40 belongs to Shard 10, group 1
+2026/06/13 22:35:37 Client 849064619790209296 get detected wrong leader for key k28 in server 0
+DEBUG: Key k54 belongs to Shard 7, group 1
+DEBUG: Key k53 belongs to Shard 2, group 2
+DEBUG: Key k22 belongs to Shard 2, group 2
+DEBUG: Key k41 belongs to Shard 9, group 1
+2026/06/13 22:35:37 Client 4324533848509956844 get detected wrong leader for key k53 in server 0
+DEBUG: Key k42 belongs to Shard 0, group 2
+2026/06/13 22:35:37 Client 2866024501325365948 get detected wrong leader for key k21 in server 0
+2026/06/13 22:35:37 Client 1639435838520391191 get detected wrong leader for key k22 in server 0
+2026/06/13 22:35:37 Client 3139792506244559618 get detected wrong leader for key k52 in server 0
+2026/06/13 22:35:37 Client 138604875523723695 get detected wrong leader for key k42 in server 0
+2026/06/13 22:35:37 Client 3893749073107519371 get detected wrong leader for key k34 in server 0
+DEBUG: Key k44 belongs to Shard 6, group 1
+DEBUG: Key k43 belongs to Shard 11, group 1
+DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/13 22:35:37 Client 960982520049843381 get detected wrong leader for key k50 in server 0
+DEBUG: Key k39 belongs to Shard 6, group 1
+DEBUG: Key k56 belongs to Shard 5, group 2
+DEBUG: Key k55 belongs to Shard 8, group 1
+DEBUG: Key k23 belongs to Shard 1, group 2
+2026/06/13 22:35:37 Client 1800805220186341378 get detected wrong leader for key k56 in server 0
+DEBUG: Key k27 belongs to Shard 9, group 1
+2026/06/13 22:35:37 Client 3538846242554881822 get detected wrong leader for key k23 in server 0
+DEBUG: Key k57 belongs to Shard 6, group 1
+DEBUG: Key k15 belongs to Shard 4, group 2
+DEBUG: Key k26 belongs to Shard 10, group 1
+DEBUG: Key k17 belongs to Shard 2, group 2
+DEBUG: Key k30 belongs to Shard 9, group 1
+2026/06/13 22:35:37 Client 2150592219828448570 get detected wrong leader for key k15 in server 0
+DEBUG: Key k24 belongs to Shard 0, group 2
+2026/06/13 22:35:37 Client 141848640207822771 get detected wrong leader for key k17 in server 0
+DEBUG: Key k38 belongs to Shard 5, group 2
+2026/06/13 22:35:37 Client 2305962732891599760 get detected wrong leader for key k24 in server 0
+2026/06/13 22:35:37 Client 2157453676535727867 get detected wrong leader for key k38 in server 0
+    test.go:236: ANNOTATION: complete get ndone: 27 when down is: 1 at checkShutDownSharding
+    test.go:238: ANNOTATION: complete checkShutDownSharding down: 1
+    shardkv_test.go:107: ANNOTATION: Finish checkShutdownSharding to group1
+2026/06/13 22:35:39 Client 1486203157863112259 get detected wrong leader for key k37 in server 0
+DEBUG: Key k0 belongs to Shard 10, group 1
+2026/06/13 22:35:39 Client 4454435668412798976 get detected wrong leader for key k0 in server 2
+2026/06/13 22:35:39 Client 4097523707381634549 get detected wrong leader for key k54 in server 2
+2026/06/13 22:35:39 Client 3826853210975095661 get detected wrong leader for key k48 in server 2
+2026/06/13 22:35:39 Client 2090722099925233903 get detected wrong leader for key k55 in server 1
+2026/06/13 22:35:39 Client 2853170559974094759 get detected wrong leader for key k1 in server 2
+2026/06/13 22:35:39 Client 4114406426054412878 get detected wrong leader for key k18 in server 0
+2026/06/13 22:35:39 Client 435489028224216445 get detected wrong leader for key k30 in server 2
+2026/06/13 22:35:39 Client 2186110579912589594 get detected wrong leader for key k31 in server 1
+2026/06/13 22:35:39 Client 3847742314356080869 get detected wrong leader for key k27 in server 2
+2026/06/13 22:35:39 Client 3867640937288409955 get detected wrong leader for key k32 in server 1
+2026/06/13 22:35:39 Client 943427599565788756 get detected wrong leader for key k4 in server 0
+2026/06/13 22:35:39 Client 427573062709114834 get detected wrong leader for key k7 in server 0
+2026/06/13 22:35:39 Client 1866767808335755557 get detected wrong leader for key k3 in server 2
+2026/06/13 22:35:39 Client 1986428416790786521 get detected wrong leader for key k41 in server 0
+2026/06/13 22:35:39 Client 1389661825106390653 get detected wrong leader for key k36 in server 2
+2026/06/13 22:35:39 Client 493005218922138324 get detected wrong leader for key k57 in server 0
+2026/06/13 22:35:39 Client 1396361483219256484 get detected wrong leader for key k11 in server 1
+2026/06/13 22:35:39 Client 855033277904894683 get detected wrong leader for key k8 in server 1
+2026/06/13 22:35:39 Client 2126824433339438283 get detected wrong leader for key k43 in server 1
+2026/06/13 22:35:39 Client 2046166855535790049 get detected wrong leader for key k35 in server 2
+2026/06/13 22:35:39 Client 474526574740120243 get detected wrong leader for key k47 in server 1
+2026/06/13 22:35:39 Client 1810488027488032428 get detected wrong leader for key k26 in server 2
+2026/06/13 22:35:39 Client 2680069624628929517 get detected wrong leader for key k25 in server 0
+2026/06/13 22:35:39 Client 3628444414618321239 get detected wrong leader for key k46 in server 0
+2026/06/13 22:35:39 Client 2811207788976809369 get detected wrong leader for key k39 in server 2
+2026/06/13 22:35:39 Client 542914349330981385 get detected wrong leader for key k29 in server 0
+2026/06/13 22:35:39 Client 1258810463679575533 get detected wrong leader for key k44 in server 2
+2026/06/13 22:35:39 Client 1194965301327924712 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:39 Client 426853888484710765 get detected wrong leader for key k58 in server 0
+2026/06/13 22:35:39 Client 1662162772020418605 get detected wrong leader for key k13 in server 0
+2026/06/13 22:35:39 Client 3430090547265128147 get detected wrong leader for key k40 in server 0
+2026/06/13 22:35:39 Client 1333375988314103605 get detected wrong leader for key k6 in server 2
+2026/06/13 22:35:39 Client 2673318430192326984 get detected wrong leader for key k10 in server 0
+2026/06/13 22:35:39 Client 4454435668412798976 get detected wrong leader for key k0 in server 0
+2026/06/13 22:35:39 Client 1486203157863112259 get detected wrong leader for key k37 in server 1
+2026/06/13 22:35:39 Client 4097523707381634549 get detected wrong leader for key k54 in server 0
+2026/06/13 22:35:39 Client 3826853210975095661 get detected wrong leader for key k48 in server 0
+2026/06/13 22:35:39 Client 2090722099925233903 get detected wrong leader for key k55 in server 2
+2026/06/13 22:35:39 Client 2853170559974094759 get detected wrong leader for key k1 in server 0
+2026/06/13 22:35:39 Client 4114406426054412878 get detected wrong leader for key k18 in server 1
+2026/06/13 22:35:39 Client 435489028224216445 get detected wrong leader for key k30 in server 0
+2026/06/13 22:35:39 Client 2186110579912589594 get detected wrong leader for key k31 in server 2
+2026/06/13 22:35:39 Client 3847742314356080869 get detected wrong leader for key k27 in server 0
+2026/06/13 22:35:39 Client 3867640937288409955 get detected wrong leader for key k32 in server 2
+2026/06/13 22:35:39 Client 943427599565788756 get detected wrong leader for key k4 in server 1
+2026/06/13 22:35:39 Client 427573062709114834 get detected wrong leader for key k7 in server 1
+2026/06/13 22:35:39 Client 1866767808335755557 get detected wrong leader for key k3 in server 0
+2026/06/13 22:35:39 Client 1986428416790786521 get detected wrong leader for key k41 in server 1
+2026/06/13 22:35:39 Client 1389661825106390653 get detected wrong leader for key k36 in server 0
+2026/06/13 22:35:39 Client 493005218922138324 get detected wrong leader for key k57 in server 1
+2026/06/13 22:35:39 Client 1396361483219256484 get detected wrong leader for key k11 in server 2
+2026/06/13 22:35:39 Client 855033277904894683 get detected wrong leader for key k8 in server 2
+2026/06/13 22:35:39 Client 2126824433339438283 get detected wrong leader for key k43 in server 2
+2026/06/13 22:35:39 Client 2046166855535790049 get detected wrong leader for key k35 in server 0
+2026/06/13 22:35:39 Client 474526574740120243 get detected wrong leader for key k47 in server 2
+2026/06/13 22:35:39 Client 1810488027488032428 get detected wrong leader for key k26 in server 0
+2026/06/13 22:35:39 Client 2680069624628929517 get detected wrong leader for key k25 in server 1
+2026/06/13 22:35:39 Client 3628444414618321239 get detected wrong leader for key k46 in server 1
+2026/06/13 22:35:39 Client 2811207788976809369 get detected wrong leader for key k39 in server 0
+2026/06/13 22:35:39 Client 542914349330981385 get detected wrong leader for key k29 in server 1
+2026/06/13 22:35:39 Client 1258810463679575533 get detected wrong leader for key k44 in server 0
+2026/06/13 22:35:39 Client 1194965301327924712 get detected wrong leader for key k0 in server 2
+2026/06/13 22:35:39 Client 426853888484710765 get detected wrong leader for key k58 in server 1
+2026/06/13 22:35:39 Client 1662162772020418605 get detected wrong leader for key k13 in server 1
+2026/06/13 22:35:39 Client 3430090547265128147 get detected wrong leader for key k40 in server 1
+2026/06/13 22:35:39 Client 1333375988314103605 get detected wrong leader for key k6 in server 0
+2026/06/13 22:35:39 Client 2673318430192326984 get detected wrong leader for key k10 in server 1
+2026/06/13 22:35:39 Client 4454435668412798976 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:39 Client 1486203157863112259 get detected wrong leader for key k37 in server 2
+2026/06/13 22:35:39 Client 4097523707381634549 get detected wrong leader for key k54 in server 1
+2026/06/13 22:35:39 Client 3826853210975095661 get detected wrong leader for key k48 in server 1
+2026/06/13 22:35:39 Client 2090722099925233903 get detected wrong leader for key k55 in server 0
+2026/06/13 22:35:39 Client 2853170559974094759 get detected wrong leader for key k1 in server 1
+2026/06/13 22:35:39 Client 4114406426054412878 get detected wrong leader for key k18 in server 2
+2026/06/13 22:35:39 Client 435489028224216445 get detected wrong leader for key k30 in server 1
+2026/06/13 22:35:39 Client 2186110579912589594 get detected wrong leader for key k31 in server 0
+2026/06/13 22:35:39 Client 3847742314356080869 get detected wrong leader for key k27 in server 1
+2026/06/13 22:35:39 Client 943427599565788756 get detected wrong leader for key k4 in server 2
+2026/06/13 22:35:39 Client 3867640937288409955 get detected wrong leader for key k32 in server 0
+2026/06/13 22:35:39 Client 427573062709114834 get detected wrong leader for key k7 in server 2
+2026/06/13 22:35:39 Client 1866767808335755557 get detected wrong leader for key k3 in server 1
+2026/06/13 22:35:39 Client 1986428416790786521 get detected wrong leader for key k41 in server 2
+2026/06/13 22:35:39 Client 1389661825106390653 get detected wrong leader for key k36 in server 1
+2026/06/13 22:35:39 Client 493005218922138324 get detected wrong leader for key k57 in server 2
+2026/06/13 22:35:39 Client 1396361483219256484 get detected wrong leader for key k11 in server 0
+2026/06/13 22:35:39 Client 855033277904894683 get detected wrong leader for key k8 in server 0
+2026/06/13 22:35:39 Client 2126824433339438283 get detected wrong leader for key k43 in server 0
+2026/06/13 22:35:39 Client 2046166855535790049 get detected wrong leader for key k35 in server 1
+2026/06/13 22:35:39 Client 474526574740120243 get detected wrong leader for key k47 in server 0
+2026/06/13 22:35:39 Client 1810488027488032428 get detected wrong leader for key k26 in server 1
+2026/06/13 22:35:39 Client 2680069624628929517 get detected wrong leader for key k25 in server 2
+2026/06/13 22:35:39 Client 3628444414618321239 get detected wrong leader for key k46 in server 2
+2026/06/13 22:35:39 Client 2811207788976809369 get detected wrong leader for key k39 in server 1
+2026/06/13 22:35:39 Client 542914349330981385 get detected wrong leader for key k29 in server 2
+2026/06/13 22:35:39 Client 1258810463679575533 get detected wrong leader for key k44 in server 1
+2026/06/13 22:35:39 Client 1194965301327924712 get detected wrong leader for key k0 in server 0
+2026/06/13 22:35:39 Client 426853888484710765 get detected wrong leader for key k58 in server 2
+2026/06/13 22:35:39 Client 1662162772020418605 get detected wrong leader for key k13 in server 2
+2026/06/13 22:35:39 Client 3430090547265128147 get detected wrong leader for key k40 in server 2
+2026/06/13 22:35:39 Client 1333375988314103605 get detected wrong leader for key k6 in server 1
+2026/06/13 22:35:39 Client 2673318430192326984 get detected wrong leader for key k10 in server 2
+2026/06/13 22:35:39 Client 4454435668412798976 get detected wrong leader for key k0 in server 2
+2026/06/13 22:35:39 Client 1486203157863112259 get detected wrong leader for key k37 in server 0
+2026/06/13 22:35:39 Client 4097523707381634549 get detected wrong leader for key k54 in server 2
+2026/06/13 22:35:39 Client 3826853210975095661 get detected wrong leader for key k48 in server 2
+2026/06/13 22:35:39 Client 2090722099925233903 get detected wrong leader for key k55 in server 1
+2026/06/13 22:35:39 Client 2853170559974094759 get detected wrong leader for key k1 in server 2
+2026/06/13 22:35:39 Client 4114406426054412878 get detected wrong leader for key k18 in server 0
+2026/06/13 22:35:39 Client 435489028224216445 get detected wrong leader for key k30 in server 2
+2026/06/13 22:35:39 Client 2186110579912589594 get detected wrong leader for key k31 in server 1
+2026/06/13 22:35:39 Client 3847742314356080869 get detected wrong leader for key k27 in server 2
+2026/06/13 22:35:39 Client 3867640937288409955 get detected wrong leader for key k32 in server 1
+2026/06/13 22:35:39 Client 943427599565788756 get detected wrong leader for key k4 in server 0
+2026/06/13 22:35:39 Client 427573062709114834 get detected wrong leader for key k7 in server 0
+2026/06/13 22:35:39 Client 1866767808335755557 get detected wrong leader for key k3 in server 2
+2026/06/13 22:35:39 Client 1986428416790786521 get detected wrong leader for key k41 in server 0
+2026/06/13 22:35:39 Client 1389661825106390653 get detected wrong leader for key k36 in server 2
+2026/06/13 22:35:39 Client 493005218922138324 get detected wrong leader for key k57 in server 0
+2026/06/13 22:35:39 Client 1396361483219256484 get detected wrong leader for key k11 in server 1
+2026/06/13 22:35:39 Client 2126824433339438283 get detected wrong leader for key k43 in server 1
+2026/06/13 22:35:39 Client 855033277904894683 get detected wrong leader for key k8 in server 1
+2026/06/13 22:35:39 Client 2046166855535790049 get detected wrong leader for key k35 in server 2
+2026/06/13 22:35:39 Client 474526574740120243 get detected wrong leader for key k47 in server 1
+2026/06/13 22:35:39 Client 1810488027488032428 get detected wrong leader for key k26 in server 2
+2026/06/13 22:35:39 Client 2680069624628929517 get detected wrong leader for key k25 in server 0
+2026/06/13 22:35:39 Client 3628444414618321239 get detected wrong leader for key k46 in server 0
+2026/06/13 22:35:39 Client 2811207788976809369 get detected wrong leader for key k39 in server 2
+2026/06/13 22:35:39 Client 542914349330981385 get detected wrong leader for key k29 in server 0
+2026/06/13 22:35:39 Client 1258810463679575533 get detected wrong leader for key k44 in server 2
+2026/06/13 22:35:39 Client 1194965301327924712 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:39 Client 426853888484710765 get detected wrong leader for key k58 in server 0
+2026/06/13 22:35:39 Client 1662162772020418605 get detected wrong leader for key k13 in server 0
+2026/06/13 22:35:39 Client 3430090547265128147 get detected wrong leader for key k40 in server 0
+2026/06/13 22:35:39 Client 1333375988314103605 get detected wrong leader for key k6 in server 2
+2026/06/13 22:35:39 Client 2673318430192326984 get detected wrong leader for key k10 in server 0
+2026/06/13 22:35:40 Client 1486203157863112259 get detected wrong leader for key k37 in server 1
+2026/06/13 22:35:40 Client 4454435668412798976 get detected wrong leader for key k0 in server 0
+2026/06/13 22:35:40 Client 4097523707381634549 get detected wrong leader for key k54 in server 0
+2026/06/13 22:35:40 Client 3826853210975095661 get detected wrong leader for key k48 in server 0
+2026/06/13 22:35:40 Client 2090722099925233903 get detected wrong leader for key k55 in server 2
+2026/06/13 22:35:40 Client 2853170559974094759 get detected wrong leader for key k1 in server 0
+2026/06/13 22:35:40 Client 435489028224216445 get detected wrong leader for key k30 in server 0
+2026/06/13 22:35:40 Client 4114406426054412878 get detected wrong leader for key k18 in server 1
+2026/06/13 22:35:40 Client 2186110579912589594 get detected wrong leader for key k31 in server 2
+2026/06/13 22:35:40 Client 3847742314356080869 get detected wrong leader for key k27 in server 0
+2026/06/13 22:35:40 Client 943427599565788756 get detected wrong leader for key k4 in server 1
+2026/06/13 22:35:40 Client 3867640937288409955 get detected wrong leader for key k32 in server 2
+2026/06/13 22:35:40 Client 427573062709114834 get detected wrong leader for key k7 in server 1
+2026/06/13 22:35:40 Client 1866767808335755557 get detected wrong leader for key k3 in server 0
+2026/06/13 22:35:40 Client 1986428416790786521 get detected wrong leader for key k41 in server 1
+2026/06/13 22:35:40 Client 1389661825106390653 get detected wrong leader for key k36 in server 0
+2026/06/13 22:35:40 Client 493005218922138324 get detected wrong leader for key k57 in server 1
+2026/06/13 22:35:40 Client 1396361483219256484 get detected wrong leader for key k11 in server 2
+2026/06/13 22:35:40 Client 855033277904894683 get detected wrong leader for key k8 in server 2
+2026/06/13 22:35:40 Client 2126824433339438283 get detected wrong leader for key k43 in server 2
+2026/06/13 22:35:40 Client 2046166855535790049 get detected wrong leader for key k35 in server 0
+2026/06/13 22:35:40 Client 474526574740120243 get detected wrong leader for key k47 in server 2
+2026/06/13 22:35:40 Client 1810488027488032428 get detected wrong leader for key k26 in server 0
+2026/06/13 22:35:40 Client 2680069624628929517 get detected wrong leader for key k25 in server 1
+2026/06/13 22:35:40 Client 3628444414618321239 get detected wrong leader for key k46 in server 1
+2026/06/13 22:35:40 Client 542914349330981385 get detected wrong leader for key k29 in server 1
+2026/06/13 22:35:40 Client 2811207788976809369 get detected wrong leader for key k39 in server 0
+2026/06/13 22:35:40 Client 1258810463679575533 get detected wrong leader for key k44 in server 0
+2026/06/13 22:35:40 Client 1194965301327924712 get detected wrong leader for key k0 in server 2
+2026/06/13 22:35:40 Client 426853888484710765 get detected wrong leader for key k58 in server 1
+2026/06/13 22:35:40 Client 1662162772020418605 get detected wrong leader for key k13 in server 1
+2026/06/13 22:35:40 Client 3430090547265128147 get detected wrong leader for key k40 in server 1
+2026/06/13 22:35:40 Client 1333375988314103605 get detected wrong leader for key k6 in server 0
+2026/06/13 22:35:40 Client 2673318430192326984 get detected wrong leader for key k10 in server 1
+2026/06/13 22:35:40 Client 4454435668412798976 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:40 Client 3826853210975095661 get detected wrong leader for key k48 in server 1
+2026/06/13 22:35:40 Client 1486203157863112259 get detected wrong leader for key k37 in server 2
+2026/06/13 22:35:40 Client 4097523707381634549 get detected wrong leader for key k54 in server 1
+2026/06/13 22:35:40 Client 2090722099925233903 get detected wrong leader for key k55 in server 0
+2026/06/13 22:35:40 Client 2853170559974094759 get detected wrong leader for key k1 in server 1
+2026/06/13 22:35:40 Client 435489028224216445 get detected wrong leader for key k30 in server 1
+2026/06/13 22:35:40 Client 4114406426054412878 get detected wrong leader for key k18 in server 2
+2026/06/13 22:35:40 Client 2186110579912589594 get detected wrong leader for key k31 in server 0
+2026/06/13 22:35:40 Client 3847742314356080869 get detected wrong leader for key k27 in server 1
+2026/06/13 22:35:40 Client 943427599565788756 get detected wrong leader for key k4 in server 2
+2026/06/13 22:35:40 Client 3867640937288409955 get detected wrong leader for key k32 in server 0
+2026/06/13 22:35:40 Client 427573062709114834 get detected wrong leader for key k7 in server 2
+2026/06/13 22:35:40 Client 1866767808335755557 get detected wrong leader for key k3 in server 1
+2026/06/13 22:35:40 Client 1986428416790786521 get detected wrong leader for key k41 in server 2
+2026/06/13 22:35:40 Client 1389661825106390653 get detected wrong leader for key k36 in server 1
+2026/06/13 22:35:40 Client 493005218922138324 get detected wrong leader for key k57 in server 2
+2026/06/13 22:35:40 Client 1396361483219256484 get detected wrong leader for key k11 in server 0
+2026/06/13 22:35:40 Client 855033277904894683 get detected wrong leader for key k8 in server 0
+2026/06/13 22:35:40 Client 2126824433339438283 get detected wrong leader for key k43 in server 0
+2026/06/13 22:35:40 Client 2046166855535790049 get detected wrong leader for key k35 in server 1
+2026/06/13 22:35:40 Client 474526574740120243 get detected wrong leader for key k47 in server 0
+2026/06/13 22:35:40 Client 1810488027488032428 get detected wrong leader for key k26 in server 1
+2026/06/13 22:35:40 Client 2680069624628929517 get detected wrong leader for key k25 in server 2
+2026/06/13 22:35:40 Client 3628444414618321239 get detected wrong leader for key k46 in server 2
+2026/06/13 22:35:40 Client 2811207788976809369 get detected wrong leader for key k39 in server 1
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 2 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 Client 1258810463679575533 get detected wrong leader for key k44 in server 1
+2026/06/13 22:35:40 Client 1194965301327924712 get detected wrong leader for key k0 in server 0
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 1 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 SERVER 0 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:40 Client 1333375988314103605 get detected wrong leader for key k6 in server 1
+2026/06/13 22:35:40 Client 1486203157863112259 get detected wrong leader for key k37 in server 0
+2026/06/13 22:35:40 Client 2090722099925233903 get detected wrong leader for key k55 in server 1
+DEBUG: Key k1 belongs to Shard 9, group 1
+2026/06/13 22:35:40 Client 2186110579912589594 get detected wrong leader for key k31 in server 1
+2026/06/13 22:35:40 Client 4114406426054412878 get detected wrong leader for key k18 in server 0
+2026/06/13 22:35:40 Client 3867640937288409955 get detected wrong leader for key k32 in server 1
+2026/06/13 22:35:40 Client 943427599565788756 get detected wrong leader for key k4 in server 0
+2026/06/13 22:35:40 Client 427573062709114834 get detected wrong leader for key k7 in server 0
+2026/06/13 22:35:40 Client 1986428416790786521 get detected wrong leader for key k41 in server 0
+DEBUG: Key k2 belongs to Shard 0, group 2
+2026/06/13 22:35:40 Client 227938366473662264 get detected wrong leader for key k2 in server 0
+2026/06/13 22:35:40 Client 493005218922138324 get detected wrong leader for key k57 in server 0
+2026/06/13 22:35:40 Client 1396361483219256484 get detected wrong leader for key k11 in server 1
+2026/06/13 22:35:40 Client 2126824433339438283 get detected wrong leader for key k43 in server 1
+2026/06/13 22:35:40 Client 855033277904894683 get detected wrong leader for key k8 in server 1
+2026/06/13 22:35:40 Client 474526574740120243 get detected wrong leader for key k47 in server 1
+2026/06/13 22:35:40 Client 2680069624628929517 get detected wrong leader for key k25 in server 0
+2026/06/13 22:35:40 Client 3628444414618321239 get detected wrong leader for key k46 in server 0
+2026/06/13 22:35:40 Client 1194965301327924712 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:40 Client 1486203157863112259 get detected wrong leader for key k37 in server 1
+2026/06/13 22:35:40 Client 4114406426054412878 get detected wrong leader for key k18 in server 1
+2026/06/13 22:35:40 Client 943427599565788756 get detected wrong leader for key k4 in server 1
+2026/06/13 22:35:40 Client 427573062709114834 get detected wrong leader for key k7 in server 1
+2026/06/13 22:35:40 Client 1986428416790786521 get detected wrong leader for key k41 in server 1
+DEBUG: Key k3 belongs to Shard 11, group 1
+2026/06/13 22:35:40 Client 493005218922138324 get detected wrong leader for key k57 in server 1
+2026/06/13 22:35:40 Client 2680069624628929517 get detected wrong leader for key k25 in server 1
+2026/06/13 22:35:40 Client 3628444414618321239 get detected wrong leader for key k46 in server 1
+DEBUG: Key k4 belongs to Shard 6, group 1
+DEBUG: Key k5 belongs to Shard 5, group 2
+DEBUG: Key k6 belongs to Shard 8, group 1
+DEBUG: Key k7 belongs to Shard 7, group 1
+DEBUG: Key k8 belongs to Shard 6, group 1
+DEBUG: Key k9 belongs to Shard 5, group 2
+DEBUG: Key k10 belongs to Shard 7, group 1
+DEBUG: Key k11 belongs to Shard 8, group 1
+DEBUG: Key k12 belongs to Shard 5, group 2
+DEBUG: Key k13 belongs to Shard 6, group 1
+DEBUG: Key k14 belongs to Shard 3, group 2
+DEBUG: Key k15 belongs to Shard 4, group 2
+DEBUG: Key k16 belongs to Shard 1, group 2
+DEBUG: Key k17 belongs to Shard 2, group 2
+DEBUG: Key k18 belongs to Shard 11, group 1
+DEBUG: Key k19 belongs to Shard 0, group 2
+DEBUG: Key k20 belongs to Shard 4, group 2
+DEBUG: Key k21 belongs to Shard 3, group 2
+DEBUG: Key k22 belongs to Shard 2, group 2
+DEBUG: Key k23 belongs to Shard 1, group 2
+DEBUG: Key k24 belongs to Shard 0, group 2
+DEBUG: Key k25 belongs to Shard 11, group 1
+DEBUG: Key k26 belongs to Shard 10, group 1
+DEBUG: Key k27 belongs to Shard 9, group 1
+DEBUG: Key k28 belongs to Shard 0, group 2
+DEBUG: Key k29 belongs to Shard 11, group 1
+DEBUG: Key k30 belongs to Shard 9, group 1
+DEBUG: Key k31 belongs to Shard 10, group 1
+DEBUG: Key k32 belongs to Shard 11, group 1
+DEBUG: Key k33 belongs to Shard 0, group 2
+DEBUG: Key k34 belongs to Shard 5, group 2
+DEBUG: Key k35 belongs to Shard 6, group 1
+DEBUG: Key k36 belongs to Shard 7, group 1
+DEBUG: Key k37 belongs to Shard 8, group 1
+DEBUG: Key k38 belongs to Shard 5, group 2
+DEBUG: Key k39 belongs to Shard 6, group 1
+DEBUG: Key k40 belongs to Shard 10, group 1
+DEBUG: Key k41 belongs to Shard 9, group 1
+DEBUG: Key k42 belongs to Shard 0, group 2
+DEBUG: Key k43 belongs to Shard 11, group 1
+DEBUG: Key k44 belongs to Shard 6, group 1
+DEBUG: Key k45 belongs to Shard 5, group 2
+DEBUG: Key k46 belongs to Shard 8, group 1
+DEBUG: Key k47 belongs to Shard 7, group 1
+DEBUG: Key k48 belongs to Shard 6, group 1
+DEBUG: Key k49 belongs to Shard 5, group 2
+DEBUG: Key k50 belongs to Shard 3, group 2
+DEBUG: Key k51 belongs to Shard 4, group 2
+DEBUG: Key k52 belongs to Shard 1, group 2
+DEBUG: Key k53 belongs to Shard 2, group 2
+DEBUG: Key k54 belongs to Shard 7, group 1
+DEBUG: Key k55 belongs to Shard 8, group 1
+DEBUG: Key k56 belongs to Shard 5, group 2
+DEBUG: Key k57 belongs to Shard 6, group 1
+DEBUG: Key k58 belongs to Shard 11, group 1
+DEBUG: Key k59 belongs to Shard 0, group 2
+    shardkv_test.go:113: ANNOTATION: Start checkShutdownSharding to group2
+DEBUG: Key k0 belongs to Shard 10, group 1
+DEBUG: Key k59 belongs to Shard 0, group 2
+DEBUG: Key k6 belongs to Shard 8, group 1
+2026/06/13 22:35:40 Client 4483720700860912912 get detected wrong leader for key k0 in server 0
+2026/06/13 22:35:40 Client 1479512007483503943 get detected wrong leader for key k6 in server 0
+DEBUG: Key k9 belongs to Shard 5, group 2
+DEBUG: Key k3 belongs to Shard 11, group 1
+DEBUG: Key k1 belongs to Shard 9, group 1
+DEBUG: Key k8 belongs to Shard 6, group 1
+2026/06/13 22:35:40 Client 2718453076176062729 get detected wrong leader for key k3 in server 0
+DEBUG: Key k10 belongs to Shard 7, group 1
+2026/06/13 22:35:40 Client 2554424917611639455 get detected wrong leader for key k1 in server 0
+2026/06/13 22:35:40 Client 2662158985838692364 get detected wrong leader for key k8 in server 0
+DEBUG: Key k5 belongs to Shard 5, group 2
+DEBUG: Key k4 belongs to Shard 6, group 1
+DEBUG: Key k2 belongs to Shard 0, group 2
+2026/06/13 22:35:40 Client 3726208313705897123 get detected wrong leader for key k10 in server 0
+DEBUG: Key k35 belongs to Shard 6, group 1
+2026/06/13 22:35:40 Client 228349088706724234 get detected wrong leader for key k4 in server 0
+DEBUG: Key k36 belongs to Shard 7, group 1
+DEBUG: Key k48 belongs to Shard 6, group 1
+DEBUG: Key k7 belongs to Shard 7, group 1
+DEBUG: Key k20 belongs to Shard 4, group 2
+DEBUG: Key k43 belongs to Shard 11, group 1
+2026/06/13 22:35:40 Client 3062689626223772646 get detected wrong leader for key k7 in server 0
+DEBUG: Key k49 belongs to Shard 5, group 2
+2026/06/13 22:35:40 Client 2494911791807998382 get detected wrong leader for key k43 in server 0
+DEBUG: Key k21 belongs to Shard 3, group 2
+DEBUG: Key k45 belongs to Shard 5, group 2
+DEBUG: Key k50 belongs to Shard 3, group 2
+DEBUG: Key k47 belongs to Shard 7, group 1
+DEBUG: Key k44 belongs to Shard 6, group 1
+DEBUG: Key k51 belongs to Shard 4, group 2
+2026/06/13 22:35:40 Client 1398980156702219748 get detected wrong leader for key k47 in server 0
+2026/06/13 22:35:40 Client 2657938456826171478 get detected wrong leader for key k44 in server 0
+2026/06/13 22:35:40 Client 2930861320153401947 get detected wrong leader for key k35 in server 0
+DEBUG: Key k24 belongs to Shard 0, group 2
+DEBUG: Key k57 belongs to Shard 6, group 1
+DEBUG: Key k40 belongs to Shard 10, group 1
+DEBUG: Key k11 belongs to Shard 8, group 1
+DEBUG: Key k25 belongs to Shard 11, group 1
+2026/06/13 22:35:40 Client 1155643741952747232 get detected wrong leader for key k57 in server 0
+2026/06/13 22:35:40 Client 197243413359810076 get detected wrong leader for key k40 in server 0
+DEBUG: Key k38 belongs to Shard 5, group 2
+DEBUG: Key k41 belongs to Shard 9, group 1
+DEBUG: Key k16 belongs to Shard 1, group 2
+DEBUG: Key k22 belongs to Shard 2, group 2
+2026/06/13 22:35:40 Client 1704327687380252183 get detected wrong leader for key k41 in server 0
+DEBUG: Key k39 belongs to Shard 6, group 1
+2026/06/13 22:35:40 Client 2704220692587856151 get detected wrong leader for key k48 in server 0
+DEBUG: Key k28 belongs to Shard 0, group 2
+2026/06/13 22:35:40 Client 1689778857836643043 get detected wrong leader for key k39 in server 0
+DEBUG: Key k23 belongs to Shard 1, group 2
+DEBUG: Key k19 belongs to Shard 0, group 2
+DEBUG: Key k53 belongs to Shard 2, group 2
+DEBUG: Key k46 belongs to Shard 8, group 1
+DEBUG: Key k34 belongs to Shard 5, group 2
+DEBUG: Key k27 belongs to Shard 9, group 1
+2026/06/13 22:35:40 Client 1067512037968962857 get detected wrong leader for key k46 in server 0
+DEBUG: Key k26 belongs to Shard 10, group 1
+2026/06/13 22:35:40 Client 2811663757661769007 get detected wrong leader for key k27 in server 0
+DEBUG: Key k54 belongs to Shard 7, group 1
+2026/06/13 22:35:40 Client 2726138935701335385 get detected wrong leader for key k26 in server 0
+DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/13 22:35:40 Client 3815575631270655283 get detected wrong leader for key k54 in server 0
+DEBUG: Key k52 belongs to Shard 1, group 2
+DEBUG: Key k12 belongs to Shard 5, group 2
+2026/06/13 22:35:40 Client 886388965580143563 get detected wrong leader for key k13 in server 0
+DEBUG: Key k37 belongs to Shard 8, group 1
+DEBUG: Key k29 belongs to Shard 11, group 1
+2026/06/13 22:35:40 Client 3805244615559769011 get detected wrong leader for key k36 in server 0
+2026/06/13 22:35:40 Client 3948240947151536021 get detected wrong leader for key k37 in server 0
+DEBUG: Key k55 belongs to Shard 8, group 1
+DEBUG: Key k15 belongs to Shard 4, group 2
+DEBUG: Key k32 belongs to Shard 11, group 1
+2026/06/13 22:35:40 Client 2726232894789776001 get detected wrong leader for key k29 in server 0
+2026/06/13 22:35:40 Client 3623360194015867406 get detected wrong leader for key k55 in server 0
+DEBUG: Key k14 belongs to Shard 3, group 2
+2026/06/13 22:35:40 Client 3564968337270419902 get detected wrong leader for key k32 in server 0
+DEBUG: Key k58 belongs to Shard 11, group 1
+DEBUG: Key k56 belongs to Shard 5, group 2
+DEBUG: Key k17 belongs to Shard 2, group 2
+2026/06/13 22:35:40 Client 408100436728178457 get detected wrong leader for key k25 in server 0
+2026/06/13 22:35:40 Client 2077212401395245675 get detected wrong leader for key k58 in server 0
+2026/06/13 22:35:40 Client 775974177375041120 get detected wrong leader for key k11 in server 0
+DEBUG: Key k18 belongs to Shard 11, group 1
+DEBUG: Key k31 belongs to Shard 10, group 1
+DEBUG: Key k42 belongs to Shard 0, group 2
+DEBUG: Key k30 belongs to Shard 9, group 1
+2026/06/13 22:35:40 Client 3219811816722248313 get detected wrong leader for key k31 in server 0
+2026/06/13 22:35:40 Client 1904989414502926590 get detected wrong leader for key k18 in server 0
+DEBUG: Key k33 belongs to Shard 0, group 2
+2026/06/13 22:35:40 Client 3611040212776424820 get detected wrong leader for key k30 in server 0
+2026/06/13 22:35:41 Client 1479512007483503943 get detected wrong leader for key k6 in server 1
+2026/06/13 22:35:41 Client 4483720700860912912 get detected wrong leader for key k0 in server 1
+2026/06/13 22:35:41 Client 2718453076176062729 get detected wrong leader for key k3 in server 1
+2026/06/13 22:35:41 Client 2554424917611639455 get detected wrong leader for key k1 in server 1
+2026/06/13 22:35:41 Client 2662158985838692364 get detected wrong leader for key k8 in server 1
+2026/06/13 22:35:41 Client 3726208313705897123 get detected wrong leader for key k10 in server 1
+2026/06/13 22:35:41 Client 228349088706724234 get detected wrong leader for key k4 in server 1
+2026/06/13 22:35:41 Client 3062689626223772646 get detected wrong leader for key k7 in server 1
+2026/06/13 22:35:41 Client 2494911791807998382 get detected wrong leader for key k43 in server 1
+2026/06/13 22:35:41 Client 1398980156702219748 get detected wrong leader for key k47 in server 1
+2026/06/13 22:35:41 Client 2657938456826171478 get detected wrong leader for key k44 in server 1
+2026/06/13 22:35:41 Client 2930861320153401947 get detected wrong leader for key k35 in server 1
+2026/06/13 22:35:41 Client 1155643741952747232 get detected wrong leader for key k57 in server 1
+2026/06/13 22:35:41 Client 197243413359810076 get detected wrong leader for key k40 in server 1
+2026/06/13 22:35:41 Client 1704327687380252183 get detected wrong leader for key k41 in server 1
+2026/06/13 22:35:41 Client 2704220692587856151 get detected wrong leader for key k48 in server 1
+2026/06/13 22:35:41 Client 1689778857836643043 get detected wrong leader for key k39 in server 1
+2026/06/13 22:35:41 Client 1067512037968962857 get detected wrong leader for key k46 in server 1
+2026/06/13 22:35:41 Client 2811663757661769007 get detected wrong leader for key k27 in server 1
+2026/06/13 22:35:41 Client 2726138935701335385 get detected wrong leader for key k26 in server 1
+2026/06/13 22:35:41 Client 3815575631270655283 get detected wrong leader for key k54 in server 1
+2026/06/13 22:35:41 Client 886388965580143563 get detected wrong leader for key k13 in server 1
+2026/06/13 22:35:41 Client 3948240947151536021 get detected wrong leader for key k37 in server 1
+2026/06/13 22:35:41 Client 3805244615559769011 get detected wrong leader for key k36 in server 1
+2026/06/13 22:35:41 Client 2726232894789776001 get detected wrong leader for key k29 in server 1
+2026/06/13 22:35:41 Client 3623360194015867406 get detected wrong leader for key k55 in server 1
+2026/06/13 22:35:41 Client 3564968337270419902 get detected wrong leader for key k32 in server 1
+2026/06/13 22:35:41 Client 408100436728178457 get detected wrong leader for key k25 in server 1
+2026/06/13 22:35:41 Client 2077212401395245675 get detected wrong leader for key k58 in server 1
+2026/06/13 22:35:41 Client 775974177375041120 get detected wrong leader for key k11 in server 1
+2026/06/13 22:35:41 Client 3219811816722248313 get detected wrong leader for key k31 in server 1
+2026/06/13 22:35:41 Client 1904989414502926590 get detected wrong leader for key k18 in server 1
+2026/06/13 22:35:41 Client 3611040212776424820 get detected wrong leader for key k30 in server 1
+    test.go:236: ANNOTATION: complete get ndone: 33 when down is: 2 at checkShutDownSharding
+    test.go:238: ANNOTATION: complete checkShutDownSharding down: 2
+    shardkv_test.go:115: ANNOTATION: End checkShutdownSharding to group2
+DEBUG: Key k0 belongs to Shard 10, group 1
+DEBUG: Key k1 belongs to Shard 9, group 1
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 2
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 2
+2026/06/13 22:35:43 Client 1513839514677354326 get detected wrong leader for key k17 in server 1
+2026/06/13 22:35:43 Client 4375785730738269598 get detected wrong leader for key k21 in server 0
+2026/06/13 22:35:43 Client 2481270294674000317 get detected wrong leader for key k53 in server 1
+2026/06/13 22:35:43 Client 3321305244029229379 get detected wrong leader for key k19 in server 0
+2026/06/13 22:35:43 Client 2014224607007923705 get detected wrong leader for key k15 in server 0
+2026/06/13 22:35:43 Client 655383289291775232 get detected wrong leader for key k49 in server 0
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 2
+DEBUG: Key k2 belongs to Shard 0, group 2
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 2
+2026/06/13 22:35:43 Client 227938366473662264 get detected wrong leader for key k2 in server 1
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 2
+2026/06/13 22:35:43 Client 2120898021546333978 get detected wrong leader for key k33 in server 1
+2026/06/13 22:35:43 Client 2322964077189761159 get detected wrong leader for key k50 in server 0
+2026/06/13 22:35:43 Client 2635265978073076751 get detected wrong leader for key k59 in server 0
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 2
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 2
+2026/06/13 22:35:43 Client 750112625542711800 get detected wrong leader for key k5 in server 0
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 2
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 2
+2026/06/13 22:35:43 Client 100819404378357800 get detected wrong leader for key k12 in server 0
+2026/06/13 22:35:43 Client 2136810642140305665 get detected wrong leader for key k56 in server 1
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 2
+2026/06/13 22:35:43 Client 220707525040975170 get detected wrong leader for key k28 in server 1
+2026/06/13 22:35:43 Client 4384889898305122126 get detected wrong leader for key k14 in server 0
+2026/06/13 22:35:43 Client 1969605260844857094 get detected wrong leader for key k16 in server 1
+2026/06/13 22:35:43 Client 3691233040729143793 get detected wrong leader for key k9 in server 2
+2026/06/13 22:35:43 Client 2070380071976770361 get detected wrong leader for key k42 in server 2
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 0
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 0
+2026/06/13 22:35:43 Client 1513839514677354326 get detected wrong leader for key k17 in server 2
+2026/06/13 22:35:43 Client 4375785730738269598 get detected wrong leader for key k21 in server 1
+2026/06/13 22:35:43 Client 2481270294674000317 get detected wrong leader for key k53 in server 2
+2026/06/13 22:35:43 Client 3321305244029229379 get detected wrong leader for key k19 in server 1
+2026/06/13 22:35:43 Client 2014224607007923705 get detected wrong leader for key k15 in server 1
+2026/06/13 22:35:43 Client 655383289291775232 get detected wrong leader for key k49 in server 1
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 0
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 0
+2026/06/13 22:35:43 Client 227938366473662264 get detected wrong leader for key k2 in server 2
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 0
+2026/06/13 22:35:43 Client 2120898021546333978 get detected wrong leader for key k33 in server 2
+2026/06/13 22:35:43 Client 2322964077189761159 get detected wrong leader for key k50 in server 1
+2026/06/13 22:35:43 Client 2635265978073076751 get detected wrong leader for key k59 in server 1
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 0
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 0
+2026/06/13 22:35:43 Client 750112625542711800 get detected wrong leader for key k5 in server 1
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 0
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 0
+2026/06/13 22:35:43 Client 100819404378357800 get detected wrong leader for key k12 in server 1
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 0
+2026/06/13 22:35:43 Client 2136810642140305665 get detected wrong leader for key k56 in server 2
+2026/06/13 22:35:43 Client 4384889898305122126 get detected wrong leader for key k14 in server 1
+2026/06/13 22:35:43 Client 220707525040975170 get detected wrong leader for key k28 in server 2
+2026/06/13 22:35:43 Client 1969605260844857094 get detected wrong leader for key k16 in server 2
+2026/06/13 22:35:43 Client 3691233040729143793 get detected wrong leader for key k9 in server 0
+2026/06/13 22:35:43 Client 2070380071976770361 get detected wrong leader for key k42 in server 0
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 1
+2026/06/13 22:35:43 Client 1513839514677354326 get detected wrong leader for key k17 in server 0
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 1
+2026/06/13 22:35:43 Client 4375785730738269598 get detected wrong leader for key k21 in server 2
+2026/06/13 22:35:43 Client 2481270294674000317 get detected wrong leader for key k53 in server 0
+2026/06/13 22:35:43 Client 3321305244029229379 get detected wrong leader for key k19 in server 2
+2026/06/13 22:35:43 Client 2014224607007923705 get detected wrong leader for key k15 in server 2
+2026/06/13 22:35:43 Client 655383289291775232 get detected wrong leader for key k49 in server 2
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 1
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 1
+2026/06/13 22:35:43 Client 227938366473662264 get detected wrong leader for key k2 in server 0
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 1
+2026/06/13 22:35:43 Client 2120898021546333978 get detected wrong leader for key k33 in server 0
+2026/06/13 22:35:43 Client 2322964077189761159 get detected wrong leader for key k50 in server 2
+2026/06/13 22:35:43 Client 2635265978073076751 get detected wrong leader for key k59 in server 2
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 1
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 1
+2026/06/13 22:35:43 Client 750112625542711800 get detected wrong leader for key k5 in server 2
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 1
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 1
+2026/06/13 22:35:43 Client 100819404378357800 get detected wrong leader for key k12 in server 2
+2026/06/13 22:35:43 Client 2136810642140305665 get detected wrong leader for key k56 in server 0
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 1
+2026/06/13 22:35:43 Client 4384889898305122126 get detected wrong leader for key k14 in server 2
+2026/06/13 22:35:43 Client 220707525040975170 get detected wrong leader for key k28 in server 0
+2026/06/13 22:35:43 Client 1969605260844857094 get detected wrong leader for key k16 in server 0
+2026/06/13 22:35:43 Client 3691233040729143793 get detected wrong leader for key k9 in server 1
+2026/06/13 22:35:43 Client 2070380071976770361 get detected wrong leader for key k42 in server 1
+2026/06/13 22:35:43 Client 1513839514677354326 get detected wrong leader for key k17 in server 1
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 2
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 2
+2026/06/13 22:35:43 Client 4375785730738269598 get detected wrong leader for key k21 in server 0
+2026/06/13 22:35:43 Client 2481270294674000317 get detected wrong leader for key k53 in server 1
+2026/06/13 22:35:43 Client 3321305244029229379 get detected wrong leader for key k19 in server 0
+2026/06/13 22:35:43 Client 2014224607007923705 get detected wrong leader for key k15 in server 0
+2026/06/13 22:35:43 Client 655383289291775232 get detected wrong leader for key k49 in server 0
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 2
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 2
+2026/06/13 22:35:43 Client 227938366473662264 get detected wrong leader for key k2 in server 1
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 2
+2026/06/13 22:35:43 Client 2120898021546333978 get detected wrong leader for key k33 in server 1
+2026/06/13 22:35:43 Client 2322964077189761159 get detected wrong leader for key k50 in server 0
+2026/06/13 22:35:43 Client 2635265978073076751 get detected wrong leader for key k59 in server 0
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 2
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 2
+2026/06/13 22:35:43 Client 750112625542711800 get detected wrong leader for key k5 in server 0
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 2
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 2
+2026/06/13 22:35:43 Client 100819404378357800 get detected wrong leader for key k12 in server 0
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 2
+2026/06/13 22:35:43 Client 2136810642140305665 get detected wrong leader for key k56 in server 1
+2026/06/13 22:35:43 Client 220707525040975170 get detected wrong leader for key k28 in server 1
+2026/06/13 22:35:43 Client 4384889898305122126 get detected wrong leader for key k14 in server 0
+2026/06/13 22:35:43 Client 1969605260844857094 get detected wrong leader for key k16 in server 1
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:43 SERVER 2 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 2 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:43 SERVER 1 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 1 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 0 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 1 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 2 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 3 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 4 is now ACTIVE
+2026/06/13 22:35:43 SERVER 0 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/13 22:35:43 SERVER 0 GID 2: Shard 5 is now ACTIVE
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 0
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 0
+2026/06/13 22:35:43 Client 4375785730738269598 get detected wrong leader for key k21 in server 1
+2026/06/13 22:35:43 Client 3321305244029229379 get detected wrong leader for key k19 in server 1
+2026/06/13 22:35:43 Client 2014224607007923705 get detected wrong leader for key k15 in server 1
+2026/06/13 22:35:43 Client 655383289291775232 get detected wrong leader for key k49 in server 1
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 0
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 0
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 0
+DEBUG: Key k3 belongs to Shard 11, group 1
+DEBUG: Key k4 belongs to Shard 6, group 1
+2026/06/13 22:35:43 Client 2322964077189761159 get detected wrong leader for key k50 in server 1
+2026/06/13 22:35:43 Client 2635265978073076751 get detected wrong leader for key k59 in server 1
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 0
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 0
+2026/06/13 22:35:43 Client 750112625542711800 get detected wrong leader for key k5 in server 1
+DEBUG: Key k5 belongs to Shard 5, group 2
+DEBUG: Key k6 belongs to Shard 8, group 1
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 0
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 0
+2026/06/13 22:35:43 Client 100819404378357800 get detected wrong leader for key k12 in server 1
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 0
+DEBUG: Key k7 belongs to Shard 7, group 1
+2026/06/13 22:35:43 Client 4384889898305122126 get detected wrong leader for key k14 in server 1
+DEBUG: Key k8 belongs to Shard 6, group 1
+DEBUG: Key k9 belongs to Shard 5, group 2
+DEBUG: Key k10 belongs to Shard 7, group 1
+DEBUG: Key k11 belongs to Shard 8, group 1
+2026/06/13 22:35:43 Client 1855213525596438038 get detected wrong leader for key k34 in server 1
+2026/06/13 22:35:43 Client 269527037071855691 get detected wrong leader for key k52 in server 1
+2026/06/13 22:35:43 Client 1302639562147593534 get detected wrong leader for key k23 in server 1
+2026/06/13 22:35:43 Client 4169091627383734695 get detected wrong leader for key k22 in server 1
+DEBUG: Key k12 belongs to Shard 5, group 2
+2026/06/13 22:35:43 Client 2567544831050842528 get detected wrong leader for key k51 in server 1
+DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/13 22:35:43 Client 3692035828524099999 get detected wrong leader for key k20 in server 1
+DEBUG: Key k14 belongs to Shard 3, group 2
+2026/06/13 22:35:43 Client 88043960684163556 get detected wrong leader for key k45 in server 1
+DEBUG: Key k15 belongs to Shard 4, group 2
+2026/06/13 22:35:43 Client 4241435926784792745 get detected wrong leader for key k24 in server 1
+2026/06/13 22:35:43 Client 1696336717860127162 get detected wrong leader for key k38 in server 1
+2026/06/13 22:35:43 Client 2720181424859616059 get detected wrong leader for key k2 in server 1
+DEBUG: Key k16 belongs to Shard 1, group 2
+DEBUG: Key k17 belongs to Shard 2, group 2
+DEBUG: Key k18 belongs to Shard 11, group 1
+DEBUG: Key k19 belongs to Shard 0, group 2
+DEBUG: Key k20 belongs to Shard 4, group 2
+DEBUG: Key k21 belongs to Shard 3, group 2
+DEBUG: Key k22 belongs to Shard 2, group 2
+DEBUG: Key k23 belongs to Shard 1, group 2
+DEBUG: Key k24 belongs to Shard 0, group 2
+DEBUG: Key k25 belongs to Shard 11, group 1
+DEBUG: Key k26 belongs to Shard 10, group 1
+DEBUG: Key k27 belongs to Shard 9, group 1
+DEBUG: Key k28 belongs to Shard 0, group 2
+DEBUG: Key k29 belongs to Shard 11, group 1
+DEBUG: Key k30 belongs to Shard 9, group 1
+DEBUG: Key k31 belongs to Shard 10, group 1
+DEBUG: Key k32 belongs to Shard 11, group 1
+DEBUG: Key k33 belongs to Shard 0, group 2
+DEBUG: Key k34 belongs to Shard 5, group 2
+DEBUG: Key k35 belongs to Shard 6, group 1
+DEBUG: Key k36 belongs to Shard 7, group 1
+DEBUG: Key k37 belongs to Shard 8, group 1
+DEBUG: Key k38 belongs to Shard 5, group 2
+DEBUG: Key k39 belongs to Shard 6, group 1
+DEBUG: Key k40 belongs to Shard 10, group 1
+DEBUG: Key k41 belongs to Shard 9, group 1
+DEBUG: Key k42 belongs to Shard 0, group 2
+DEBUG: Key k43 belongs to Shard 11, group 1
+DEBUG: Key k44 belongs to Shard 6, group 1
+DEBUG: Key k45 belongs to Shard 5, group 2
+DEBUG: Key k46 belongs to Shard 8, group 1
+DEBUG: Key k47 belongs to Shard 7, group 1
+DEBUG: Key k48 belongs to Shard 6, group 1
+DEBUG: Key k49 belongs to Shard 5, group 2
+DEBUG: Key k50 belongs to Shard 3, group 2
+DEBUG: Key k51 belongs to Shard 4, group 2
+DEBUG: Key k52 belongs to Shard 1, group 2
+DEBUG: Key k53 belongs to Shard 2, group 2
+DEBUG: Key k54 belongs to Shard 7, group 1
+DEBUG: Key k55 belongs to Shard 8, group 1
+DEBUG: Key k56 belongs to Shard 5, group 2
+DEBUG: Key k57 belongs to Shard 6, group 1
+DEBUG: Key k58 belongs to Shard 11, group 1
+DEBUG: Key k59 belongs to Shard 0, group 2
+  ... Passed --  time  9.9s #peers 1 #RPCs 15128 #Ops  180
+--- PASS: TestJoinBasic5A (9.89s)
+PASS
+ok  	6.5840/shardkv1	10.226s

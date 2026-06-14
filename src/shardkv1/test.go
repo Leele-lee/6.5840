@@ -233,7 +233,10 @@ func (ts *Test) checkShutdownSharding(down tester.Tgid, ka []string, va []string
 	}
 
 	// bring the crashed shard/group back to life.
+	//ts.t.Logf("ANNOTATION: complete get ndone: %d when down is: %d at checkShutDownSharding", ndone, down)
 	ts.Group(down).StartServers()
+	//ts.t.Logf("ANNOTATION: complete checkShutDownSharding down: %d", down)
+
 }
 
 // Run one controler and then partition it after some time. Run

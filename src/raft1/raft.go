@@ -219,6 +219,10 @@ func (rf *Raft) readPersist(data []byte) {
 		rf.lastApplied = ps.LastIncludedIndex
 		rf.commitIndex = ps.LastIncludedIndex
 	}
+
+	tester.Annotate(fmt.Sprintf("S%d", rf.me), "readPersist", 
+		fmt.Sprintf("Raft %d finished readPersist: Term=%d, VotedFor=%d, LogLen=%d", 
+    	rf.me, rf.currentTerm, rf.votedFor, len(rf.logs)))
 }
 
 // how many bytes in Raft's persisted log?
@@ -430,6 +434,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		rf.currentTerm = args.Term
 		rf.currentState = Follower
 		rf.votedFor = -1
+
+		rf.persist()
 
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Step Down", 
