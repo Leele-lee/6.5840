@@ -359,12 +359,6 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 
 	kv.mu.Lock()
 
-	if !kv.serveringShards[shardID] {
-		reply.Err = rpc.ErrWrongGroup
-		kv.mu.Unlock()
-		return
-	}
-
 	// reject old config version num
 	// If we are ALREADY at a higher version, we might have already deleted the data!
 	if configNumForShard <= kv.shardConfigNums[shardID] {

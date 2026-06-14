@@ -8,7 +8,6 @@ import (
 
 	"log"
 	"time"
-	//"fmt"
 	"6.5840/kvsrv1"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
@@ -73,7 +72,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
         var data map[string]shardrpc.DBValue
         var lastOpResult map[int64]shardrpc.Result
         var lastAppliedSeq map[int64]int
-		err := rpc.OK
+		//err := rpc.OK
 
 		// shard's group not change or grp ID is 0(group no exist yet), ignore
 		if oldGrpID == newGrpID {
@@ -82,41 +81,40 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		
 		shardgrp.DPrintf("ExecuteMoves: shard %d move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
 
-		// 1. else first freeze changed shards in old shardgrp
-		// pass shardID and configNum ID
-		if oldGrpID != 0 {
-			shardgrp.DPrintf("ExecuteMoves: shard %d freeze when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
-
-			d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
-			if err == rpc.OK {
+		for {
+			// 1. FREEZE PHASE
+			if oldGrpID != 0 {
+				d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
+				if err != rpc.OK {
+					// Network failed or server not leader. Sleep and try again.
+					time.Sleep(100 * time.Millisecond)
+					continue 
+				}
 				data, lastOpResult, lastAppliedSeq = d, r, s
 			}
-			//data, lastOpResult, lastAppliedSeq, err = oldGrpClerk.FreezeShard(i, new.Num)
-		}
-		
-		// the current request has been operate
-		if err == rpc.OK && newGrpID != 0 {
-			// 2. copy (install) the shard to the destination shardgrp
-			shardgrp.DPrintf("ExecuteMoves: shard %d install when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
-
-			errInstall := newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
-
-			if oldGrpID != 0 && errInstall == rpc.OK {
-				// 3. then delete the frozen shard
-				shardgrp.DPrintf("ExecuteMoves: shard %d delete when move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
-
-				errDelete := oldGrpClerk.DeleteShard(i, new.Num)
-				if errDelete != rpc.OK {
-					shardgrp.DPrintf("ExecuteMoves: shard %d delete failed: %s when move from old group %d to new group %d \n", i, errDelete, oldGrpID, newGrpID)
+			// 2. INSTALL PHASE
+			// We only get here if Freeze succeeded (or oldGrp was 0)
+			if newGrpID != 0 {
+				//errInstall := getClerk(newGrpID, new).InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
+				errInstall := newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
+				if errInstall != rpc.OK {
+					// If Install failed, we MUST retry the whole process for this shard.
+					// Note: Since Freeze is idempotent, calling it again is safe.
+					time.Sleep(100 * time.Millisecond)
+					continue
 				}
 			}
-		} else if err == rpc.ErrNoKey || data == nil {
-			// THIS IS THE FIX:
-			// If the old group says "I don't have this key," it means 
-			// someone else (a previous controller) already finished this move!
-			// We can safely assume the data is already at the destination.
-			shardgrp.DPrintf("Shard %d already moved, skipping...", i)
-			continue
+			// 3. Delete phase
+			if oldGrpID != 0 {
+				errDelete := oldGrpClerk.DeleteShard(i, new.Num)
+				if errDelete != rpc.OK {
+					time.Sleep(100 * time.Millisecond)
+					continue
+				}
+			}
+
+			shardgrp.DPrintf("ExecuteMoves: Shard %d successfully moved to GID %d", i, newGrpID)
+			break;
 		}
 	}
 }
