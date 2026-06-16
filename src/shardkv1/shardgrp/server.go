@@ -80,6 +80,9 @@ func (kv *KVServer) executeOp(op rsm.Op) shardrpc.Result {
 		res.Value = verVal.Value
 		res.Version = verVal.Version
 		res.Err = rpc.OK
+
+		//DPrintf("SERVER %d GID %d: execute Get for key %s (Shard %d). Op.Num is %d, Current ConfigNum for shard: is %d", 
+        //    kv.me, kv.gid, op.Key, shard, op.ConfigNum, kv.shardConfigNums[shard])
 		return res
 
 	case "Put":
@@ -96,10 +99,15 @@ func (kv *KVServer) executeOp(op rsm.Op) shardrpc.Result {
 		// success, modify database
 		kv.shardsData[shard][op.Key] = shardrpc.DBValue{Value: op.Value, Version: op.Version + 1}
 		res.Err = rpc.OK
+		res.Value = op.Value
+		res.Version = op.Version + 1
 		// record the result to kv
 		kv.lastAppliedSeq[shard][op.ClientID] = op.SeqNum
 		kv.lastOpResult[shard][op.ClientID] = res
 	}
+	//DPrintf("SERVER %d GID %d: execute Put for key %s (Shard %d). Op.Num is %d, Current ConfigNum for shard: is %d", 
+    //    kv.me, kv.gid, op.Key, shard, op.ConfigNum, kv.shardConfigNums[shard])
+
 	return res
 }
 
@@ -125,10 +133,19 @@ func (kv *KVServer) DoOp(req any) any {
 		// 1. If the server is BEHIND the client's config, it's not "wrong," it's just "slow."
     	//    Return a retry error (like ErrNoKey or a custom ErrRetry) or just return ErrWrongGroup 
     	//    ONLY if the server's version is >= the client's version.
-    	if kv.shardConfigNums[shard] < op.ConfigNum {
-        	res.Err = rpc.ErrRetry // Tells the clerk to retry the SAME group
-        	return res
-    	}
+    	//if kv.shardConfigNums[shard] < op.ConfigNum {
+			// Your server is lagging. Return ErrRetry. 
+			// (The clerk will wait and try again, giving Raft time to catch up).
+        //	res.Err = rpc.ErrRetry // Tells the clerk to retry the SAME group
+        //	return res
+    	//}
+
+		if kv.shardConfigNums[shard] != op.ConfigNum {
+			// The client is stale. Return ErrWrongGroup. 
+			// (The clerk will then call Query to get the new config)
+			res.Err = rpc.ErrWrongGroup
+			return res
+		}
 
 		// first check to make sure:
 		// 1. the group still contains this shard
@@ -258,11 +275,13 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	// Your code here. Use kv.rsm.Submit() to submit args
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a GetReply: rep.(rpc.GetReply)
-
-
+	
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
 	//fmt.Printf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
+
+	DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d for shard %d",
+	 kv.me, args.Key, args.ClientID, args.SeqNum, shard)
 
 	op := rsm.Op{
 		Operation: "Get", 
@@ -285,6 +304,10 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
     reply.Err = res.Err
     reply.Value = res.Value
 	reply.Version = res.Version
+
+	DPrintf("S%d after get(key: %s) clientID: %d, seqNum: %d for shard %d, get reply (val: %s, ver: %d, err: %s)",
+	 kv.me, args.Key, args.ClientID, args.SeqNum, shard, reply.Value, reply.Version, reply.Err)
+
 }
 
 func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
@@ -292,6 +315,9 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
+
+	DPrintf("S%d received put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d for shard %d, configNum %d",
+	 kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, shard, kv.shardConfigNums[shard])
 
 	kv.mu.Lock()
 	// this shardgrp didn't respond for this shard
@@ -321,6 +347,10 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 		reply.Err = err
 		return
 	}
+
+	DPrintf("S%d after put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d for shard %d, the kv.lastAppliedSeq: %d, kv.lastOpResult's (val: %s, err: %s, ver: %d)", 
+	kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, shard, kv.lastAppliedSeq[shard][op.ClientID], kv.lastOpResult[shard][op.ClientID].Value, kv.lastOpResult[shard][op.ClientID].Err, kv.lastOpResult[shard][op.ClientID].Version)
+
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 }
@@ -361,6 +391,8 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 
 	// reject old config version num
 	// If we are ALREADY at a higher version, we might have already deleted the data!
+	// if req.Num < kv.Num: Return OK. (It’s a duplicate from the past).
+	// if req.Num == kv.Num: Return OK. (It’s a retry or another shard for the current config).
 	if configNumForShard <= kv.shardConfigNums[shardID] {
 		// if the data is gone, we can't request this old request
 		if kv.shardsData[shardID] == nil {
@@ -378,11 +410,6 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		kv.mu.Unlock()
 		return
 	}
-	
-	reply.Data = copyMap(kv.shardsData[shardID])
-	reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
-	reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
-	reply.Num = kv.shardConfigNums[shardID]
 
 	// check the request is on raft or not, if yes retry later, don;t send to raft again
 	//if pendingTask, ok := kv.pendingMigration[shardID]; ok && pendingTask.OpType == "Freeze" && pendingTask.Num >= args.Num {
@@ -398,7 +425,6 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		Operation: "FreezeShard",
 		ShardID: shardID,
 		ConfigNum: configNumForShard,
-		Data: copyMap(reply.Data),
 	}
 
 	DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
@@ -408,6 +434,13 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		reply.Err = err
 		return
 	}
+
+	reply.Data = copyMap(kv.shardsData[shardID])
+	reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
+	reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
+	reply.Num = kv.shardConfigNums[shardID]
+
+	DPrintf("S%d after received freezeShard for shard %d, %v", kv.me, shardID, reply)
 
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err

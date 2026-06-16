@@ -79,7 +79,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 			continue
 		}
 		
-		shardgrp.DPrintf("ExecuteMoves: shard %d move from old group %d to new group %d \n", i, oldGrpID, newGrpID)
+		shardgrp.DPrintf("ExecuteMoves: shard %d move from old group %d to new group %d, from configNum %d to %d \n", i, oldGrpID, newGrpID, oldConfig.Num, new.Num)
 
 		for {
 			// 1. FREEZE PHASE
