@@ -43,7 +43,7 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 	return sck
 }
 
-func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) {
+func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) bool {
 	// A temporary map to store clerks for the duration of this function
 	// using pointer instead copy clerk here, bc clerk variable changed instead of 
 	// only read operation, groupID -> group clerk
@@ -60,6 +60,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		clerks[gid] = ck
 		return ck
 	}
+	faile := false
 
 	// i is shardID
 	for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
@@ -81,7 +82,12 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		
 		shardgrp.DPrintf("ExecuteMoves: shard %d move from old group %d to new group %d, from configNum %d to %d \n", i, oldGrpID, newGrpID, oldConfig.Num, new.Num)
 
-		for {
+		maxRetries := 50
+
+		for retries := 0; retries < maxRetries; retries++ {
+			if retries == maxRetries - 1 {
+				faile = true
+			}
 			// 1. FREEZE PHASE
 			if oldGrpID != 0 {
 				d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
@@ -117,6 +123,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 			break;
 		}
 	}
+	return faile
 }
 
 // get current version and put version in new put, if superseded by another controller 
@@ -220,7 +227,7 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 
  	// STEP 2: EXECUTE (Move the data)
 	oldConfig := sck.Query() // get the current/old config
-	sck.executeMoves(oldConfig, new)
+	killed := sck.executeMoves(oldConfig, new)
 
 	// STEP 3: COMMIT / POST (Make it official)
     // By updating "current-config", you are telling the whole world the moves are done
@@ -228,6 +235,9 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// using "next-config" as key
 	// (Ensure your Query() logic knows how to find this key later)
 	// succeesed, update current-configure
+	if killed {
+		return
+	}
 	sck.safeUpdate(CurrConfigKey, newConfigString)
 }
 

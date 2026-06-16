@@ -13,7 +13,7 @@ import (
 	"6.5840/shardkv1/shardgrp/shardrpc"
 )
 
-const Debug = false // Set to false to turn off logs when you are done
+const Debug = true // Set to false to turn off logs when you are done
 
 func DPrintf(format string, a ...interface{}) {
 	if Debug {
