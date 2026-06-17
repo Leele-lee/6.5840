@@ -1,0 +1,1546 @@
+=== RUN   TestJoinLeaveBasic5A
+Test (5A): basic groups join/leave ... (reliable network)...
+2026/06/16 17:07:31 S0 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 0 received ErrWrongLeader 
+2026/06/16 17:07:31 S1 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 1 received ErrWrongLeader 
+2026/06/16 17:07:31 S2 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 2 received ErrWrongLeader 
+2026/06/16 17:07:31 S0 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 0 received ErrWrongLeader 
+2026/06/16 17:07:31 S1 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 1 received ErrWrongLeader 
+2026/06/16 17:07:31 S2 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 2 received ErrWrongLeader 
+2026/06/16 17:07:31 S0 received put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, configNum 1
+2026/06/16 17:07:31 S0 after put(key: k0, value: rbSHMiUrqKz24MV9ijGW, version: 0) clientID: 3802376916218725105, seqNum: 1 for shard 10, the kv.lastAppliedSeq: 1, kv.lastOpResult's (val: rbSHMiUrqKz24MV9ijGW, err: OK, ver: 1)
+2026/06/16 17:07:31 Put(key: k0, val: rbSHMiUrqKz24MV9ijGW, ver: 0) to server 0 received OK 
+2026/06/16 17:07:31 S0 received put(key: k1, value: UNTFJm4fwgbU6wHL1ekK, version: 0) clientID: 3802376916218725105, seqNum: 2 for shard 9, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k1, value: UNTFJm4fwgbU6wHL1ekK, version: 0) clientID: 3802376916218725105, seqNum: 2 for shard 9, the kv.lastAppliedSeq: 2, kv.lastOpResult's (val: UNTFJm4fwgbU6wHL1ekK, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k1, val: UNTFJm4fwgbU6wHL1ekK, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k2, value: MyAa9WgA3XWgzcytOO5x, version: 0) clientID: 3802376916218725105, seqNum: 3 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k2, value: MyAa9WgA3XWgzcytOO5x, version: 0) clientID: 3802376916218725105, seqNum: 3 for shard 0, the kv.lastAppliedSeq: 3, kv.lastOpResult's (val: MyAa9WgA3XWgzcytOO5x, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k2, val: MyAa9WgA3XWgzcytOO5x, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k3, value: OwVoZ-doxEbpZJc7tKVv, version: 0) clientID: 3802376916218725105, seqNum: 4 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k3, value: OwVoZ-doxEbpZJc7tKVv, version: 0) clientID: 3802376916218725105, seqNum: 4 for shard 11, the kv.lastAppliedSeq: 4, kv.lastOpResult's (val: OwVoZ-doxEbpZJc7tKVv, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k3, val: OwVoZ-doxEbpZJc7tKVv, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k4, value: zXKJk7W8-CrlT5cnmZyk, version: 0) clientID: 3802376916218725105, seqNum: 5 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k4, value: zXKJk7W8-CrlT5cnmZyk, version: 0) clientID: 3802376916218725105, seqNum: 5 for shard 6, the kv.lastAppliedSeq: 5, kv.lastOpResult's (val: zXKJk7W8-CrlT5cnmZyk, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k4, val: zXKJk7W8-CrlT5cnmZyk, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k5, value: HLlHQhmuKjdkcEZ-fXXX, version: 0) clientID: 3802376916218725105, seqNum: 6 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k5, value: HLlHQhmuKjdkcEZ-fXXX, version: 0) clientID: 3802376916218725105, seqNum: 6 for shard 5, the kv.lastAppliedSeq: 6, kv.lastOpResult's (val: HLlHQhmuKjdkcEZ-fXXX, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k5, val: HLlHQhmuKjdkcEZ-fXXX, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k6, value: L0a6XLQxfG_OERX16jcu, version: 0) clientID: 3802376916218725105, seqNum: 7 for shard 8, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k6, value: L0a6XLQxfG_OERX16jcu, version: 0) clientID: 3802376916218725105, seqNum: 7 for shard 8, the kv.lastAppliedSeq: 7, kv.lastOpResult's (val: L0a6XLQxfG_OERX16jcu, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k6, val: L0a6XLQxfG_OERX16jcu, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k7, value: -_PLSaD9UHoaeSlRrVGC, version: 0) clientID: 3802376916218725105, seqNum: 8 for shard 7, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k7, value: -_PLSaD9UHoaeSlRrVGC, version: 0) clientID: 3802376916218725105, seqNum: 8 for shard 7, the kv.lastAppliedSeq: 8, kv.lastOpResult's (val: -_PLSaD9UHoaeSlRrVGC, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k7, val: -_PLSaD9UHoaeSlRrVGC, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k8, value: KmJZNnDmgTSYIe-9PorF, version: 0) clientID: 3802376916218725105, seqNum: 9 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k8, value: KmJZNnDmgTSYIe-9PorF, version: 0) clientID: 3802376916218725105, seqNum: 9 for shard 6, the kv.lastAppliedSeq: 9, kv.lastOpResult's (val: KmJZNnDmgTSYIe-9PorF, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k8, val: KmJZNnDmgTSYIe-9PorF, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k9, value: 1-qvLMv20c-Yys4lm-iu, version: 0) clientID: 3802376916218725105, seqNum: 10 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k9, value: 1-qvLMv20c-Yys4lm-iu, version: 0) clientID: 3802376916218725105, seqNum: 10 for shard 5, the kv.lastAppliedSeq: 10, kv.lastOpResult's (val: 1-qvLMv20c-Yys4lm-iu, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k9, val: 1-qvLMv20c-Yys4lm-iu, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k10, value: 3QNU2gdFTxMlqkKEvRNT, version: 0) clientID: 3802376916218725105, seqNum: 11 for shard 7, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k10, value: 3QNU2gdFTxMlqkKEvRNT, version: 0) clientID: 3802376916218725105, seqNum: 11 for shard 7, the kv.lastAppliedSeq: 11, kv.lastOpResult's (val: 3QNU2gdFTxMlqkKEvRNT, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k10, val: 3QNU2gdFTxMlqkKEvRNT, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k11, value: 0vA5jdl0VPr-xwMi4o5N, version: 0) clientID: 3802376916218725105, seqNum: 12 for shard 8, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k11, value: 0vA5jdl0VPr-xwMi4o5N, version: 0) clientID: 3802376916218725105, seqNum: 12 for shard 8, the kv.lastAppliedSeq: 12, kv.lastOpResult's (val: 0vA5jdl0VPr-xwMi4o5N, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k11, val: 0vA5jdl0VPr-xwMi4o5N, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k12, value: UMRGURchoH3gw1uCaeA0, version: 0) clientID: 3802376916218725105, seqNum: 13 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k12, value: UMRGURchoH3gw1uCaeA0, version: 0) clientID: 3802376916218725105, seqNum: 13 for shard 5, the kv.lastAppliedSeq: 13, kv.lastOpResult's (val: UMRGURchoH3gw1uCaeA0, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k12, val: UMRGURchoH3gw1uCaeA0, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k13, value: wk5OsU5BB9Jm8FRA0oDJ, version: 0) clientID: 3802376916218725105, seqNum: 14 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k13, value: wk5OsU5BB9Jm8FRA0oDJ, version: 0) clientID: 3802376916218725105, seqNum: 14 for shard 6, the kv.lastAppliedSeq: 14, kv.lastOpResult's (val: wk5OsU5BB9Jm8FRA0oDJ, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k13, val: wk5OsU5BB9Jm8FRA0oDJ, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k14, value: 1_79CU7OdVGazTzgi0aU, version: 0) clientID: 3802376916218725105, seqNum: 15 for shard 3, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k14, value: 1_79CU7OdVGazTzgi0aU, version: 0) clientID: 3802376916218725105, seqNum: 15 for shard 3, the kv.lastAppliedSeq: 15, kv.lastOpResult's (val: 1_79CU7OdVGazTzgi0aU, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k14, val: 1_79CU7OdVGazTzgi0aU, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k15, value: kxI3B9JgScuqavra2rhk, version: 0) clientID: 3802376916218725105, seqNum: 16 for shard 4, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k15, value: kxI3B9JgScuqavra2rhk, version: 0) clientID: 3802376916218725105, seqNum: 16 for shard 4, the kv.lastAppliedSeq: 16, kv.lastOpResult's (val: kxI3B9JgScuqavra2rhk, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k15, val: kxI3B9JgScuqavra2rhk, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k16, value: muz9XyyaFJI8MIHIYnu3, version: 0) clientID: 3802376916218725105, seqNum: 17 for shard 1, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k16, value: muz9XyyaFJI8MIHIYnu3, version: 0) clientID: 3802376916218725105, seqNum: 17 for shard 1, the kv.lastAppliedSeq: 17, kv.lastOpResult's (val: muz9XyyaFJI8MIHIYnu3, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k16, val: muz9XyyaFJI8MIHIYnu3, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k17, value: akPNXxM9hh0SxZ-QJA0y, version: 0) clientID: 3802376916218725105, seqNum: 18 for shard 2, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k17, value: akPNXxM9hh0SxZ-QJA0y, version: 0) clientID: 3802376916218725105, seqNum: 18 for shard 2, the kv.lastAppliedSeq: 18, kv.lastOpResult's (val: akPNXxM9hh0SxZ-QJA0y, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k17, val: akPNXxM9hh0SxZ-QJA0y, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k18, value: S8hjBEyfxkxq1rZFd9HD, version: 0) clientID: 3802376916218725105, seqNum: 19 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k18, value: S8hjBEyfxkxq1rZFd9HD, version: 0) clientID: 3802376916218725105, seqNum: 19 for shard 11, the kv.lastAppliedSeq: 19, kv.lastOpResult's (val: S8hjBEyfxkxq1rZFd9HD, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k18, val: S8hjBEyfxkxq1rZFd9HD, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k19, value: 6KbCSrzkNs4AQb3Zj8Nw, version: 0) clientID: 3802376916218725105, seqNum: 20 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k19, value: 6KbCSrzkNs4AQb3Zj8Nw, version: 0) clientID: 3802376916218725105, seqNum: 20 for shard 0, the kv.lastAppliedSeq: 20, kv.lastOpResult's (val: 6KbCSrzkNs4AQb3Zj8Nw, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k19, val: 6KbCSrzkNs4AQb3Zj8Nw, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k20, value: J8e7VulLMIyMirpB7EeN, version: 0) clientID: 3802376916218725105, seqNum: 21 for shard 4, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k20, value: J8e7VulLMIyMirpB7EeN, version: 0) clientID: 3802376916218725105, seqNum: 21 for shard 4, the kv.lastAppliedSeq: 21, kv.lastOpResult's (val: J8e7VulLMIyMirpB7EeN, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k20, val: J8e7VulLMIyMirpB7EeN, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k21, value: j4wfKLbTfW2Zof6C41B7, version: 0) clientID: 3802376916218725105, seqNum: 22 for shard 3, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k21, value: j4wfKLbTfW2Zof6C41B7, version: 0) clientID: 3802376916218725105, seqNum: 22 for shard 3, the kv.lastAppliedSeq: 22, kv.lastOpResult's (val: j4wfKLbTfW2Zof6C41B7, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k21, val: j4wfKLbTfW2Zof6C41B7, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k22, value: WBadCPyX6rQGOe37N9gH, version: 0) clientID: 3802376916218725105, seqNum: 23 for shard 2, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k22, value: WBadCPyX6rQGOe37N9gH, version: 0) clientID: 3802376916218725105, seqNum: 23 for shard 2, the kv.lastAppliedSeq: 23, kv.lastOpResult's (val: WBadCPyX6rQGOe37N9gH, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k22, val: WBadCPyX6rQGOe37N9gH, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k23, value: 3-nZKCeqRW-VYI405oQd, version: 0) clientID: 3802376916218725105, seqNum: 24 for shard 1, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k23, value: 3-nZKCeqRW-VYI405oQd, version: 0) clientID: 3802376916218725105, seqNum: 24 for shard 1, the kv.lastAppliedSeq: 24, kv.lastOpResult's (val: 3-nZKCeqRW-VYI405oQd, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k23, val: 3-nZKCeqRW-VYI405oQd, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k24, value: cFpUphksLUtsPLfbJi4T, version: 0) clientID: 3802376916218725105, seqNum: 25 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k24, value: cFpUphksLUtsPLfbJi4T, version: 0) clientID: 3802376916218725105, seqNum: 25 for shard 0, the kv.lastAppliedSeq: 25, kv.lastOpResult's (val: cFpUphksLUtsPLfbJi4T, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k24, val: cFpUphksLUtsPLfbJi4T, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k25, value: WWgGLz9eZtMfomPLAIlh, version: 0) clientID: 3802376916218725105, seqNum: 26 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k25, value: WWgGLz9eZtMfomPLAIlh, version: 0) clientID: 3802376916218725105, seqNum: 26 for shard 11, the kv.lastAppliedSeq: 26, kv.lastOpResult's (val: WWgGLz9eZtMfomPLAIlh, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k25, val: WWgGLz9eZtMfomPLAIlh, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k26, value: 6IjNs7zLzFZbQ7IFWjyu, version: 0) clientID: 3802376916218725105, seqNum: 27 for shard 10, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k26, value: 6IjNs7zLzFZbQ7IFWjyu, version: 0) clientID: 3802376916218725105, seqNum: 27 for shard 10, the kv.lastAppliedSeq: 27, kv.lastOpResult's (val: 6IjNs7zLzFZbQ7IFWjyu, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k26, val: 6IjNs7zLzFZbQ7IFWjyu, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k27, value: fVdMUjLnLaXtZ0YbQ_7s, version: 0) clientID: 3802376916218725105, seqNum: 28 for shard 9, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k27, value: fVdMUjLnLaXtZ0YbQ_7s, version: 0) clientID: 3802376916218725105, seqNum: 28 for shard 9, the kv.lastAppliedSeq: 28, kv.lastOpResult's (val: fVdMUjLnLaXtZ0YbQ_7s, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k27, val: fVdMUjLnLaXtZ0YbQ_7s, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k28, value: FtXM_xDqGXcz1_V9T2xP, version: 0) clientID: 3802376916218725105, seqNum: 29 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k28, value: FtXM_xDqGXcz1_V9T2xP, version: 0) clientID: 3802376916218725105, seqNum: 29 for shard 0, the kv.lastAppliedSeq: 29, kv.lastOpResult's (val: FtXM_xDqGXcz1_V9T2xP, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k28, val: FtXM_xDqGXcz1_V9T2xP, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k29, value: t5UEvlh8c_DOWSWf8MKI, version: 0) clientID: 3802376916218725105, seqNum: 30 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k29, value: t5UEvlh8c_DOWSWf8MKI, version: 0) clientID: 3802376916218725105, seqNum: 30 for shard 11, the kv.lastAppliedSeq: 30, kv.lastOpResult's (val: t5UEvlh8c_DOWSWf8MKI, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k29, val: t5UEvlh8c_DOWSWf8MKI, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k30, value: iNOOUEfsbwz97PqkKmZe, version: 0) clientID: 3802376916218725105, seqNum: 31 for shard 9, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k30, value: iNOOUEfsbwz97PqkKmZe, version: 0) clientID: 3802376916218725105, seqNum: 31 for shard 9, the kv.lastAppliedSeq: 31, kv.lastOpResult's (val: iNOOUEfsbwz97PqkKmZe, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k30, val: iNOOUEfsbwz97PqkKmZe, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k31, value: LaDCcFBKxu6YAKPqvFXb, version: 0) clientID: 3802376916218725105, seqNum: 32 for shard 10, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k31, value: LaDCcFBKxu6YAKPqvFXb, version: 0) clientID: 3802376916218725105, seqNum: 32 for shard 10, the kv.lastAppliedSeq: 32, kv.lastOpResult's (val: LaDCcFBKxu6YAKPqvFXb, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k31, val: LaDCcFBKxu6YAKPqvFXb, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k32, value: qmpbHmhXH36qdc5vxWbs, version: 0) clientID: 3802376916218725105, seqNum: 33 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k32, value: qmpbHmhXH36qdc5vxWbs, version: 0) clientID: 3802376916218725105, seqNum: 33 for shard 11, the kv.lastAppliedSeq: 33, kv.lastOpResult's (val: qmpbHmhXH36qdc5vxWbs, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k32, val: qmpbHmhXH36qdc5vxWbs, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k33, value: 2AanwvD1XFuIts142Lrs, version: 0) clientID: 3802376916218725105, seqNum: 34 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k33, value: 2AanwvD1XFuIts142Lrs, version: 0) clientID: 3802376916218725105, seqNum: 34 for shard 0, the kv.lastAppliedSeq: 34, kv.lastOpResult's (val: 2AanwvD1XFuIts142Lrs, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k33, val: 2AanwvD1XFuIts142Lrs, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k34, value: uuNciQVuQKJwLM-AbUQA, version: 0) clientID: 3802376916218725105, seqNum: 35 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k34, value: uuNciQVuQKJwLM-AbUQA, version: 0) clientID: 3802376916218725105, seqNum: 35 for shard 5, the kv.lastAppliedSeq: 35, kv.lastOpResult's (val: uuNciQVuQKJwLM-AbUQA, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k34, val: uuNciQVuQKJwLM-AbUQA, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k35, value: mQ64vVtilic_xGFU1DIR, version: 0) clientID: 3802376916218725105, seqNum: 36 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k35, value: mQ64vVtilic_xGFU1DIR, version: 0) clientID: 3802376916218725105, seqNum: 36 for shard 6, the kv.lastAppliedSeq: 36, kv.lastOpResult's (val: mQ64vVtilic_xGFU1DIR, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k35, val: mQ64vVtilic_xGFU1DIR, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k36, value: AJNmJy85fej1Hj1d6_TR, version: 0) clientID: 3802376916218725105, seqNum: 37 for shard 7, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k36, value: AJNmJy85fej1Hj1d6_TR, version: 0) clientID: 3802376916218725105, seqNum: 37 for shard 7, the kv.lastAppliedSeq: 37, kv.lastOpResult's (val: AJNmJy85fej1Hj1d6_TR, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k36, val: AJNmJy85fej1Hj1d6_TR, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k37, value: 8T1D7JnrhPikN2uqyAp3, version: 0) clientID: 3802376916218725105, seqNum: 38 for shard 8, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k37, value: 8T1D7JnrhPikN2uqyAp3, version: 0) clientID: 3802376916218725105, seqNum: 38 for shard 8, the kv.lastAppliedSeq: 38, kv.lastOpResult's (val: 8T1D7JnrhPikN2uqyAp3, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k37, val: 8T1D7JnrhPikN2uqyAp3, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k38, value: NLIfaGg_mD--T8aEz4Ox, version: 0) clientID: 3802376916218725105, seqNum: 39 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k38, value: NLIfaGg_mD--T8aEz4Ox, version: 0) clientID: 3802376916218725105, seqNum: 39 for shard 5, the kv.lastAppliedSeq: 39, kv.lastOpResult's (val: NLIfaGg_mD--T8aEz4Ox, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k38, val: NLIfaGg_mD--T8aEz4Ox, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k39, value: Z2xTwz7agA02qyIG43x_, version: 0) clientID: 3802376916218725105, seqNum: 40 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k39, value: Z2xTwz7agA02qyIG43x_, version: 0) clientID: 3802376916218725105, seqNum: 40 for shard 6, the kv.lastAppliedSeq: 40, kv.lastOpResult's (val: Z2xTwz7agA02qyIG43x_, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k39, val: Z2xTwz7agA02qyIG43x_, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k40, value: 0l9hq7rolD6RIoOJ2Q1h, version: 0) clientID: 3802376916218725105, seqNum: 41 for shard 10, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k40, value: 0l9hq7rolD6RIoOJ2Q1h, version: 0) clientID: 3802376916218725105, seqNum: 41 for shard 10, the kv.lastAppliedSeq: 41, kv.lastOpResult's (val: 0l9hq7rolD6RIoOJ2Q1h, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k40, val: 0l9hq7rolD6RIoOJ2Q1h, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k41, value: L3Xcpvu1nkYMV3K5yItN, version: 0) clientID: 3802376916218725105, seqNum: 42 for shard 9, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k41, value: L3Xcpvu1nkYMV3K5yItN, version: 0) clientID: 3802376916218725105, seqNum: 42 for shard 9, the kv.lastAppliedSeq: 42, kv.lastOpResult's (val: L3Xcpvu1nkYMV3K5yItN, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k41, val: L3Xcpvu1nkYMV3K5yItN, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k42, value: dqSRwbd5pIVx-f2LlxUG, version: 0) clientID: 3802376916218725105, seqNum: 43 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k42, value: dqSRwbd5pIVx-f2LlxUG, version: 0) clientID: 3802376916218725105, seqNum: 43 for shard 0, the kv.lastAppliedSeq: 43, kv.lastOpResult's (val: dqSRwbd5pIVx-f2LlxUG, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k42, val: dqSRwbd5pIVx-f2LlxUG, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k43, value: s5PxAHKA6_GnbtzAoqhB, version: 0) clientID: 3802376916218725105, seqNum: 44 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k43, value: s5PxAHKA6_GnbtzAoqhB, version: 0) clientID: 3802376916218725105, seqNum: 44 for shard 11, the kv.lastAppliedSeq: 44, kv.lastOpResult's (val: s5PxAHKA6_GnbtzAoqhB, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k43, val: s5PxAHKA6_GnbtzAoqhB, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k44, value: i8VfN9KCFWPjtssWRPEn, version: 0) clientID: 3802376916218725105, seqNum: 45 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k44, value: i8VfN9KCFWPjtssWRPEn, version: 0) clientID: 3802376916218725105, seqNum: 45 for shard 6, the kv.lastAppliedSeq: 45, kv.lastOpResult's (val: i8VfN9KCFWPjtssWRPEn, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k44, val: i8VfN9KCFWPjtssWRPEn, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k45, value: 48GM3oZg3CFUjC5tgbi-, version: 0) clientID: 3802376916218725105, seqNum: 46 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k45, value: 48GM3oZg3CFUjC5tgbi-, version: 0) clientID: 3802376916218725105, seqNum: 46 for shard 5, the kv.lastAppliedSeq: 46, kv.lastOpResult's (val: 48GM3oZg3CFUjC5tgbi-, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k45, val: 48GM3oZg3CFUjC5tgbi-, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k46, value: 6PcBofy-WhxDQvQrdHcv, version: 0) clientID: 3802376916218725105, seqNum: 47 for shard 8, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k46, value: 6PcBofy-WhxDQvQrdHcv, version: 0) clientID: 3802376916218725105, seqNum: 47 for shard 8, the kv.lastAppliedSeq: 47, kv.lastOpResult's (val: 6PcBofy-WhxDQvQrdHcv, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k46, val: 6PcBofy-WhxDQvQrdHcv, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k47, value: _Dxz4w8WDAnpFrxf3QTD, version: 0) clientID: 3802376916218725105, seqNum: 48 for shard 7, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k47, value: _Dxz4w8WDAnpFrxf3QTD, version: 0) clientID: 3802376916218725105, seqNum: 48 for shard 7, the kv.lastAppliedSeq: 48, kv.lastOpResult's (val: _Dxz4w8WDAnpFrxf3QTD, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k47, val: _Dxz4w8WDAnpFrxf3QTD, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k48, value: bxJhMTAQkx2kCMeG8j05, version: 0) clientID: 3802376916218725105, seqNum: 49 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k48, value: bxJhMTAQkx2kCMeG8j05, version: 0) clientID: 3802376916218725105, seqNum: 49 for shard 6, the kv.lastAppliedSeq: 49, kv.lastOpResult's (val: bxJhMTAQkx2kCMeG8j05, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k48, val: bxJhMTAQkx2kCMeG8j05, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k49, value: CPJL1AarWm-6YUpxq_oh, version: 0) clientID: 3802376916218725105, seqNum: 50 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k49, value: CPJL1AarWm-6YUpxq_oh, version: 0) clientID: 3802376916218725105, seqNum: 50 for shard 5, the kv.lastAppliedSeq: 50, kv.lastOpResult's (val: CPJL1AarWm-6YUpxq_oh, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k49, val: CPJL1AarWm-6YUpxq_oh, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k50, value: yCUG4A2XdAkJc9Bwq9PA, version: 0) clientID: 3802376916218725105, seqNum: 51 for shard 3, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k50, value: yCUG4A2XdAkJc9Bwq9PA, version: 0) clientID: 3802376916218725105, seqNum: 51 for shard 3, the kv.lastAppliedSeq: 51, kv.lastOpResult's (val: yCUG4A2XdAkJc9Bwq9PA, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k50, val: yCUG4A2XdAkJc9Bwq9PA, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k51, value: MosFJ0nzm8jy6YETjWmr, version: 0) clientID: 3802376916218725105, seqNum: 52 for shard 4, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k51, value: MosFJ0nzm8jy6YETjWmr, version: 0) clientID: 3802376916218725105, seqNum: 52 for shard 4, the kv.lastAppliedSeq: 52, kv.lastOpResult's (val: MosFJ0nzm8jy6YETjWmr, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k51, val: MosFJ0nzm8jy6YETjWmr, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k52, value: _lmSzqT2LaBeFHVJGLHS, version: 0) clientID: 3802376916218725105, seqNum: 53 for shard 1, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k52, value: _lmSzqT2LaBeFHVJGLHS, version: 0) clientID: 3802376916218725105, seqNum: 53 for shard 1, the kv.lastAppliedSeq: 53, kv.lastOpResult's (val: _lmSzqT2LaBeFHVJGLHS, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k52, val: _lmSzqT2LaBeFHVJGLHS, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k53, value: MTA-7LCCCqTVu3q2dbIF, version: 0) clientID: 3802376916218725105, seqNum: 54 for shard 2, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k53, value: MTA-7LCCCqTVu3q2dbIF, version: 0) clientID: 3802376916218725105, seqNum: 54 for shard 2, the kv.lastAppliedSeq: 54, kv.lastOpResult's (val: MTA-7LCCCqTVu3q2dbIF, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k53, val: MTA-7LCCCqTVu3q2dbIF, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k54, value: J2LVNhBHddKjpBo2C_HC, version: 0) clientID: 3802376916218725105, seqNum: 55 for shard 7, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k54, value: J2LVNhBHddKjpBo2C_HC, version: 0) clientID: 3802376916218725105, seqNum: 55 for shard 7, the kv.lastAppliedSeq: 55, kv.lastOpResult's (val: J2LVNhBHddKjpBo2C_HC, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k54, val: J2LVNhBHddKjpBo2C_HC, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k55, value: XN0ceWTA9fPInoXcVQfx, version: 0) clientID: 3802376916218725105, seqNum: 56 for shard 8, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k55, value: XN0ceWTA9fPInoXcVQfx, version: 0) clientID: 3802376916218725105, seqNum: 56 for shard 8, the kv.lastAppliedSeq: 56, kv.lastOpResult's (val: XN0ceWTA9fPInoXcVQfx, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k55, val: XN0ceWTA9fPInoXcVQfx, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k56, value: uXZwzFjo0-VXyw9QhZ_R, version: 0) clientID: 3802376916218725105, seqNum: 57 for shard 5, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k56, value: uXZwzFjo0-VXyw9QhZ_R, version: 0) clientID: 3802376916218725105, seqNum: 57 for shard 5, the kv.lastAppliedSeq: 57, kv.lastOpResult's (val: uXZwzFjo0-VXyw9QhZ_R, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k56, val: uXZwzFjo0-VXyw9QhZ_R, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k57, value: cyuYuWp9hxY22Skc_le5, version: 0) clientID: 3802376916218725105, seqNum: 58 for shard 6, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k57, value: cyuYuWp9hxY22Skc_le5, version: 0) clientID: 3802376916218725105, seqNum: 58 for shard 6, the kv.lastAppliedSeq: 58, kv.lastOpResult's (val: cyuYuWp9hxY22Skc_le5, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k57, val: cyuYuWp9hxY22Skc_le5, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k58, value: VsTQou0LbRxriqfmdB3w, version: 0) clientID: 3802376916218725105, seqNum: 59 for shard 11, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k58, value: VsTQou0LbRxriqfmdB3w, version: 0) clientID: 3802376916218725105, seqNum: 59 for shard 11, the kv.lastAppliedSeq: 59, kv.lastOpResult's (val: VsTQou0LbRxriqfmdB3w, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k58, val: VsTQou0LbRxriqfmdB3w, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 S0 received put(key: k59, value: v4PDEZjBs3_DspBT2i8V, version: 0) clientID: 3802376916218725105, seqNum: 60 for shard 0, configNum 1
+2026/06/16 17:07:32 S0 after put(key: k59, value: v4PDEZjBs3_DspBT2i8V, version: 0) clientID: 3802376916218725105, seqNum: 60 for shard 0, the kv.lastAppliedSeq: 60, kv.lastOpResult's (val: v4PDEZjBs3_DspBT2i8V, err: OK, ver: 1)
+2026/06/16 17:07:32 Put(key: k59, val: v4PDEZjBs3_DspBT2i8V, ver: 0) to server 0 received OK 
+2026/06/16 17:07:32 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/06/16 17:07:32 S0 received get(key: k0) clientID: 3802376916218725105, seqNum: 61 for shard 10
+2026/06/16 17:07:32 S0 after get(key: k0) clientID: 3802376916218725105, seqNum: 61 for shard 10, get reply (val: rbSHMiUrqKz24MV9ijGW, ver: 1, err: OK)
+2026/06/16 17:07:32 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/06/16 17:07:32 S0 received get(key: k1) clientID: 3802376916218725105, seqNum: 62 for shard 9
+2026/06/16 17:07:32 S0 after get(key: k1) clientID: 3802376916218725105, seqNum: 62 for shard 9, get reply (val: UNTFJm4fwgbU6wHL1ekK, ver: 1, err: OK)
+2026/06/16 17:07:32 DEBUG: Key k2 belongs to Shard 0, group 1
+2026/06/16 17:07:32 S0 received get(key: k2) clientID: 3802376916218725105, seqNum: 63 for shard 0
+2026/06/16 17:07:32 S0 after get(key: k2) clientID: 3802376916218725105, seqNum: 63 for shard 0, get reply (val: MyAa9WgA3XWgzcytOO5x, ver: 1, err: OK)
+2026/06/16 17:07:32 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/06/16 17:07:32 S0 received get(key: k3) clientID: 3802376916218725105, seqNum: 64 for shard 11
+2026/06/16 17:07:32 S0 after get(key: k3) clientID: 3802376916218725105, seqNum: 64 for shard 11, get reply (val: OwVoZ-doxEbpZJc7tKVv, ver: 1, err: OK)
+2026/06/16 17:07:32 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/06/16 17:07:32 S0 received get(key: k4) clientID: 3802376916218725105, seqNum: 65 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k4) clientID: 3802376916218725105, seqNum: 65 for shard 6, get reply (val: zXKJk7W8-CrlT5cnmZyk, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k5 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k5) clientID: 3802376916218725105, seqNum: 66 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k5) clientID: 3802376916218725105, seqNum: 66 for shard 5, get reply (val: HLlHQhmuKjdkcEZ-fXXX, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/06/16 17:07:33 S0 received get(key: k6) clientID: 3802376916218725105, seqNum: 67 for shard 8
+2026/06/16 17:07:33 S0 after get(key: k6) clientID: 3802376916218725105, seqNum: 67 for shard 8, get reply (val: L0a6XLQxfG_OERX16jcu, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/06/16 17:07:33 S0 received get(key: k7) clientID: 3802376916218725105, seqNum: 68 for shard 7
+2026/06/16 17:07:33 S0 after get(key: k7) clientID: 3802376916218725105, seqNum: 68 for shard 7, get reply (val: -_PLSaD9UHoaeSlRrVGC, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k8) clientID: 3802376916218725105, seqNum: 69 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k8) clientID: 3802376916218725105, seqNum: 69 for shard 6, get reply (val: KmJZNnDmgTSYIe-9PorF, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k9 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k9) clientID: 3802376916218725105, seqNum: 70 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k9) clientID: 3802376916218725105, seqNum: 70 for shard 5, get reply (val: 1-qvLMv20c-Yys4lm-iu, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/06/16 17:07:33 S0 received get(key: k10) clientID: 3802376916218725105, seqNum: 71 for shard 7
+2026/06/16 17:07:33 S0 after get(key: k10) clientID: 3802376916218725105, seqNum: 71 for shard 7, get reply (val: 3QNU2gdFTxMlqkKEvRNT, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/06/16 17:07:33 S0 received get(key: k11) clientID: 3802376916218725105, seqNum: 72 for shard 8
+2026/06/16 17:07:33 S0 after get(key: k11) clientID: 3802376916218725105, seqNum: 72 for shard 8, get reply (val: 0vA5jdl0VPr-xwMi4o5N, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k12 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k12) clientID: 3802376916218725105, seqNum: 73 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k12) clientID: 3802376916218725105, seqNum: 73 for shard 5, get reply (val: UMRGURchoH3gw1uCaeA0, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k13) clientID: 3802376916218725105, seqNum: 74 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k13) clientID: 3802376916218725105, seqNum: 74 for shard 6, get reply (val: wk5OsU5BB9Jm8FRA0oDJ, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k14 belongs to Shard 3, group 1
+2026/06/16 17:07:33 S0 received get(key: k14) clientID: 3802376916218725105, seqNum: 75 for shard 3
+2026/06/16 17:07:33 S0 after get(key: k14) clientID: 3802376916218725105, seqNum: 75 for shard 3, get reply (val: 1_79CU7OdVGazTzgi0aU, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k15 belongs to Shard 4, group 1
+2026/06/16 17:07:33 S0 received get(key: k15) clientID: 3802376916218725105, seqNum: 76 for shard 4
+2026/06/16 17:07:33 S0 after get(key: k15) clientID: 3802376916218725105, seqNum: 76 for shard 4, get reply (val: kxI3B9JgScuqavra2rhk, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k16 belongs to Shard 1, group 1
+2026/06/16 17:07:33 S0 received get(key: k16) clientID: 3802376916218725105, seqNum: 77 for shard 1
+2026/06/16 17:07:33 S0 after get(key: k16) clientID: 3802376916218725105, seqNum: 77 for shard 1, get reply (val: muz9XyyaFJI8MIHIYnu3, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k17 belongs to Shard 2, group 1
+2026/06/16 17:07:33 S0 received get(key: k17) clientID: 3802376916218725105, seqNum: 78 for shard 2
+2026/06/16 17:07:33 S0 after get(key: k17) clientID: 3802376916218725105, seqNum: 78 for shard 2, get reply (val: akPNXxM9hh0SxZ-QJA0y, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k18) clientID: 3802376916218725105, seqNum: 79 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k18) clientID: 3802376916218725105, seqNum: 79 for shard 11, get reply (val: S8hjBEyfxkxq1rZFd9HD, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k19 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k19) clientID: 3802376916218725105, seqNum: 80 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k19) clientID: 3802376916218725105, seqNum: 80 for shard 0, get reply (val: 6KbCSrzkNs4AQb3Zj8Nw, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k20 belongs to Shard 4, group 1
+2026/06/16 17:07:33 S0 received get(key: k20) clientID: 3802376916218725105, seqNum: 81 for shard 4
+2026/06/16 17:07:33 S0 after get(key: k20) clientID: 3802376916218725105, seqNum: 81 for shard 4, get reply (val: J8e7VulLMIyMirpB7EeN, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k21 belongs to Shard 3, group 1
+2026/06/16 17:07:33 S0 received get(key: k21) clientID: 3802376916218725105, seqNum: 82 for shard 3
+2026/06/16 17:07:33 S0 after get(key: k21) clientID: 3802376916218725105, seqNum: 82 for shard 3, get reply (val: j4wfKLbTfW2Zof6C41B7, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k22 belongs to Shard 2, group 1
+2026/06/16 17:07:33 S0 received get(key: k22) clientID: 3802376916218725105, seqNum: 83 for shard 2
+2026/06/16 17:07:33 S0 after get(key: k22) clientID: 3802376916218725105, seqNum: 83 for shard 2, get reply (val: WBadCPyX6rQGOe37N9gH, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k23 belongs to Shard 1, group 1
+2026/06/16 17:07:33 S0 received get(key: k23) clientID: 3802376916218725105, seqNum: 84 for shard 1
+2026/06/16 17:07:33 S0 after get(key: k23) clientID: 3802376916218725105, seqNum: 84 for shard 1, get reply (val: 3-nZKCeqRW-VYI405oQd, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k24 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k24) clientID: 3802376916218725105, seqNum: 85 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k24) clientID: 3802376916218725105, seqNum: 85 for shard 0, get reply (val: cFpUphksLUtsPLfbJi4T, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k25) clientID: 3802376916218725105, seqNum: 86 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k25) clientID: 3802376916218725105, seqNum: 86 for shard 11, get reply (val: WWgGLz9eZtMfomPLAIlh, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/06/16 17:07:33 S0 received get(key: k26) clientID: 3802376916218725105, seqNum: 87 for shard 10
+2026/06/16 17:07:33 S0 after get(key: k26) clientID: 3802376916218725105, seqNum: 87 for shard 10, get reply (val: 6IjNs7zLzFZbQ7IFWjyu, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/06/16 17:07:33 S0 received get(key: k27) clientID: 3802376916218725105, seqNum: 88 for shard 9
+2026/06/16 17:07:33 S0 after get(key: k27) clientID: 3802376916218725105, seqNum: 88 for shard 9, get reply (val: fVdMUjLnLaXtZ0YbQ_7s, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k28 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k28) clientID: 3802376916218725105, seqNum: 89 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k28) clientID: 3802376916218725105, seqNum: 89 for shard 0, get reply (val: FtXM_xDqGXcz1_V9T2xP, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k29) clientID: 3802376916218725105, seqNum: 90 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k29) clientID: 3802376916218725105, seqNum: 90 for shard 11, get reply (val: t5UEvlh8c_DOWSWf8MKI, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/06/16 17:07:33 S0 received get(key: k30) clientID: 3802376916218725105, seqNum: 91 for shard 9
+2026/06/16 17:07:33 S0 after get(key: k30) clientID: 3802376916218725105, seqNum: 91 for shard 9, get reply (val: iNOOUEfsbwz97PqkKmZe, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/06/16 17:07:33 S0 received get(key: k31) clientID: 3802376916218725105, seqNum: 92 for shard 10
+2026/06/16 17:07:33 S0 after get(key: k31) clientID: 3802376916218725105, seqNum: 92 for shard 10, get reply (val: LaDCcFBKxu6YAKPqvFXb, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k32) clientID: 3802376916218725105, seqNum: 93 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k32) clientID: 3802376916218725105, seqNum: 93 for shard 11, get reply (val: qmpbHmhXH36qdc5vxWbs, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k33 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k33) clientID: 3802376916218725105, seqNum: 94 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k33) clientID: 3802376916218725105, seqNum: 94 for shard 0, get reply (val: 2AanwvD1XFuIts142Lrs, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k34 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k34) clientID: 3802376916218725105, seqNum: 95 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k34) clientID: 3802376916218725105, seqNum: 95 for shard 5, get reply (val: uuNciQVuQKJwLM-AbUQA, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k35) clientID: 3802376916218725105, seqNum: 96 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k35) clientID: 3802376916218725105, seqNum: 96 for shard 6, get reply (val: mQ64vVtilic_xGFU1DIR, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/06/16 17:07:33 S0 received get(key: k36) clientID: 3802376916218725105, seqNum: 97 for shard 7
+2026/06/16 17:07:33 S0 after get(key: k36) clientID: 3802376916218725105, seqNum: 97 for shard 7, get reply (val: AJNmJy85fej1Hj1d6_TR, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/06/16 17:07:33 S0 received get(key: k37) clientID: 3802376916218725105, seqNum: 98 for shard 8
+2026/06/16 17:07:33 S0 after get(key: k37) clientID: 3802376916218725105, seqNum: 98 for shard 8, get reply (val: 8T1D7JnrhPikN2uqyAp3, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k38 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k38) clientID: 3802376916218725105, seqNum: 99 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k38) clientID: 3802376916218725105, seqNum: 99 for shard 5, get reply (val: NLIfaGg_mD--T8aEz4Ox, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k39) clientID: 3802376916218725105, seqNum: 100 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k39) clientID: 3802376916218725105, seqNum: 100 for shard 6, get reply (val: Z2xTwz7agA02qyIG43x_, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/06/16 17:07:33 S0 received get(key: k40) clientID: 3802376916218725105, seqNum: 101 for shard 10
+2026/06/16 17:07:33 S0 after get(key: k40) clientID: 3802376916218725105, seqNum: 101 for shard 10, get reply (val: 0l9hq7rolD6RIoOJ2Q1h, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/06/16 17:07:33 S0 received get(key: k41) clientID: 3802376916218725105, seqNum: 102 for shard 9
+2026/06/16 17:07:33 S0 after get(key: k41) clientID: 3802376916218725105, seqNum: 102 for shard 9, get reply (val: L3Xcpvu1nkYMV3K5yItN, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k42 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k42) clientID: 3802376916218725105, seqNum: 103 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k42) clientID: 3802376916218725105, seqNum: 103 for shard 0, get reply (val: dqSRwbd5pIVx-f2LlxUG, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k43) clientID: 3802376916218725105, seqNum: 104 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k43) clientID: 3802376916218725105, seqNum: 104 for shard 11, get reply (val: s5PxAHKA6_GnbtzAoqhB, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k44) clientID: 3802376916218725105, seqNum: 105 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k44) clientID: 3802376916218725105, seqNum: 105 for shard 6, get reply (val: i8VfN9KCFWPjtssWRPEn, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k45 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k45) clientID: 3802376916218725105, seqNum: 106 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k45) clientID: 3802376916218725105, seqNum: 106 for shard 5, get reply (val: 48GM3oZg3CFUjC5tgbi-, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/06/16 17:07:33 S0 received get(key: k46) clientID: 3802376916218725105, seqNum: 107 for shard 8
+2026/06/16 17:07:33 S0 after get(key: k46) clientID: 3802376916218725105, seqNum: 107 for shard 8, get reply (val: 6PcBofy-WhxDQvQrdHcv, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/06/16 17:07:33 S0 received get(key: k47) clientID: 3802376916218725105, seqNum: 108 for shard 7
+2026/06/16 17:07:33 S0 after get(key: k47) clientID: 3802376916218725105, seqNum: 108 for shard 7, get reply (val: _Dxz4w8WDAnpFrxf3QTD, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k48) clientID: 3802376916218725105, seqNum: 109 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k48) clientID: 3802376916218725105, seqNum: 109 for shard 6, get reply (val: bxJhMTAQkx2kCMeG8j05, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k49 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k49) clientID: 3802376916218725105, seqNum: 110 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k49) clientID: 3802376916218725105, seqNum: 110 for shard 5, get reply (val: CPJL1AarWm-6YUpxq_oh, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k50 belongs to Shard 3, group 1
+2026/06/16 17:07:33 S0 received get(key: k50) clientID: 3802376916218725105, seqNum: 111 for shard 3
+2026/06/16 17:07:33 S0 after get(key: k50) clientID: 3802376916218725105, seqNum: 111 for shard 3, get reply (val: yCUG4A2XdAkJc9Bwq9PA, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k51 belongs to Shard 4, group 1
+2026/06/16 17:07:33 S0 received get(key: k51) clientID: 3802376916218725105, seqNum: 112 for shard 4
+2026/06/16 17:07:33 S0 after get(key: k51) clientID: 3802376916218725105, seqNum: 112 for shard 4, get reply (val: MosFJ0nzm8jy6YETjWmr, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k52 belongs to Shard 1, group 1
+2026/06/16 17:07:33 S0 received get(key: k52) clientID: 3802376916218725105, seqNum: 113 for shard 1
+2026/06/16 17:07:33 S0 after get(key: k52) clientID: 3802376916218725105, seqNum: 113 for shard 1, get reply (val: _lmSzqT2LaBeFHVJGLHS, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k53 belongs to Shard 2, group 1
+2026/06/16 17:07:33 S0 received get(key: k53) clientID: 3802376916218725105, seqNum: 114 for shard 2
+2026/06/16 17:07:33 S0 after get(key: k53) clientID: 3802376916218725105, seqNum: 114 for shard 2, get reply (val: MTA-7LCCCqTVu3q2dbIF, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/06/16 17:07:33 S0 received get(key: k54) clientID: 3802376916218725105, seqNum: 115 for shard 7
+2026/06/16 17:07:33 S0 after get(key: k54) clientID: 3802376916218725105, seqNum: 115 for shard 7, get reply (val: J2LVNhBHddKjpBo2C_HC, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/06/16 17:07:33 S0 received get(key: k55) clientID: 3802376916218725105, seqNum: 116 for shard 8
+2026/06/16 17:07:33 S0 after get(key: k55) clientID: 3802376916218725105, seqNum: 116 for shard 8, get reply (val: XN0ceWTA9fPInoXcVQfx, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k56 belongs to Shard 5, group 1
+2026/06/16 17:07:33 S0 received get(key: k56) clientID: 3802376916218725105, seqNum: 117 for shard 5
+2026/06/16 17:07:33 S0 after get(key: k56) clientID: 3802376916218725105, seqNum: 117 for shard 5, get reply (val: uXZwzFjo0-VXyw9QhZ_R, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/06/16 17:07:33 S0 received get(key: k57) clientID: 3802376916218725105, seqNum: 118 for shard 6
+2026/06/16 17:07:33 S0 after get(key: k57) clientID: 3802376916218725105, seqNum: 118 for shard 6, get reply (val: cyuYuWp9hxY22Skc_le5, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/06/16 17:07:33 S0 received get(key: k58) clientID: 3802376916218725105, seqNum: 119 for shard 11
+2026/06/16 17:07:33 S0 after get(key: k58) clientID: 3802376916218725105, seqNum: 119 for shard 11, get reply (val: VsTQou0LbRxriqfmdB3w, ver: 1, err: OK)
+2026/06/16 17:07:33 DEBUG: Key k59 belongs to Shard 0, group 1
+2026/06/16 17:07:33 S0 received get(key: k59) clientID: 3802376916218725105, seqNum: 120 for shard 0
+2026/06/16 17:07:33 S0 after get(key: k59) clientID: 3802376916218725105, seqNum: 120 for shard 0, get reply (val: v4PDEZjBs3_DspBT2i8V, ver: 1, err: OK)
+2026/06/16 17:07:33 ExecuteMoves: shard 0 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:33 C3008749808805217390 calling FreezeShard for Shard 0, Num 2 to Group Leader 0
+2026/06/16 17:07:33 S0 received freezeShard for shard 0, {FreezeShard   0 0 0 0 2 map[] map[] map[]}
+2026/06/16 17:07:33 SERVER 0 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:33 S0 after received freezeShard for shard 0, &{map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60] 2 }
+2026/06/16 17:07:33 C3008749808805217390 FreezeShard for shard 0, Num 2 Success to Group Leader 0
+2026/06/16 17:07:33 Data length return by freezeShard: 7, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:33 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 0
+2026/06/16 17:07:33 S0 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:33 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:33 SERVER 2 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:33 SERVER 1 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:33 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 1
+2026/06/16 17:07:34 S1 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 2
+2026/06/16 17:07:34 S2 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 1
+2026/06/16 17:07:34 S1 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 2
+2026/06/16 17:07:34 S2 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 C3523815931509339374 InstallShard received error: ErrWrongLeader
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 0, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 0, {InstallShard   0 0 0 0 2 map[k19:{6KbCSrzkNs4AQb3Zj8Nw 1} k2:{MyAa9WgA3XWgzcytOO5x 1} k24:{cFpUphksLUtsPLfbJi4T 1} k28:{FtXM_xDqGXcz1_V9T2xP 1} k33:{2AanwvD1XFuIts142Lrs 1} k42:{dqSRwbd5pIVx-f2LlxUG 1} k59:{v4PDEZjBs3_DspBT2i8V 1}] map[3802376916218725105:{v4PDEZjBs3_DspBT2i8V OK 1}] map[3802376916218725105:60]}
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 0 is now ACTIVE
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 0, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 0, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 0, {DeleteShard   0 0 0 0 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 0, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 0 successfully moved to GID 2
+2026/06/16 17:07:34 ExecuteMoves: shard 1 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:34 C3008749808805217390 calling FreezeShard for Shard 1, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received freezeShard for shard 1, {FreezeShard   0 0 0 1 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 S0 after received freezeShard for shard 1, &{map[k16:{muz9XyyaFJI8MIHIYnu3 1} k23:{3-nZKCeqRW-VYI405oQd 1} k52:{_lmSzqT2LaBeFHVJGLHS 1}] map[3802376916218725105:{_lmSzqT2LaBeFHVJGLHS OK 1}] map[3802376916218725105:53] 2 }
+2026/06/16 17:07:34 C3008749808805217390 FreezeShard for shard 1, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 1, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 1, {InstallShard   0 0 0 1 2 map[k16:{muz9XyyaFJI8MIHIYnu3 1} k23:{3-nZKCeqRW-VYI405oQd 1} k52:{_lmSzqT2LaBeFHVJGLHS 1}] map[3802376916218725105:{_lmSzqT2LaBeFHVJGLHS OK 1}] map[3802376916218725105:53]}
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 0 is now ACTIVE
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 1 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 0 is now ACTIVE
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 1, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 1, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 1, {DeleteShard   0 0 0 1 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 1, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 1 successfully moved to GID 2
+2026/06/16 17:07:34 ExecuteMoves: shard 2 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:34 C3008749808805217390 calling FreezeShard for Shard 2, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received freezeShard for shard 2, {FreezeShard   0 0 0 2 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 1 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 1 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 S0 after received freezeShard for shard 2, &{map[k17:{akPNXxM9hh0SxZ-QJA0y 1} k22:{WBadCPyX6rQGOe37N9gH 1} k53:{MTA-7LCCCqTVu3q2dbIF 1}] map[3802376916218725105:{MTA-7LCCCqTVu3q2dbIF OK 1}] map[3802376916218725105:54] 2 }
+2026/06/16 17:07:34 C3008749808805217390 FreezeShard for shard 2, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 2, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 2, {InstallShard   0 0 0 2 2 map[k17:{akPNXxM9hh0SxZ-QJA0y 1} k22:{WBadCPyX6rQGOe37N9gH 1} k53:{MTA-7LCCCqTVu3q2dbIF 1}] map[3802376916218725105:{MTA-7LCCCqTVu3q2dbIF OK 1}] map[3802376916218725105:54]}
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 2 is now ACTIVE
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 2, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 2, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 2, {DeleteShard   0 0 0 2 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 2, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 2 successfully moved to GID 2
+2026/06/16 17:07:34 ExecuteMoves: shard 3 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:34 C3008749808805217390 calling FreezeShard for Shard 3, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received freezeShard for shard 3, {FreezeShard   0 0 0 3 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 S0 after received freezeShard for shard 3, &{map[k14:{1_79CU7OdVGazTzgi0aU 1} k21:{j4wfKLbTfW2Zof6C41B7 1} k50:{yCUG4A2XdAkJc9Bwq9PA 1}] map[3802376916218725105:{yCUG4A2XdAkJc9Bwq9PA OK 1}] map[3802376916218725105:51] 2 }
+2026/06/16 17:07:34 C3008749808805217390 FreezeShard for shard 3, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 3, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 3, {InstallShard   0 0 0 3 2 map[k14:{1_79CU7OdVGazTzgi0aU 1} k21:{j4wfKLbTfW2Zof6C41B7 1} k50:{yCUG4A2XdAkJc9Bwq9PA 1}] map[3802376916218725105:{yCUG4A2XdAkJc9Bwq9PA OK 1}] map[3802376916218725105:51]}
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 2 is now ACTIVE
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 3 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 2 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 3, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 3, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 3, {DeleteShard   0 0 0 3 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 3, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 3 successfully moved to GID 2
+2026/06/16 17:07:34 ExecuteMoves: shard 4 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:34 C3008749808805217390 calling FreezeShard for Shard 4, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received freezeShard for shard 4, {FreezeShard   0 0 0 4 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 S0 after received freezeShard for shard 4, &{map[k15:{kxI3B9JgScuqavra2rhk 1} k20:{J8e7VulLMIyMirpB7EeN 1} k51:{MosFJ0nzm8jy6YETjWmr 1}] map[3802376916218725105:{MosFJ0nzm8jy6YETjWmr OK 1}] map[3802376916218725105:52] 2 }
+2026/06/16 17:07:34 C3008749808805217390 FreezeShard for shard 4, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 Data length return by freezeShard: 3, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 4, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 4, {InstallShard   0 0 0 4 2 map[k15:{kxI3B9JgScuqavra2rhk 1} k20:{J8e7VulLMIyMirpB7EeN 1} k51:{MosFJ0nzm8jy6YETjWmr 1}] map[3802376916218725105:{MosFJ0nzm8jy6YETjWmr OK 1}] map[3802376916218725105:52]}
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 3 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 3 is now ACTIVE
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 4 is now ACTIVE
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 4, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 4, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 4, {DeleteShard   0 0 0 4 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 4, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 4 successfully moved to GID 2
+2026/06/16 17:07:34 ExecuteMoves: shard 5 move from old group 1 to new group 2, from configNum 1 to 2 
+2026/06/16 17:07:34 C3008749808805217390 calling FreezeShard for Shard 5, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received freezeShard for shard 5, {FreezeShard   0 0 0 5 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 S0 after received freezeShard for shard 5, &{map[k12:{UMRGURchoH3gw1uCaeA0 1} k34:{uuNciQVuQKJwLM-AbUQA 1} k38:{NLIfaGg_mD--T8aEz4Ox 1} k45:{48GM3oZg3CFUjC5tgbi- 1} k49:{CPJL1AarWm-6YUpxq_oh 1} k5:{HLlHQhmuKjdkcEZ-fXXX 1} k56:{uXZwzFjo0-VXyw9QhZ_R 1} k9:{1-qvLMv20c-Yys4lm-iu 1}] map[3802376916218725105:{uXZwzFjo0-VXyw9QhZ_R OK 1}] map[3802376916218725105:57] 2 }
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 4 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 4 is now ACTIVE
+2026/06/16 17:07:34 C3008749808805217390 FreezeShard for shard 5, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 Data length return by freezeShard: 8, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:34 C3523815931509339374 calling InstallShard for Shard 5, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received InstallShard for shard 5, {InstallShard   0 0 0 5 2 map[k12:{UMRGURchoH3gw1uCaeA0 1} k34:{uuNciQVuQKJwLM-AbUQA 1} k38:{NLIfaGg_mD--T8aEz4Ox 1} k45:{48GM3oZg3CFUjC5tgbi- 1} k49:{CPJL1AarWm-6YUpxq_oh 1} k5:{HLlHQhmuKjdkcEZ-fXXX 1} k56:{uXZwzFjo0-VXyw9QhZ_R 1} k9:{1-qvLMv20c-Yys4lm-iu 1}] map[3802376916218725105:{uXZwzFjo0-VXyw9QhZ_R OK 1}] map[3802376916218725105:57]}
+2026/06/16 17:07:34 SERVER 0 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 2: Shard 5 is now ACTIVE
+2026/06/16 17:07:34 C3523815931509339374 InstallShard for shard 5, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 C3008749808805217390 calling DeleteShard for Shard 5, Num 2 to Group Leader 0
+2026/06/16 17:07:34 S0 received DeleteShard for shard 5, {DeleteShard   0 0 0 5 2 map[] map[] map[]}
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 0 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 0 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 C3008749808805217390 Delete for shard 5, Num 2 Success to Group Leader 0
+2026/06/16 17:07:34 ExecuteMoves: Shard 5 successfully moved to GID 2
+2026/06/16 17:07:34 SERVER 2 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 1 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:34 SERVER 2 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 2 GID 2: Shard 5 is now ACTIVE
+2026/06/16 17:07:34 SERVER 1 GID 2: APPLYING InstallShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:34 SERVER 1 GID 2: Shard 5 is now ACTIVE
+2026/06/16 17:07:34 DEBUG: Key k2 belongs to Shard 0, group 2
+2026/06/16 17:07:34 DEBUG: Key k5 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/06/16 17:07:34 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/06/16 17:07:34 S0 received get(key: k5) clientID: 1251663990941986178, seqNum: 1 for shard 5
+2026/06/16 17:07:34 DEBUG: Key k33 belongs to Shard 0, group 2
+2026/06/16 17:07:34 DEBUG: Key k34 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k20 belongs to Shard 4, group 2
+2026/06/16 17:07:34 S0 received get(key: k34) clientID: 3415483570361063004, seqNum: 1 for shard 5
+2026/06/16 17:07:34 S0 received get(key: k20) clientID: 3529564655271924700, seqNum: 1 for shard 4
+2026/06/16 17:07:34 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/06/16 17:07:34 S0 after get(key: k5) clientID: 1251663990941986178, seqNum: 1 for shard 5, get reply (val: HLlHQhmuKjdkcEZ-fXXX, ver: 1, err: OK)
+2026/06/16 17:07:34 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/06/16 17:07:34 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/06/16 17:07:34 DEBUG: Key k9 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/06/16 17:07:34 DEBUG: Key k38 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k21 belongs to Shard 3, group 2
+2026/06/16 17:07:34 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/06/16 17:07:34 S0 received get(key: k21) clientID: 2335473177559406767, seqNum: 1 for shard 3
+2026/06/16 17:07:34 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/06/16 17:07:34 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/06/16 17:07:34 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k42 belongs to Shard 0, group 2
+2026/06/16 17:07:34 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k59 belongs to Shard 0, group 2
+2026/06/16 17:07:34 DEBUG: Key k23 belongs to Shard 1, group 2
+2026/06/16 17:07:34 S0 received get(key: k38) clientID: 3827625918658630067, seqNum: 1 for shard 5
+2026/06/16 17:07:34 S0 received get(key: k23) clientID: 1820581948909704161, seqNum: 1 for shard 1
+2026/06/16 17:07:34 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/06/16 17:07:34 DEBUG: Key k16 belongs to Shard 1, group 2
+2026/06/16 17:07:34 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/06/16 17:07:34 S0 received get(key: k16) clientID: 4168074853007740962, seqNum: 1 for shard 1
+2026/06/16 17:07:34 DEBUG: Key k28 belongs to Shard 0, group 2
+2026/06/16 17:07:34 S0 received get(key: k28) clientID: 2536337711271647537, seqNum: 1 for shard 0
+2026/06/16 17:07:34 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k14 belongs to Shard 3, group 2
+2026/06/16 17:07:34 DEBUG: Key k24 belongs to Shard 0, group 2
+2026/06/16 17:07:34 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/06/16 17:07:34 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/06/16 17:07:34 S0 received get(key: k14) clientID: 2353310822428752327, seqNum: 1 for shard 3
+2026/06/16 17:07:34 DEBUG: Key k12 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k22 belongs to Shard 2, group 2
+2026/06/16 17:07:34 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/06/16 17:07:34 DEBUG: Key k45 belongs to Shard 5, group 2
+2026/06/16 17:07:34 S0 received get(key: k2) clientID: 2892704262981797650, seqNum: 1 for shard 0
+2026/06/16 17:07:34 S0 received get(key: k45) clientID: 2670841675489667959, seqNum: 1 for shard 5
+2026/06/16 17:07:34 S0 received get(key: k42) clientID: 2147654728804835709, seqNum: 1 for shard 0
+2026/06/16 17:07:34 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/06/16 17:07:34 S0 received get(key: k9) clientID: 673119467910113316, seqNum: 1 for shard 5
+2026/06/16 17:07:34 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/06/16 17:07:34 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/06/16 17:07:34 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/06/16 17:07:34 S0 received get(key: k24) clientID: 2153174963406293760, seqNum: 1 for shard 0
+2026/06/16 17:07:34 DEBUG: Key k52 belongs to Shard 1, group 2
+2026/06/16 17:07:34 S0 received get(key: k52) clientID: 1314423827315204947, seqNum: 1 for shard 1
+2026/06/16 17:07:34 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/06/16 17:07:34 S0 received get(key: k33) clientID: 3646250677542127583, seqNum: 1 for shard 0
+2026/06/16 17:07:34 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k53 belongs to Shard 2, group 2
+2026/06/16 17:07:34 S0 received get(key: k53) clientID: 2607805486147282218, seqNum: 1 for shard 2
+2026/06/16 17:07:34 DEBUG: Key k50 belongs to Shard 3, group 2
+2026/06/16 17:07:34 S0 received get(key: k50) clientID: 817537021851621164, seqNum: 1 for shard 3
+2026/06/16 17:07:34 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/06/16 17:07:34 DEBUG: Key k49 belongs to Shard 5, group 2
+2026/06/16 17:07:34 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/06/16 17:07:34 S0 received get(key: k49) clientID: 3610854098549991084, seqNum: 1 for shard 5
+2026/06/16 17:07:34 DEBUG: Key k17 belongs to Shard 2, group 2
+2026/06/16 17:07:34 DEBUG: Key k51 belongs to Shard 4, group 2
+2026/06/16 17:07:34 S0 received get(key: k17) clientID: 1413221836307619448, seqNum: 1 for shard 2
+2026/06/16 17:07:34 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/06/16 17:07:34 S0 received get(key: k59) clientID: 3047451738668059000, seqNum: 1 for shard 0
+2026/06/16 17:07:34 S0 received get(key: k51) clientID: 4555457531593008623, seqNum: 1 for shard 4
+2026/06/16 17:07:34 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/06/16 17:07:34 DEBUG: Key k15 belongs to Shard 4, group 2
+2026/06/16 17:07:34 DEBUG: Key k19 belongs to Shard 0, group 2
+2026/06/16 17:07:34 S0 received get(key: k15) clientID: 1718090697425902118, seqNum: 1 for shard 4
+2026/06/16 17:07:34 S0 received get(key: k19) clientID: 2686980922365726314, seqNum: 1 for shard 0
+2026/06/16 17:07:34 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/06/16 17:07:34 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/06/16 17:07:34 S0 received get(key: k12) clientID: 2263177590552083074, seqNum: 1 for shard 5
+2026/06/16 17:07:34 DEBUG: Key k56 belongs to Shard 5, group 2
+2026/06/16 17:07:34 S0 received get(key: k22) clientID: 3783454446152768796, seqNum: 1 for shard 2
+2026/06/16 17:07:34 S0 received get(key: k56) clientID: 3216998276954861667, seqNum: 1 for shard 5
+2026/06/16 17:07:34 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/06/16 17:07:34 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/06/16 17:07:34 S0 after get(key: k20) clientID: 3529564655271924700, seqNum: 1 for shard 4, get reply (val: J8e7VulLMIyMirpB7EeN, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k16) clientID: 4168074853007740962, seqNum: 1 for shard 1, get reply (val: muz9XyyaFJI8MIHIYnu3, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k23) clientID: 1820581948909704161, seqNum: 1 for shard 1, get reply (val: 3-nZKCeqRW-VYI405oQd, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k14) clientID: 2353310822428752327, seqNum: 1 for shard 3, get reply (val: 1_79CU7OdVGazTzgi0aU, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k28) clientID: 2536337711271647537, seqNum: 1 for shard 0, get reply (val: FtXM_xDqGXcz1_V9T2xP, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k21) clientID: 2335473177559406767, seqNum: 1 for shard 3, get reply (val: j4wfKLbTfW2Zof6C41B7, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k45) clientID: 2670841675489667959, seqNum: 1 for shard 5, get reply (val: 48GM3oZg3CFUjC5tgbi-, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k38) clientID: 3827625918658630067, seqNum: 1 for shard 5, get reply (val: NLIfaGg_mD--T8aEz4Ox, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k34) clientID: 3415483570361063004, seqNum: 1 for shard 5, get reply (val: uuNciQVuQKJwLM-AbUQA, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k2) clientID: 2892704262981797650, seqNum: 1 for shard 0, get reply (val: MyAa9WgA3XWgzcytOO5x, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k9) clientID: 673119467910113316, seqNum: 1 for shard 5, get reply (val: 1-qvLMv20c-Yys4lm-iu, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k52) clientID: 1314423827315204947, seqNum: 1 for shard 1, get reply (val: _lmSzqT2LaBeFHVJGLHS, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k42) clientID: 2147654728804835709, seqNum: 1 for shard 0, get reply (val: dqSRwbd5pIVx-f2LlxUG, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k24) clientID: 2153174963406293760, seqNum: 1 for shard 0, get reply (val: cFpUphksLUtsPLfbJi4T, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k53) clientID: 2607805486147282218, seqNum: 1 for shard 2, get reply (val: MTA-7LCCCqTVu3q2dbIF, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k49) clientID: 3610854098549991084, seqNum: 1 for shard 5, get reply (val: CPJL1AarWm-6YUpxq_oh, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k50) clientID: 817537021851621164, seqNum: 1 for shard 3, get reply (val: yCUG4A2XdAkJc9Bwq9PA, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k51) clientID: 4555457531593008623, seqNum: 1 for shard 4, get reply (val: MosFJ0nzm8jy6YETjWmr, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k33) clientID: 3646250677542127583, seqNum: 1 for shard 0, get reply (val: 2AanwvD1XFuIts142Lrs, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k59) clientID: 3047451738668059000, seqNum: 1 for shard 0, get reply (val: v4PDEZjBs3_DspBT2i8V, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k15) clientID: 1718090697425902118, seqNum: 1 for shard 4, get reply (val: kxI3B9JgScuqavra2rhk, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k17) clientID: 1413221836307619448, seqNum: 1 for shard 2, get reply (val: akPNXxM9hh0SxZ-QJA0y, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k19) clientID: 2686980922365726314, seqNum: 1 for shard 0, get reply (val: 6KbCSrzkNs4AQb3Zj8Nw, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k12) clientID: 2263177590552083074, seqNum: 1 for shard 5, get reply (val: UMRGURchoH3gw1uCaeA0, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k22) clientID: 3783454446152768796, seqNum: 1 for shard 2, get reply (val: WBadCPyX6rQGOe37N9gH, ver: 1, err: OK)
+2026/06/16 17:07:34 S0 after get(key: k56) clientID: 3216998276954861667, seqNum: 1 for shard 5, get reply (val: uXZwzFjo0-VXyw9QhZ_R, ver: 1, err: OK)
+2026/06/16 17:07:36 S0 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 3204790264269269512 get detected wrong leader for key k26 in server 0
+2026/06/16 17:07:36 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/06/16 17:07:36 S0 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:36 Client 3802376916218725105 get detected wrong leader for key k0 in server 0
+2026/06/16 17:07:36 S2 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:36 S1 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 1302937719730651709 get detected wrong leader for key k35 in server 2
+2026/06/16 17:07:36 Client 3985721403747869142 get detected wrong leader for key k11 in server 1
+2026/06/16 17:07:36 S0 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:36 Client 1631211874272873970 get detected wrong leader for key k41 in server 0
+2026/06/16 17:07:36 S2 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:36 Client 2202930997023475036 get detected wrong leader for key k10 in server 2
+2026/06/16 17:07:36 S0 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 3150960761490983271 get detected wrong leader for key k43 in server 0
+2026/06/16 17:07:36 S2 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 2351258272197093095 get detected wrong leader for key k37 in server 2
+2026/06/16 17:07:36 S2 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:36 S0 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 3558767433164737678 get detected wrong leader for key k27 in server 2
+2026/06/16 17:07:36 Client 479588869258962421 get detected wrong leader for key k3 in server 0
+2026/06/16 17:07:36 S1 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 34458913365445824 get detected wrong leader for key k31 in server 1
+2026/06/16 17:07:36 S2 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:36 S0 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:36 S0 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 660505920145961845 get detected wrong leader for key k46 in server 2
+2026/06/16 17:07:36 Client 911807899251262999 get detected wrong leader for key k29 in server 0
+2026/06/16 17:07:36 Client 1012909434719297203 get detected wrong leader for key k13 in server 0
+2026/06/16 17:07:36 S1 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:36 Client 3593929269859506230 get detected wrong leader for key k30 in server 1
+2026/06/16 17:07:36 S0 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:36 S0 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 336051101257216591 get detected wrong leader for key k1 in server 0
+2026/06/16 17:07:36 Client 2505517164821526606 get detected wrong leader for key k58 in server 0
+2026/06/16 17:07:36 S2 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 783028298022993111 get detected wrong leader for key k44 in server 2
+2026/06/16 17:07:36 S2 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 2559735080912898637 get detected wrong leader for key k4 in server 2
+2026/06/16 17:07:36 S0 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:36 Client 1158339404072750737 get detected wrong leader for key k47 in server 0
+2026/06/16 17:07:36 S2 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 1699309540371979502 get detected wrong leader for key k39 in server 2
+2026/06/16 17:07:36 S1 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 3854520864459476207 get detected wrong leader for key k6 in server 1
+2026/06/16 17:07:36 S1 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 2555407276337932180 get detected wrong leader for key k40 in server 1
+2026/06/16 17:07:36 S2 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:36 Client 4193528418191151347 get detected wrong leader for key k7 in server 2
+2026/06/16 17:07:36 S2 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 1555775158459923108 get detected wrong leader for key k8 in server 2
+2026/06/16 17:07:36 S0 received get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6
+2026/06/16 17:07:36 Client 4235464636288292609 get detected wrong leader for key k48 in server 0
+2026/06/16 17:07:36 S0 received get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 4507693380034795813 get detected wrong leader for key k55 in server 0
+2026/06/16 17:07:36 S2 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:36 Client 2963515267186062107 get detected wrong leader for key k36 in server 2
+2026/06/16 17:07:36 S1 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 4020852744631552340 get detected wrong leader for key k32 in server 1
+2026/06/16 17:07:36 S1 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:36 S1 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 1138805956559691330 get detected wrong leader for key k57 in server 1
+2026/06/16 17:07:36 Client 2424407442420491322 get detected wrong leader for key k18 in server 1
+2026/06/16 17:07:36 S1 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 4609942952553964113 get detected wrong leader for key k25 in server 1
+2026/06/16 17:07:36 S2 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:36 Client 735186863887594295 get detected wrong leader for key k54 in server 2
+2026/06/16 17:07:36 S2 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 1798666050662200915 get detected wrong leader for key k0 in server 2
+2026/06/16 17:07:36 S1 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:36 S1 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 3802376916218725105 get detected wrong leader for key k0 in server 1
+2026/06/16 17:07:36 Client 3204790264269269512 get detected wrong leader for key k26 in server 1
+2026/06/16 17:07:36 S0 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:36 S2 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 1302937719730651709 get detected wrong leader for key k35 in server 0
+2026/06/16 17:07:36 Client 3985721403747869142 get detected wrong leader for key k11 in server 2
+2026/06/16 17:07:36 S1 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:36 Client 1631211874272873970 get detected wrong leader for key k41 in server 1
+2026/06/16 17:07:36 S0 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:36 S1 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 2202930997023475036 get detected wrong leader for key k10 in server 0
+2026/06/16 17:07:36 Client 3150960761490983271 get detected wrong leader for key k43 in server 1
+2026/06/16 17:07:36 S0 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:36 Client 2351258272197093095 get detected wrong leader for key k37 in server 0
+2026/06/16 17:07:36 S0 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:36 S1 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:36 Client 3558767433164737678 get detected wrong leader for key k27 in server 0
+2026/06/16 17:07:36 Client 479588869258962421 get detected wrong leader for key k3 in server 1
+2026/06/16 17:07:36 S2 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:36 Client 34458913365445824 get detected wrong leader for key k31 in server 2
+2026/06/16 17:07:37 S0 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S1 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 660505920145961845 get detected wrong leader for key k46 in server 0
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 1
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 1
+2026/06/16 17:07:37 S2 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3593929269859506230 get detected wrong leader for key k30 in server 2
+2026/06/16 17:07:37 S1 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S1 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 1
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 1
+2026/06/16 17:07:37 S0 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 783028298022993111 get detected wrong leader for key k44 in server 0
+2026/06/16 17:07:37 S0 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2559735080912898637 get detected wrong leader for key k4 in server 0
+2026/06/16 17:07:37 S1 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 1
+2026/06/16 17:07:37 S0 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1699309540371979502 get detected wrong leader for key k39 in server 0
+2026/06/16 17:07:37 S2 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3854520864459476207 get detected wrong leader for key k6 in server 2
+2026/06/16 17:07:37 S2 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 2555407276337932180 get detected wrong leader for key k40 in server 2
+2026/06/16 17:07:37 S0 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 4193528418191151347 get detected wrong leader for key k7 in server 0
+2026/06/16 17:07:37 S0 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1555775158459923108 get detected wrong leader for key k8 in server 0
+2026/06/16 17:07:37 S1 received get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 4235464636288292609 get detected wrong leader for key k48 in server 1
+2026/06/16 17:07:37 S1 received get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 4507693380034795813 get detected wrong leader for key k55 in server 1
+2026/06/16 17:07:37 S0 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 2963515267186062107 get detected wrong leader for key k36 in server 0
+2026/06/16 17:07:37 S2 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4020852744631552340 get detected wrong leader for key k32 in server 2
+2026/06/16 17:07:37 S2 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S2 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2424407442420491322 get detected wrong leader for key k18 in server 2
+2026/06/16 17:07:37 Client 1138805956559691330 get detected wrong leader for key k57 in server 2
+2026/06/16 17:07:37 S2 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4609942952553964113 get detected wrong leader for key k25 in server 2
+2026/06/16 17:07:37 S0 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 735186863887594295 get detected wrong leader for key k54 in server 0
+2026/06/16 17:07:37 S0 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 1798666050662200915 get detected wrong leader for key k0 in server 0
+2026/06/16 17:07:37 S2 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 3204790264269269512 get detected wrong leader for key k26 in server 2
+2026/06/16 17:07:37 S2 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S1 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 3802376916218725105 get detected wrong leader for key k0 in server 2
+2026/06/16 17:07:37 Client 1302937719730651709 get detected wrong leader for key k35 in server 1
+2026/06/16 17:07:37 S0 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3985721403747869142 get detected wrong leader for key k11 in server 0
+2026/06/16 17:07:37 S2 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 1631211874272873970 get detected wrong leader for key k41 in server 2
+2026/06/16 17:07:37 S2 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 3150960761490983271 get detected wrong leader for key k43 in server 2
+2026/06/16 17:07:37 Client 2202930997023475036 get detected wrong leader for key k10 in server 1
+2026/06/16 17:07:37 S1 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 2351258272197093095 get detected wrong leader for key k37 in server 1
+2026/06/16 17:07:37 S1 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3558767433164737678 get detected wrong leader for key k27 in server 1
+2026/06/16 17:07:37 S2 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 479588869258962421 get detected wrong leader for key k3 in server 2
+2026/06/16 17:07:37 S0 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 34458913365445824 get detected wrong leader for key k31 in server 0
+2026/06/16 17:07:37 S1 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S2 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S2 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 660505920145961845 get detected wrong leader for key k46 in server 1
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 2
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 2
+2026/06/16 17:07:37 S0 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3593929269859506230 get detected wrong leader for key k30 in server 0
+2026/06/16 17:07:37 S2 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S2 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 2
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 2
+2026/06/16 17:07:37 S1 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 783028298022993111 get detected wrong leader for key k44 in server 1
+2026/06/16 17:07:37 S1 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2559735080912898637 get detected wrong leader for key k4 in server 1
+2026/06/16 17:07:37 S2 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 2
+2026/06/16 17:07:37 S1 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1699309540371979502 get detected wrong leader for key k39 in server 1
+2026/06/16 17:07:37 S0 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3854520864459476207 get detected wrong leader for key k6 in server 0
+2026/06/16 17:07:37 S0 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 2555407276337932180 get detected wrong leader for key k40 in server 0
+2026/06/16 17:07:37 S1 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 4193528418191151347 get detected wrong leader for key k7 in server 1
+2026/06/16 17:07:37 S1 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1555775158459923108 get detected wrong leader for key k8 in server 1
+2026/06/16 17:07:37 S2 received get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 4235464636288292609 get detected wrong leader for key k48 in server 2
+2026/06/16 17:07:37 S2 received get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 4507693380034795813 get detected wrong leader for key k55 in server 2
+2026/06/16 17:07:37 S1 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 2963515267186062107 get detected wrong leader for key k36 in server 1
+2026/06/16 17:07:37 S0 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4020852744631552340 get detected wrong leader for key k32 in server 0
+2026/06/16 17:07:37 S0 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S0 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2424407442420491322 get detected wrong leader for key k18 in server 0
+2026/06/16 17:07:37 Client 1138805956559691330 get detected wrong leader for key k57 in server 0
+2026/06/16 17:07:37 S0 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4609942952553964113 get detected wrong leader for key k25 in server 0
+2026/06/16 17:07:37 S1 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 735186863887594295 get detected wrong leader for key k54 in server 1
+2026/06/16 17:07:37 S1 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 1798666050662200915 get detected wrong leader for key k0 in server 1
+2026/06/16 17:07:37 S0 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S0 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S2 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 3802376916218725105 get detected wrong leader for key k0 in server 0
+2026/06/16 17:07:37 Client 3204790264269269512 get detected wrong leader for key k26 in server 0
+2026/06/16 17:07:37 S1 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 1302937719730651709 get detected wrong leader for key k35 in server 2
+2026/06/16 17:07:37 Client 3985721403747869142 get detected wrong leader for key k11 in server 1
+2026/06/16 17:07:37 S0 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 1631211874272873970 get detected wrong leader for key k41 in server 0
+2026/06/16 17:07:37 S2 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S0 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 2202930997023475036 get detected wrong leader for key k10 in server 2
+2026/06/16 17:07:37 Client 3150960761490983271 get detected wrong leader for key k43 in server 0
+2026/06/16 17:07:37 S2 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 2351258272197093095 get detected wrong leader for key k37 in server 2
+2026/06/16 17:07:37 S2 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3558767433164737678 get detected wrong leader for key k27 in server 2
+2026/06/16 17:07:37 S0 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 479588869258962421 get detected wrong leader for key k3 in server 0
+2026/06/16 17:07:37 S1 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 34458913365445824 get detected wrong leader for key k31 in server 1
+2026/06/16 17:07:37 S2 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S0 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S0 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 660505920145961845 get detected wrong leader for key k46 in server 2
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 0
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 0
+2026/06/16 17:07:37 S1 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3593929269859506230 get detected wrong leader for key k30 in server 1
+2026/06/16 17:07:37 S0 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S0 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 0
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 0
+2026/06/16 17:07:37 S2 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 783028298022993111 get detected wrong leader for key k44 in server 2
+2026/06/16 17:07:37 S2 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2559735080912898637 get detected wrong leader for key k4 in server 2
+2026/06/16 17:07:37 S0 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 0
+2026/06/16 17:07:37 S2 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1699309540371979502 get detected wrong leader for key k39 in server 2
+2026/06/16 17:07:37 S1 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3854520864459476207 get detected wrong leader for key k6 in server 1
+2026/06/16 17:07:37 S1 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 2555407276337932180 get detected wrong leader for key k40 in server 1
+2026/06/16 17:07:37 S2 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 4193528418191151347 get detected wrong leader for key k7 in server 2
+2026/06/16 17:07:37 S2 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1555775158459923108 get detected wrong leader for key k8 in server 2
+2026/06/16 17:07:37 S0 received get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S0 received get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 4235464636288292609 get detected wrong leader for key k48 in server 0
+2026/06/16 17:07:37 Client 4507693380034795813 get detected wrong leader for key k55 in server 0
+2026/06/16 17:07:37 S2 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S1 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 2963515267186062107 get detected wrong leader for key k36 in server 2
+2026/06/16 17:07:37 Client 4020852744631552340 get detected wrong leader for key k32 in server 1
+2026/06/16 17:07:37 S1 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2424407442420491322 get detected wrong leader for key k18 in server 1
+2026/06/16 17:07:37 Client 1138805956559691330 get detected wrong leader for key k57 in server 1
+2026/06/16 17:07:37 S1 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4609942952553964113 get detected wrong leader for key k25 in server 1
+2026/06/16 17:07:37 S2 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 735186863887594295 get detected wrong leader for key k54 in server 2
+2026/06/16 17:07:37 S2 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 1798666050662200915 get detected wrong leader for key k0 in server 2
+2026/06/16 17:07:37 S1 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S1 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S0 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S2 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3802376916218725105 get detected wrong leader for key k0 in server 1
+2026/06/16 17:07:37 Client 3204790264269269512 get detected wrong leader for key k26 in server 1
+2026/06/16 17:07:37 Client 1302937719730651709 get detected wrong leader for key k35 in server 0
+2026/06/16 17:07:37 Client 3985721403747869142 get detected wrong leader for key k11 in server 2
+2026/06/16 17:07:37 S1 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 1631211874272873970 get detected wrong leader for key k41 in server 1
+2026/06/16 17:07:37 S0 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S1 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 2202930997023475036 get detected wrong leader for key k10 in server 0
+2026/06/16 17:07:37 Client 3150960761490983271 get detected wrong leader for key k43 in server 1
+2026/06/16 17:07:37 S0 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 2351258272197093095 get detected wrong leader for key k37 in server 0
+2026/06/16 17:07:37 S0 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S1 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 3558767433164737678 get detected wrong leader for key k27 in server 0
+2026/06/16 17:07:37 Client 479588869258962421 get detected wrong leader for key k3 in server 1
+2026/06/16 17:07:37 S2 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 34458913365445824 get detected wrong leader for key k31 in server 2
+2026/06/16 17:07:37 S1 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S0 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S1 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 1
+2026/06/16 17:07:37 Client 660505920145961845 get detected wrong leader for key k46 in server 0
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 1
+2026/06/16 17:07:37 S2 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3593929269859506230 get detected wrong leader for key k30 in server 2
+2026/06/16 17:07:37 S1 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 1
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 1
+2026/06/16 17:07:37 S0 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 783028298022993111 get detected wrong leader for key k44 in server 0
+2026/06/16 17:07:37 S0 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 2559735080912898637 get detected wrong leader for key k4 in server 0
+2026/06/16 17:07:37 S1 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 1
+2026/06/16 17:07:37 S0 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1699309540371979502 get detected wrong leader for key k39 in server 0
+2026/06/16 17:07:37 S2 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3854520864459476207 get detected wrong leader for key k6 in server 2
+2026/06/16 17:07:37 S2 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 2555407276337932180 get detected wrong leader for key k40 in server 2
+2026/06/16 17:07:37 S0 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 4193528418191151347 get detected wrong leader for key k7 in server 0
+2026/06/16 17:07:37 S0 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 1555775158459923108 get detected wrong leader for key k8 in server 0
+2026/06/16 17:07:37 S1 received get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S1 received get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 1 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 1 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 S1 after get(key: k48) clientID: 4235464636288292609, seqNum: 1 for shard 6, get reply (val: bxJhMTAQkx2kCMeG8j05, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k55) clientID: 4507693380034795813, seqNum: 1 for shard 8, get reply (val: XN0ceWTA9fPInoXcVQfx, ver: 1, err: OK)
+2026/06/16 17:07:37 S0 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S2 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 2963515267186062107 get detected wrong leader for key k36 in server 0
+2026/06/16 17:07:37 Client 4020852744631552340 get detected wrong leader for key k32 in server 2
+2026/06/16 17:07:37 S2 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S2 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 1138805956559691330 get detected wrong leader for key k57 in server 2
+2026/06/16 17:07:37 Client 2424407442420491322 get detected wrong leader for key k18 in server 2
+2026/06/16 17:07:37 S2 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4609942952553964113 get detected wrong leader for key k25 in server 2
+2026/06/16 17:07:37 S0 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 735186863887594295 get detected wrong leader for key k54 in server 0
+2026/06/16 17:07:37 S0 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 1798666050662200915 get detected wrong leader for key k0 in server 0
+2026/06/16 17:07:37 S2 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S0 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S2 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 3985721403747869142 get detected wrong leader for key k11 in server 0
+2026/06/16 17:07:37 S1 received get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 3204790264269269512 get detected wrong leader for key k26 in server 2
+2026/06/16 17:07:37 Client 3802376916218725105 get detected wrong leader for key k0 in server 2
+2026/06/16 17:07:37 S2 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 1631211874272873970 get detected wrong leader for key k41 in server 2
+2026/06/16 17:07:37 S1 after get(key: k35) clientID: 1302937719730651709, seqNum: 1 for shard 6, get reply (val: mQ64vVtilic_xGFU1DIR, ver: 1, err: OK)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 0, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 1, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 2, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 3, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 4, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING FreezeShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 1)
+2026/06/16 17:07:37 SERVER 0 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 0 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: APPLYING DeleteShard for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 SERVER 2 GID 1: DeleteShard success for Shard 5, NewConfigNum 2. (Current Config for this shard was 2)
+2026/06/16 17:07:37 S1 received get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S2 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 3150960761490983271 get detected wrong leader for key k43 in server 2
+2026/06/16 17:07:37 S1 received get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S1 received get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S2 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 479588869258962421 get detected wrong leader for key k3 in server 2
+2026/06/16 17:07:37 S0 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 34458913365445824 get detected wrong leader for key k31 in server 0
+2026/06/16 17:07:37 S2 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S2 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 2
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 2
+2026/06/16 17:07:37 S0 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 3593929269859506230 get detected wrong leader for key k30 in server 0
+2026/06/16 17:07:37 S1 after get(key: k37) clientID: 2351258272197093095, seqNum: 1 for shard 8, get reply (val: 8T1D7JnrhPikN2uqyAp3, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k10) clientID: 2202930997023475036, seqNum: 1 for shard 7, get reply (val: 3QNU2gdFTxMlqkKEvRNT, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k27) clientID: 3558767433164737678, seqNum: 1 for shard 9, get reply (val: fVdMUjLnLaXtZ0YbQ_7s, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k46) clientID: 660505920145961845, seqNum: 1 for shard 8, get reply (val: 6PcBofy-WhxDQvQrdHcv, ver: 1, err: OK)
+2026/06/16 17:07:37 S2 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S2 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 2
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 2
+2026/06/16 17:07:37 S1 received get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S1 received get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S2 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 2
+2026/06/16 17:07:37 S1 received get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S0 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3854520864459476207 get detected wrong leader for key k6 in server 0
+2026/06/16 17:07:37 S0 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 Client 2555407276337932180 get detected wrong leader for key k40 in server 0
+2026/06/16 17:07:37 S1 received get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S1 after get(key: k4) clientID: 2559735080912898637, seqNum: 1 for shard 6, get reply (val: zXKJk7W8-CrlT5cnmZyk, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k44) clientID: 783028298022993111, seqNum: 1 for shard 6, get reply (val: i8VfN9KCFWPjtssWRPEn, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k39) clientID: 1699309540371979502, seqNum: 1 for shard 6, get reply (val: Z2xTwz7agA02qyIG43x_, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S1 received get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S0 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4020852744631552340 get detected wrong leader for key k32 in server 0
+2026/06/16 17:07:37 S1 after get(key: k8) clientID: 1555775158459923108, seqNum: 1 for shard 6, get reply (val: KmJZNnDmgTSYIe-9PorF, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k7) clientID: 4193528418191151347, seqNum: 1 for shard 7, get reply (val: -_PLSaD9UHoaeSlRrVGC, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k36) clientID: 2963515267186062107, seqNum: 1 for shard 7, get reply (val: AJNmJy85fej1Hj1d6_TR, ver: 1, err: OK)
+2026/06/16 17:07:37 S0 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S0 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 1138805956559691330 get detected wrong leader for key k57 in server 0
+2026/06/16 17:07:37 Client 2424407442420491322 get detected wrong leader for key k18 in server 0
+2026/06/16 17:07:37 S0 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 4609942952553964113 get detected wrong leader for key k25 in server 0
+2026/06/16 17:07:37 S1 received get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7
+2026/06/16 17:07:37 S1 after get(key: k54) clientID: 735186863887594295, seqNum: 1 for shard 7, get reply (val: J2LVNhBHddKjpBo2C_HC, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S1 after get(key: k0) clientID: 1798666050662200915, seqNum: 1 for shard 10, get reply (val: rbSHMiUrqKz24MV9ijGW, ver: 1, err: OK)
+2026/06/16 17:07:37 S0 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S0 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S1 received get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8
+2026/06/16 17:07:37 Client 3204790264269269512 get detected wrong leader for key k26 in server 0
+2026/06/16 17:07:37 Client 3802376916218725105 get detected wrong leader for key k0 in server 0
+2026/06/16 17:07:37 S0 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 1631211874272873970 get detected wrong leader for key k41 in server 0
+2026/06/16 17:07:37 S1 after get(key: k11) clientID: 3985721403747869142, seqNum: 1 for shard 8, get reply (val: 0vA5jdl0VPr-xwMi4o5N, ver: 1, err: OK)
+2026/06/16 17:07:37 S0 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 3150960761490983271 get detected wrong leader for key k43 in server 0
+2026/06/16 17:07:37 S0 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 Client 479588869258962421 get detected wrong leader for key k3 in server 0
+2026/06/16 17:07:37 S1 received get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S0 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S0 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 Client 911807899251262999 get detected wrong leader for key k29 in server 0
+2026/06/16 17:07:37 Client 1012909434719297203 get detected wrong leader for key k13 in server 0
+2026/06/16 17:07:37 S1 received get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S1 after get(key: k31) clientID: 34458913365445824, seqNum: 1 for shard 10, get reply (val: LaDCcFBKxu6YAKPqvFXb, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k30) clientID: 3593929269859506230, seqNum: 1 for shard 9, get reply (val: iNOOUEfsbwz97PqkKmZe, ver: 1, err: OK)
+2026/06/16 17:07:37 S0 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S0 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 Client 2505517164821526606 get detected wrong leader for key k58 in server 0
+2026/06/16 17:07:37 Client 336051101257216591 get detected wrong leader for key k1 in server 0
+2026/06/16 17:07:37 S0 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 Client 1158339404072750737 get detected wrong leader for key k47 in server 0
+2026/06/16 17:07:37 S1 received get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8
+2026/06/16 17:07:37 S1 received get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S1 after get(key: k6) clientID: 3854520864459476207, seqNum: 1 for shard 8, get reply (val: L0a6XLQxfG_OERX16jcu, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 after get(key: k32) clientID: 4020852744631552340, seqNum: 1 for shard 11, get reply (val: qmpbHmhXH36qdc5vxWbs, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k40) clientID: 2555407276337932180, seqNum: 1 for shard 10, get reply (val: 0l9hq7rolD6RIoOJ2Q1h, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S1 received get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 after get(key: k57) clientID: 1138805956559691330, seqNum: 1 for shard 6, get reply (val: cyuYuWp9hxY22Skc_le5, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k18) clientID: 2424407442420491322, seqNum: 1 for shard 11, get reply (val: S8hjBEyfxkxq1rZFd9HD, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k25) clientID: 4609942952553964113, seqNum: 1 for shard 11, get reply (val: WWgGLz9eZtMfomPLAIlh, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10
+2026/06/16 17:07:37 S1 received get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10
+2026/06/16 17:07:37 S1 received get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S1 after get(key: k0) clientID: 3802376916218725105, seqNum: 121 for shard 10, get reply (val: rbSHMiUrqKz24MV9ijGW, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/06/16 17:07:37 S1 received get(key: k1) clientID: 3802376916218725105, seqNum: 122 for shard 9
+2026/06/16 17:07:37 S1 after get(key: k26) clientID: 3204790264269269512, seqNum: 1 for shard 10, get reply (val: 6IjNs7zLzFZbQ7IFWjyu, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k41) clientID: 1631211874272873970, seqNum: 1 for shard 9, get reply (val: L3Xcpvu1nkYMV3K5yItN, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6
+2026/06/16 17:07:37 S1 received get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11
+2026/06/16 17:07:37 S1 received get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9
+2026/06/16 17:07:37 S1 after get(key: k43) clientID: 3150960761490983271, seqNum: 1 for shard 11, get reply (val: s5PxAHKA6_GnbtzAoqhB, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k1) clientID: 3802376916218725105, seqNum: 122 for shard 9, get reply (val: UNTFJm4fwgbU6wHL1ekK, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k2 belongs to Shard 0, group 1
+2026/06/16 17:07:37 S1 after get(key: k29) clientID: 911807899251262999, seqNum: 1 for shard 11, get reply (val: t5UEvlh8c_DOWSWf8MKI, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k2) clientID: 3802376916218725105, seqNum: 123 for shard 0
+2026/06/16 17:07:37 S1 after get(key: k3) clientID: 479588869258962421, seqNum: 1 for shard 11, get reply (val: OwVoZ-doxEbpZJc7tKVv, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k13) clientID: 1012909434719297203, seqNum: 1 for shard 6, get reply (val: wk5OsU5BB9Jm8FRA0oDJ, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 received get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7
+2026/06/16 17:07:37 SERVER 2 GID 1: REJECTING Get for key k2 (Shard 0). Current ConfigNum for shard: 2 is 2. servingShards is FALSE
+2026/06/16 17:07:37 SERVER 0 GID 1: REJECTING Get for key k2 (Shard 0). Current ConfigNum for shard: 2 is 2. servingShards is FALSE
+2026/06/16 17:07:37 S1 after get(key: k1) clientID: 336051101257216591, seqNum: 1 for shard 9, get reply (val: UNTFJm4fwgbU6wHL1ekK, ver: 1, err: OK)
+2026/06/16 17:07:37 SERVER 1 GID 1: REJECTING Get for key k2 (Shard 0). Current ConfigNum for shard: 2 is 2. servingShards is FALSE
+2026/06/16 17:07:37 S1 after get(key: k47) clientID: 1158339404072750737, seqNum: 1 for shard 7, get reply (val: _Dxz4w8WDAnpFrxf3QTD, ver: 1, err: OK)
+2026/06/16 17:07:37 S1 after get(key: k2) clientID: 3802376916218725105, seqNum: 123 for shard 0, get reply (val: , ver: 0, err: ErrWrongGroup)
+2026/06/16 17:07:37 S1 after get(key: k58) clientID: 2505517164821526606, seqNum: 1 for shard 11, get reply (val: VsTQou0LbRxriqfmdB3w, ver: 1, err: OK)
+2026/06/16 17:07:37 Client get detected wrong group, querying shardctrler...
+2026/06/16 17:07:37 DEBUG: Key k2 belongs to Shard 0, group 2
+2026/06/16 17:07:37 S0 received get(key: k2) clientID: 1283588157413269896, seqNum: 1 for shard 0
+2026/06/16 17:07:37 S0 after get(key: k2) clientID: 1283588157413269896, seqNum: 1 for shard 0, get reply (val: MyAa9WgA3XWgzcytOO5x, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/06/16 17:07:37 S1 received get(key: k3) clientID: 3802376916218725105, seqNum: 124 for shard 11
+2026/06/16 17:07:37 S1 after get(key: k3) clientID: 3802376916218725105, seqNum: 124 for shard 11, get reply (val: OwVoZ-doxEbpZJc7tKVv, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/06/16 17:07:37 S1 received get(key: k4) clientID: 3802376916218725105, seqNum: 125 for shard 6
+2026/06/16 17:07:37 S1 after get(key: k4) clientID: 3802376916218725105, seqNum: 125 for shard 6, get reply (val: zXKJk7W8-CrlT5cnmZyk, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k5 belongs to Shard 5, group 2
+2026/06/16 17:07:37 S0 received get(key: k5) clientID: 1283588157413269896, seqNum: 2 for shard 5
+2026/06/16 17:07:37 S0 after get(key: k5) clientID: 1283588157413269896, seqNum: 2 for shard 5, get reply (val: HLlHQhmuKjdkcEZ-fXXX, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/06/16 17:07:37 S1 received get(key: k6) clientID: 3802376916218725105, seqNum: 126 for shard 8
+2026/06/16 17:07:37 S1 after get(key: k6) clientID: 3802376916218725105, seqNum: 126 for shard 8, get reply (val: L0a6XLQxfG_OERX16jcu, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/06/16 17:07:37 S1 received get(key: k7) clientID: 3802376916218725105, seqNum: 127 for shard 7
+2026/06/16 17:07:37 S1 after get(key: k7) clientID: 3802376916218725105, seqNum: 127 for shard 7, get reply (val: -_PLSaD9UHoaeSlRrVGC, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/06/16 17:07:37 S1 received get(key: k8) clientID: 3802376916218725105, seqNum: 128 for shard 6
+2026/06/16 17:07:37 S1 after get(key: k8) clientID: 3802376916218725105, seqNum: 128 for shard 6, get reply (val: KmJZNnDmgTSYIe-9PorF, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k9 belongs to Shard 5, group 2
+2026/06/16 17:07:37 S0 received get(key: k9) clientID: 1283588157413269896, seqNum: 3 for shard 5
+2026/06/16 17:07:37 S0 after get(key: k9) clientID: 1283588157413269896, seqNum: 3 for shard 5, get reply (val: 1-qvLMv20c-Yys4lm-iu, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/06/16 17:07:37 S1 received get(key: k10) clientID: 3802376916218725105, seqNum: 129 for shard 7
+2026/06/16 17:07:37 S1 after get(key: k10) clientID: 3802376916218725105, seqNum: 129 for shard 7, get reply (val: 3QNU2gdFTxMlqkKEvRNT, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/06/16 17:07:37 S1 received get(key: k11) clientID: 3802376916218725105, seqNum: 130 for shard 8
+2026/06/16 17:07:37 S1 after get(key: k11) clientID: 3802376916218725105, seqNum: 130 for shard 8, get reply (val: 0vA5jdl0VPr-xwMi4o5N, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k12 belongs to Shard 5, group 2
+2026/06/16 17:07:37 S0 received get(key: k12) clientID: 1283588157413269896, seqNum: 4 for shard 5
+2026/06/16 17:07:37 S0 after get(key: k12) clientID: 1283588157413269896, seqNum: 4 for shard 5, get reply (val: UMRGURchoH3gw1uCaeA0, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/06/16 17:07:37 S1 received get(key: k13) clientID: 3802376916218725105, seqNum: 131 for shard 6
+2026/06/16 17:07:37 S1 after get(key: k13) clientID: 3802376916218725105, seqNum: 131 for shard 6, get reply (val: wk5OsU5BB9Jm8FRA0oDJ, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k14 belongs to Shard 3, group 2
+2026/06/16 17:07:37 S0 received get(key: k14) clientID: 1283588157413269896, seqNum: 5 for shard 3
+2026/06/16 17:07:37 S0 after get(key: k14) clientID: 1283588157413269896, seqNum: 5 for shard 3, get reply (val: 1_79CU7OdVGazTzgi0aU, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k15 belongs to Shard 4, group 2
+2026/06/16 17:07:37 S0 received get(key: k15) clientID: 1283588157413269896, seqNum: 6 for shard 4
+2026/06/16 17:07:37 S0 after get(key: k15) clientID: 1283588157413269896, seqNum: 6 for shard 4, get reply (val: kxI3B9JgScuqavra2rhk, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k16 belongs to Shard 1, group 2
+2026/06/16 17:07:37 S0 received get(key: k16) clientID: 1283588157413269896, seqNum: 7 for shard 1
+2026/06/16 17:07:37 S0 after get(key: k16) clientID: 1283588157413269896, seqNum: 7 for shard 1, get reply (val: muz9XyyaFJI8MIHIYnu3, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k17 belongs to Shard 2, group 2
+2026/06/16 17:07:37 S0 received get(key: k17) clientID: 1283588157413269896, seqNum: 8 for shard 2
+2026/06/16 17:07:37 S0 after get(key: k17) clientID: 1283588157413269896, seqNum: 8 for shard 2, get reply (val: akPNXxM9hh0SxZ-QJA0y, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/06/16 17:07:37 S1 received get(key: k18) clientID: 3802376916218725105, seqNum: 132 for shard 11
+2026/06/16 17:07:37 S1 after get(key: k18) clientID: 3802376916218725105, seqNum: 132 for shard 11, get reply (val: S8hjBEyfxkxq1rZFd9HD, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k19 belongs to Shard 0, group 2
+2026/06/16 17:07:37 S0 received get(key: k19) clientID: 1283588157413269896, seqNum: 9 for shard 0
+2026/06/16 17:07:37 S0 after get(key: k19) clientID: 1283588157413269896, seqNum: 9 for shard 0, get reply (val: 6KbCSrzkNs4AQb3Zj8Nw, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k20 belongs to Shard 4, group 2
+2026/06/16 17:07:37 S0 received get(key: k20) clientID: 1283588157413269896, seqNum: 10 for shard 4
+2026/06/16 17:07:37 S0 after get(key: k20) clientID: 1283588157413269896, seqNum: 10 for shard 4, get reply (val: J8e7VulLMIyMirpB7EeN, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k21 belongs to Shard 3, group 2
+2026/06/16 17:07:37 S0 received get(key: k21) clientID: 1283588157413269896, seqNum: 11 for shard 3
+2026/06/16 17:07:37 S0 after get(key: k21) clientID: 1283588157413269896, seqNum: 11 for shard 3, get reply (val: j4wfKLbTfW2Zof6C41B7, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k22 belongs to Shard 2, group 2
+2026/06/16 17:07:37 S0 received get(key: k22) clientID: 1283588157413269896, seqNum: 12 for shard 2
+2026/06/16 17:07:37 S0 after get(key: k22) clientID: 1283588157413269896, seqNum: 12 for shard 2, get reply (val: WBadCPyX6rQGOe37N9gH, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k23 belongs to Shard 1, group 2
+2026/06/16 17:07:37 S0 received get(key: k23) clientID: 1283588157413269896, seqNum: 13 for shard 1
+2026/06/16 17:07:37 S0 after get(key: k23) clientID: 1283588157413269896, seqNum: 13 for shard 1, get reply (val: 3-nZKCeqRW-VYI405oQd, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k24 belongs to Shard 0, group 2
+2026/06/16 17:07:37 S0 received get(key: k24) clientID: 1283588157413269896, seqNum: 14 for shard 0
+2026/06/16 17:07:37 S0 after get(key: k24) clientID: 1283588157413269896, seqNum: 14 for shard 0, get reply (val: cFpUphksLUtsPLfbJi4T, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/06/16 17:07:37 S1 received get(key: k25) clientID: 3802376916218725105, seqNum: 133 for shard 11
+2026/06/16 17:07:37 S1 after get(key: k25) clientID: 3802376916218725105, seqNum: 133 for shard 11, get reply (val: WWgGLz9eZtMfomPLAIlh, ver: 1, err: OK)
+2026/06/16 17:07:37 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/06/16 17:07:37 S1 received get(key: k26) clientID: 3802376916218725105, seqNum: 134 for shard 10
+2026/06/16 17:07:38 S1 after get(key: k26) clientID: 3802376916218725105, seqNum: 134 for shard 10, get reply (val: 6IjNs7zLzFZbQ7IFWjyu, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/06/16 17:07:38 S1 received get(key: k27) clientID: 3802376916218725105, seqNum: 135 for shard 9
+2026/06/16 17:07:38 S1 after get(key: k27) clientID: 3802376916218725105, seqNum: 135 for shard 9, get reply (val: fVdMUjLnLaXtZ0YbQ_7s, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k28 belongs to Shard 0, group 2
+2026/06/16 17:07:38 S0 received get(key: k28) clientID: 1283588157413269896, seqNum: 15 for shard 0
+2026/06/16 17:07:38 S0 after get(key: k28) clientID: 1283588157413269896, seqNum: 15 for shard 0, get reply (val: FtXM_xDqGXcz1_V9T2xP, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/06/16 17:07:38 S1 received get(key: k29) clientID: 3802376916218725105, seqNum: 136 for shard 11
+2026/06/16 17:07:38 S1 after get(key: k29) clientID: 3802376916218725105, seqNum: 136 for shard 11, get reply (val: t5UEvlh8c_DOWSWf8MKI, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/06/16 17:07:38 S1 received get(key: k30) clientID: 3802376916218725105, seqNum: 137 for shard 9
+2026/06/16 17:07:38 S1 after get(key: k30) clientID: 3802376916218725105, seqNum: 137 for shard 9, get reply (val: iNOOUEfsbwz97PqkKmZe, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/06/16 17:07:38 S1 received get(key: k31) clientID: 3802376916218725105, seqNum: 138 for shard 10
+2026/06/16 17:07:38 S1 after get(key: k31) clientID: 3802376916218725105, seqNum: 138 for shard 10, get reply (val: LaDCcFBKxu6YAKPqvFXb, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/06/16 17:07:38 S1 received get(key: k32) clientID: 3802376916218725105, seqNum: 139 for shard 11
+2026/06/16 17:07:38 S1 after get(key: k32) clientID: 3802376916218725105, seqNum: 139 for shard 11, get reply (val: qmpbHmhXH36qdc5vxWbs, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k33 belongs to Shard 0, group 2
+2026/06/16 17:07:38 S0 received get(key: k33) clientID: 1283588157413269896, seqNum: 16 for shard 0
+2026/06/16 17:07:38 S0 after get(key: k33) clientID: 1283588157413269896, seqNum: 16 for shard 0, get reply (val: 2AanwvD1XFuIts142Lrs, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k34 belongs to Shard 5, group 2
+2026/06/16 17:07:38 S0 received get(key: k34) clientID: 1283588157413269896, seqNum: 17 for shard 5
+2026/06/16 17:07:38 S0 after get(key: k34) clientID: 1283588157413269896, seqNum: 17 for shard 5, get reply (val: uuNciQVuQKJwLM-AbUQA, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/06/16 17:07:38 S1 received get(key: k35) clientID: 3802376916218725105, seqNum: 140 for shard 6
+2026/06/16 17:07:38 S1 after get(key: k35) clientID: 3802376916218725105, seqNum: 140 for shard 6, get reply (val: mQ64vVtilic_xGFU1DIR, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/06/16 17:07:38 S1 received get(key: k36) clientID: 3802376916218725105, seqNum: 141 for shard 7
+2026/06/16 17:07:38 S1 after get(key: k36) clientID: 3802376916218725105, seqNum: 141 for shard 7, get reply (val: AJNmJy85fej1Hj1d6_TR, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/06/16 17:07:38 S1 received get(key: k37) clientID: 3802376916218725105, seqNum: 142 for shard 8
+2026/06/16 17:07:38 S1 after get(key: k37) clientID: 3802376916218725105, seqNum: 142 for shard 8, get reply (val: 8T1D7JnrhPikN2uqyAp3, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k38 belongs to Shard 5, group 2
+2026/06/16 17:07:38 S0 received get(key: k38) clientID: 1283588157413269896, seqNum: 18 for shard 5
+2026/06/16 17:07:38 S0 after get(key: k38) clientID: 1283588157413269896, seqNum: 18 for shard 5, get reply (val: NLIfaGg_mD--T8aEz4Ox, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/06/16 17:07:38 S1 received get(key: k39) clientID: 3802376916218725105, seqNum: 143 for shard 6
+2026/06/16 17:07:38 S1 after get(key: k39) clientID: 3802376916218725105, seqNum: 143 for shard 6, get reply (val: Z2xTwz7agA02qyIG43x_, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/06/16 17:07:38 S1 received get(key: k40) clientID: 3802376916218725105, seqNum: 144 for shard 10
+2026/06/16 17:07:38 S1 after get(key: k40) clientID: 3802376916218725105, seqNum: 144 for shard 10, get reply (val: 0l9hq7rolD6RIoOJ2Q1h, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/06/16 17:07:38 S1 received get(key: k41) clientID: 3802376916218725105, seqNum: 145 for shard 9
+2026/06/16 17:07:38 S1 after get(key: k41) clientID: 3802376916218725105, seqNum: 145 for shard 9, get reply (val: L3Xcpvu1nkYMV3K5yItN, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k42 belongs to Shard 0, group 2
+2026/06/16 17:07:38 S0 received get(key: k42) clientID: 1283588157413269896, seqNum: 19 for shard 0
+2026/06/16 17:07:38 S0 after get(key: k42) clientID: 1283588157413269896, seqNum: 19 for shard 0, get reply (val: dqSRwbd5pIVx-f2LlxUG, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/06/16 17:07:38 S1 received get(key: k43) clientID: 3802376916218725105, seqNum: 146 for shard 11
+2026/06/16 17:07:38 S1 after get(key: k43) clientID: 3802376916218725105, seqNum: 146 for shard 11, get reply (val: s5PxAHKA6_GnbtzAoqhB, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/06/16 17:07:38 S1 received get(key: k44) clientID: 3802376916218725105, seqNum: 147 for shard 6
+2026/06/16 17:07:38 S1 after get(key: k44) clientID: 3802376916218725105, seqNum: 147 for shard 6, get reply (val: i8VfN9KCFWPjtssWRPEn, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k45 belongs to Shard 5, group 2
+2026/06/16 17:07:38 S0 received get(key: k45) clientID: 1283588157413269896, seqNum: 20 for shard 5
+2026/06/16 17:07:38 S0 after get(key: k45) clientID: 1283588157413269896, seqNum: 20 for shard 5, get reply (val: 48GM3oZg3CFUjC5tgbi-, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/06/16 17:07:38 S1 received get(key: k46) clientID: 3802376916218725105, seqNum: 148 for shard 8
+2026/06/16 17:07:38 S1 after get(key: k46) clientID: 3802376916218725105, seqNum: 148 for shard 8, get reply (val: 6PcBofy-WhxDQvQrdHcv, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/06/16 17:07:38 S1 received get(key: k47) clientID: 3802376916218725105, seqNum: 149 for shard 7
+2026/06/16 17:07:38 S1 after get(key: k47) clientID: 3802376916218725105, seqNum: 149 for shard 7, get reply (val: _Dxz4w8WDAnpFrxf3QTD, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/06/16 17:07:38 S1 received get(key: k48) clientID: 3802376916218725105, seqNum: 150 for shard 6
+2026/06/16 17:07:38 S1 after get(key: k48) clientID: 3802376916218725105, seqNum: 150 for shard 6, get reply (val: bxJhMTAQkx2kCMeG8j05, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k49 belongs to Shard 5, group 2
+2026/06/16 17:07:38 S0 received get(key: k49) clientID: 1283588157413269896, seqNum: 21 for shard 5
+2026/06/16 17:07:38 S0 after get(key: k49) clientID: 1283588157413269896, seqNum: 21 for shard 5, get reply (val: CPJL1AarWm-6YUpxq_oh, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k50 belongs to Shard 3, group 2
+2026/06/16 17:07:38 S0 received get(key: k50) clientID: 1283588157413269896, seqNum: 22 for shard 3
+2026/06/16 17:07:38 S0 after get(key: k50) clientID: 1283588157413269896, seqNum: 22 for shard 3, get reply (val: yCUG4A2XdAkJc9Bwq9PA, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k51 belongs to Shard 4, group 2
+2026/06/16 17:07:38 S0 received get(key: k51) clientID: 1283588157413269896, seqNum: 23 for shard 4
+2026/06/16 17:07:38 S0 after get(key: k51) clientID: 1283588157413269896, seqNum: 23 for shard 4, get reply (val: MosFJ0nzm8jy6YETjWmr, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k52 belongs to Shard 1, group 2
+2026/06/16 17:07:38 S0 received get(key: k52) clientID: 1283588157413269896, seqNum: 24 for shard 1
+2026/06/16 17:07:38 S0 after get(key: k52) clientID: 1283588157413269896, seqNum: 24 for shard 1, get reply (val: _lmSzqT2LaBeFHVJGLHS, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k53 belongs to Shard 2, group 2
+2026/06/16 17:07:38 S0 received get(key: k53) clientID: 1283588157413269896, seqNum: 25 for shard 2
+2026/06/16 17:07:38 S0 after get(key: k53) clientID: 1283588157413269896, seqNum: 25 for shard 2, get reply (val: MTA-7LCCCqTVu3q2dbIF, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/06/16 17:07:38 S1 received get(key: k54) clientID: 3802376916218725105, seqNum: 151 for shard 7
+2026/06/16 17:07:38 S1 after get(key: k54) clientID: 3802376916218725105, seqNum: 151 for shard 7, get reply (val: J2LVNhBHddKjpBo2C_HC, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/06/16 17:07:38 S1 received get(key: k55) clientID: 3802376916218725105, seqNum: 152 for shard 8
+2026/06/16 17:07:38 S1 after get(key: k55) clientID: 3802376916218725105, seqNum: 152 for shard 8, get reply (val: XN0ceWTA9fPInoXcVQfx, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k56 belongs to Shard 5, group 2
+2026/06/16 17:07:38 S0 received get(key: k56) clientID: 1283588157413269896, seqNum: 26 for shard 5
+2026/06/16 17:07:38 S0 after get(key: k56) clientID: 1283588157413269896, seqNum: 26 for shard 5, get reply (val: uXZwzFjo0-VXyw9QhZ_R, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/06/16 17:07:38 S1 received get(key: k57) clientID: 3802376916218725105, seqNum: 153 for shard 6
+2026/06/16 17:07:38 S1 after get(key: k57) clientID: 3802376916218725105, seqNum: 153 for shard 6, get reply (val: cyuYuWp9hxY22Skc_le5, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/06/16 17:07:38 S1 received get(key: k58) clientID: 3802376916218725105, seqNum: 154 for shard 11
+2026/06/16 17:07:38 S1 after get(key: k58) clientID: 3802376916218725105, seqNum: 154 for shard 11, get reply (val: VsTQou0LbRxriqfmdB3w, ver: 1, err: OK)
+2026/06/16 17:07:38 DEBUG: Key k59 belongs to Shard 0, group 2
+2026/06/16 17:07:38 S0 received get(key: k59) clientID: 1283588157413269896, seqNum: 27 for shard 0
+2026/06/16 17:07:38 S0 after get(key: k59) clientID: 1283588157413269896, seqNum: 27 for shard 0, get reply (val: v4PDEZjBs3_DspBT2i8V, ver: 1, err: OK)
+2026/06/16 17:07:38 ExecuteMoves: shard 6 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 6, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received freezeShard for shard 6, {FreezeShard   0 0 0 6 3 map[] map[] map[]}
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard received error: ErrWrongLeader
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 6, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 6, {FreezeShard   0 0 0 6 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 6, &{map[k13:{wk5OsU5BB9Jm8FRA0oDJ 1} k35:{mQ64vVtilic_xGFU1DIR 1} k39:{Z2xTwz7agA02qyIG43x_ 1} k4:{zXKJk7W8-CrlT5cnmZyk 1} k44:{i8VfN9KCFWPjtssWRPEn 1} k48:{bxJhMTAQkx2kCMeG8j05 1} k57:{cyuYuWp9hxY22Skc_le5 1} k8:{KmJZNnDmgTSYIe-9PorF 1}] map[3802376916218725105:{cyuYuWp9hxY22Skc_le5 OK 1}] map[3802376916218725105:58] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 6, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 8, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 6, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 6, {InstallShard   0 0 0 6 3 map[k13:{wk5OsU5BB9Jm8FRA0oDJ 1} k35:{mQ64vVtilic_xGFU1DIR 1} k39:{Z2xTwz7agA02qyIG43x_ 1} k4:{zXKJk7W8-CrlT5cnmZyk 1} k44:{i8VfN9KCFWPjtssWRPEn 1} k48:{bxJhMTAQkx2kCMeG8j05 1} k57:{cyuYuWp9hxY22Skc_le5 1} k8:{KmJZNnDmgTSYIe-9PorF 1}] map[3802376916218725105:{cyuYuWp9hxY22Skc_le5 OK 1}] map[3802376916218725105:58]}
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 6 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 6, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 6, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 6, {DeleteShard   0 0 0 6 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 6, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 6 successfully moved to GID 2
+2026/06/16 17:07:38 ExecuteMoves: shard 7 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 7, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 7, {FreezeShard   0 0 0 7 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING DeleteShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: DeleteShard success for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING DeleteShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: DeleteShard success for Shard 6, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 7, &{map[k10:{3QNU2gdFTxMlqkKEvRNT 1} k36:{AJNmJy85fej1Hj1d6_TR 1} k47:{_Dxz4w8WDAnpFrxf3QTD 1} k54:{J2LVNhBHddKjpBo2C_HC 1} k7:{-_PLSaD9UHoaeSlRrVGC 1}] map[3802376916218725105:{J2LVNhBHddKjpBo2C_HC OK 1}] map[3802376916218725105:55] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 7, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 5, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 7, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 7, {InstallShard   0 0 0 7 3 map[k10:{3QNU2gdFTxMlqkKEvRNT 1} k36:{AJNmJy85fej1Hj1d6_TR 1} k47:{_Dxz4w8WDAnpFrxf3QTD 1} k54:{J2LVNhBHddKjpBo2C_HC 1} k7:{-_PLSaD9UHoaeSlRrVGC 1}] map[3802376916218725105:{J2LVNhBHddKjpBo2C_HC OK 1}] map[3802376916218725105:55]}
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 6 is now ACTIVE
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 7 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 6, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 6 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 7, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 7, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 7, {DeleteShard   0 0 0 7 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 7, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 7 successfully moved to GID 2
+2026/06/16 17:07:38 ExecuteMoves: shard 8 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 8, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 8, {FreezeShard   0 0 0 8 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING DeleteShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: DeleteShard success for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING DeleteShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: DeleteShard success for Shard 7, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 8, &{map[k11:{0vA5jdl0VPr-xwMi4o5N 1} k37:{8T1D7JnrhPikN2uqyAp3 1} k46:{6PcBofy-WhxDQvQrdHcv 1} k55:{XN0ceWTA9fPInoXcVQfx 1} k6:{L0a6XLQxfG_OERX16jcu 1}] map[3802376916218725105:{XN0ceWTA9fPInoXcVQfx OK 1}] map[3802376916218725105:56] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 8, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 5, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 8, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 8, {InstallShard   0 0 0 8 3 map[k11:{0vA5jdl0VPr-xwMi4o5N 1} k37:{8T1D7JnrhPikN2uqyAp3 1} k46:{6PcBofy-WhxDQvQrdHcv 1} k55:{XN0ceWTA9fPInoXcVQfx 1} k6:{L0a6XLQxfG_OERX16jcu 1}] map[3802376916218725105:{XN0ceWTA9fPInoXcVQfx OK 1}] map[3802376916218725105:56]}
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 7 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 7, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 8 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 7 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 8, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 8, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 8, {DeleteShard   0 0 0 8 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 8, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 8 successfully moved to GID 2
+2026/06/16 17:07:38 ExecuteMoves: shard 9 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 9, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 9, {FreezeShard   0 0 0 9 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 8 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 8 is now ACTIVE
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING DeleteShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: DeleteShard success for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING DeleteShard for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: DeleteShard success for Shard 8, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 9, &{map[k1:{UNTFJm4fwgbU6wHL1ekK 1} k27:{fVdMUjLnLaXtZ0YbQ_7s 1} k30:{iNOOUEfsbwz97PqkKmZe 1} k41:{L3Xcpvu1nkYMV3K5yItN 1}] map[3802376916218725105:{L3Xcpvu1nkYMV3K5yItN OK 1}] map[3802376916218725105:42] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 9, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 4, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 9, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 9, {InstallShard   0 0 0 9 3 map[k1:{UNTFJm4fwgbU6wHL1ekK 1} k27:{fVdMUjLnLaXtZ0YbQ_7s 1} k30:{iNOOUEfsbwz97PqkKmZe 1} k41:{L3Xcpvu1nkYMV3K5yItN 1}] map[3802376916218725105:{L3Xcpvu1nkYMV3K5yItN OK 1}] map[3802376916218725105:42]}
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 9 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 9, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 9, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 9, {DeleteShard   0 0 0 9 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 9, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 9 successfully moved to GID 2
+2026/06/16 17:07:38 ExecuteMoves: shard 10 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 10, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 10, {FreezeShard   0 0 0 10 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING DeleteShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: DeleteShard success for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING DeleteShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: DeleteShard success for Shard 9, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 10, &{map[k0:{rbSHMiUrqKz24MV9ijGW 1} k26:{6IjNs7zLzFZbQ7IFWjyu 1} k31:{LaDCcFBKxu6YAKPqvFXb 1} k40:{0l9hq7rolD6RIoOJ2Q1h 1}] map[3802376916218725105:{0l9hq7rolD6RIoOJ2Q1h OK 1}] map[3802376916218725105:41] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 10, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 4, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 10, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 10, {InstallShard   0 0 0 10 3 map[k0:{rbSHMiUrqKz24MV9ijGW 1} k26:{6IjNs7zLzFZbQ7IFWjyu 1} k31:{LaDCcFBKxu6YAKPqvFXb 1} k40:{0l9hq7rolD6RIoOJ2Q1h 1}] map[3802376916218725105:{0l9hq7rolD6RIoOJ2Q1h OK 1}] map[3802376916218725105:41]}
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 9 is now ACTIVE
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 10 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 9, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 9 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 10, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 10, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 10, {DeleteShard   0 0 0 10 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 10, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 10 successfully moved to GID 2
+2026/06/16 17:07:38 ExecuteMoves: shard 11 move from old group 1 to new group 2, from configNum 2 to 3 
+2026/06/16 17:07:38 C3393873902010113672 calling FreezeShard for Shard 11, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received freezeShard for shard 11, {FreezeShard   0 0 0 11 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING DeleteShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 0 GID 1: DeleteShard success for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING DeleteShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 2 GID 1: DeleteShard success for Shard 10, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING FreezeShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 S1 after received freezeShard for shard 11, &{map[k18:{S8hjBEyfxkxq1rZFd9HD 1} k25:{WWgGLz9eZtMfomPLAIlh 1} k29:{t5UEvlh8c_DOWSWf8MKI 1} k3:{OwVoZ-doxEbpZJc7tKVv 1} k32:{qmpbHmhXH36qdc5vxWbs 1} k43:{s5PxAHKA6_GnbtzAoqhB 1} k58:{VsTQou0LbRxriqfmdB3w 1}] map[3802376916218725105:{VsTQou0LbRxriqfmdB3w OK 1}] map[3802376916218725105:59] 3 }
+2026/06/16 17:07:38 C3393873902010113672 FreezeShard for shard 11, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 Data length return by freezeShard: 7, lastOpResult: 1, lastAppliedSeq: 1
+2026/06/16 17:07:38 C4137636952186198172 calling InstallShard for Shard 11, Num 3 to Group Leader 0
+2026/06/16 17:07:38 S0 received InstallShard for shard 11, {InstallShard   0 0 0 11 3 map[k18:{S8hjBEyfxkxq1rZFd9HD 1} k25:{WWgGLz9eZtMfomPLAIlh 1} k29:{t5UEvlh8c_DOWSWf8MKI 1} k3:{OwVoZ-doxEbpZJc7tKVv 1} k32:{qmpbHmhXH36qdc5vxWbs 1} k43:{s5PxAHKA6_GnbtzAoqhB 1} k58:{VsTQou0LbRxriqfmdB3w 1}] map[3802376916218725105:{VsTQou0LbRxriqfmdB3w OK 1}] map[3802376916218725105:59]}
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 10 is now ACTIVE
+2026/06/16 17:07:38 SERVER 0 GID 2: APPLYING InstallShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 2: Shard 11 is now ACTIVE
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 10, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 10 is now ACTIVE
+2026/06/16 17:07:38 C4137636952186198172 InstallShard for shard 11, Num 3 Success to Group Leader 0
+2026/06/16 17:07:38 C3393873902010113672 calling DeleteShard for Shard 11, Num 3 to Group Leader 1
+2026/06/16 17:07:38 S1 received DeleteShard for shard 11, {DeleteShard   0 0 0 11 3 map[] map[] map[]}
+2026/06/16 17:07:38 SERVER 2 GID 1: APPLYING FreezeShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 0 GID 1: APPLYING FreezeShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 1: APPLYING DeleteShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 SERVER 1 GID 1: DeleteShard success for Shard 11, NewConfigNum 3. (Current Config for this shard was 3)
+2026/06/16 17:07:38 C3393873902010113672 Delete for shard 11, Num 3 Success to Group Leader 1
+2026/06/16 17:07:38 ExecuteMoves: Shard 11 successfully moved to GID 2
+2026/06/16 17:07:38 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/06/16 17:07:38 SERVER 1 GID 2: APPLYING InstallShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 1 GID 2: Shard 11 is now ACTIVE
+2026/06/16 17:07:38 SERVER 2 GID 2: APPLYING InstallShard for Shard 11, NewConfigNum 3. (Current Config for this shard was 1)
+2026/06/16 17:07:38 SERVER 2 GID 2: Shard 11 is now ACTIVE
+info: wrote visualization to /var/folders/q3/080dg5ks16v1js8zhcc3cx3c0000gn/T/porcupine-57869996.html
+exit status 1
+FAIL	6.5840/shardkv1	25.654s

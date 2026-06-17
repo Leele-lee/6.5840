@@ -151,8 +151,8 @@ func (kv *KVServer) DoOp(req any) any {
 		// 1. the group still contains this shard
 		// 2. and the config Num is match
 		if !kv.serveringShards[shard] {
-			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
-            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
+			//DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
+            //	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
 			res.Err = rpc.ErrWrongGroup
 			return res
 		}
@@ -166,8 +166,8 @@ func (kv *KVServer) DoOp(req any) any {
 
 	case "FreezeShard":
 		// first check Num, freeze only when request config num >= current config in grp
-		DPrintf("SERVER %d GID %d: APPLYING FreezeShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
-        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+		//DPrintf("SERVER %d GID %d: APPLYING FreezeShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
 		if op.ConfigNum >= kv.shardConfigNums[shard] {
 			kv.serveringShards[shard] = false
@@ -179,8 +179,8 @@ func (kv *KVServer) DoOp(req any) any {
 	case "InstallShard":
 		// install only when request num greater than current config, in case of duplicate install
 		// only install when request num strictly greater than current num
-		DPrintf("SERVER %d GID %d: APPLYING InstallShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
-        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+		//DPrintf("SERVER %d GID %d: APPLYING InstallShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
 		if op.ConfigNum > kv.shardConfigNums[shard] {
 			kv.shardsData[shard] = copyMap(op.Data)
@@ -189,17 +189,17 @@ func (kv *KVServer) DoOp(req any) any {
 			kv.shardConfigNums[shard] = op.ConfigNum
 			kv.serveringShards[shard] = true
 
-			DPrintf("SERVER %d GID %d: Shard %d is now ACTIVE", kv.me, kv.gid, shard)
+		//	DPrintf("SERVER %d GID %d: Shard %d is now ACTIVE", kv.me, kv.gid, shard)
 			res.Err = rpc.OK
 		} else {
-			DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
-            	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+			//DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
+            //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		}
 
 	case "DeleteShard":
-		DPrintf("SERVER %d GID %d: APPLYING DeleteShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
-        	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+		//DPrintf("SERVER %d GID %d: APPLYING DeleteShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+        //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
 		if op.ConfigNum >= kv.shardConfigNums[shard] {
 			kv.serveringShards[shard] = false
@@ -207,12 +207,12 @@ func (kv *KVServer) DoOp(req any) any {
 			kv.lastAppliedSeq[shard] = nil
 			kv.lastOpResult[shard] = nil
 			kv.shardConfigNums[shard] = op.ConfigNum
-			DPrintf("SERVER %d GID %d: DeleteShard success for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
-			kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+			//DPrintf("SERVER %d GID %d: DeleteShard success for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
+			//kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		} else {
-			DPrintf("SERVER %d GID %d: REJECTED DeleteShard for Shard %d (Stale Num: %d <= %d)", 
-				kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+			//DPrintf("SERVER %d GID %d: REJECTED DeleteShard for Shard %d (Stale Num: %d <= %d)", 
+			//	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		}
 	}
@@ -278,7 +278,7 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
-	//fmt.Printf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
+	DPrintf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
 
 	DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d for shard %d",
 	 kv.me, args.Key, args.ClientID, args.SeqNum, shard)

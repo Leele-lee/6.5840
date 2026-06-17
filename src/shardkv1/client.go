@@ -31,6 +31,7 @@ type Clerk struct {
 	// every group has a specific shardgrp.clerk
 	// Map Group ID -> specific group clerk
 	groupClerks map[tester.Tgid]*shardgrp.Clerk
+	config *shardcfg.ShardConfig
 
 	// You might need a mutex if your client is multi-threaded
     mu sync.Mutex 
@@ -43,6 +44,7 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 		clnt: clnt,
 		sck:  sck,
 		groupClerks: make(map[tester.Tgid]*shardgrp.Clerk),
+		config: nil,  // lazily set 
 	}
 	// You'll have to add code here.
 	return ck
@@ -60,6 +62,21 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		// find which shard has this key
 		shard := shardcfg.Key2Shard(key)
 		
+		// 1. SAFELY READ CACHED CONFIG
+        ck.mu.Lock()
+        config := ck.config
+        ck.mu.Unlock()
+
+		// 2. LAZY FETCH: If we don't have a config, get one now
+        if config == nil {
+			shardgrp.DPrintf("GET: for get key %s, the ck.config is nil", key)
+            config = ck.sck.Query()
+            ck.mu.Lock()
+            ck.config = config
+            ck.mu.Unlock()
+
+        }
+
 		// To put/get a key from a shardgrp, the shardkv clerk should create a 
 		// shardgrp clerk for the shardgrp by calling shardgrp.MakeClerk , 
 		// passing in the servers found in the configuration and the shardkv clerk's ck.clnt . 
@@ -69,8 +86,9 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		// so we makeclerk lazily when we need, not at the shardkv.makeClerk
 
 		// get current config
-		config := ck.sck.Query()
+		//config := ck.sck.Query()
 
+		shardgrp.DPrintf("GET: for get key %s current config is %v", key, config)
 		// find the group ID and servers for this shard in configuration
 		gid, servers, ok := config.GidServers(shard)
 
@@ -96,11 +114,15 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		
 		// ask that group for the key
 		val, ver, err := gClerk.Get(key)
-		
+
 		// handle the result
-		if err == rpc.ErrWrongGroup {
+		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader {
 			// The config changed while we were talking to them!
             // Loop again to Query() the new config.
+			newConfig := ck.sck.Query()
+            ck.mu.Lock()
+            ck.config = newConfig
+            ck.mu.Unlock()
 			time.Sleep(100 * time.Millisecond)
 			continue
 		} else {
@@ -117,8 +139,22 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		//  which shard is a key in?
 		shard := shardcfg.Key2Shard(key)
 
+		// 1. SAFELY READ CACHED CONFIG
+        ck.mu.Lock()
+        config := ck.config
+        ck.mu.Unlock()
+
+		// 2. LAZY FETCH: If we don't have a config, get one now
+        if config == nil {
+			//shardgrp.DPrintf("GET: for get key %s, the ck.config is nil", key)
+
+            config = ck.sck.Query()
+            ck.mu.Lock()
+            ck.config = config
+            ck.mu.Unlock()
+        }
 		// get current config
-		config := ck.sck.Query()
+		//config := ck.sck.Query()
 
 		// find the group ID and servers for this shard in configuration
 		gid, servers, ok := config.GidServers(shard)
@@ -143,7 +179,12 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		// put key to that group
 		err := gClerk.Put(key, value, version)
 
-		if err == rpc.ErrWrongGroup {
+		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader{
+			newConfig := ck.sck.Query()
+            ck.mu.Lock()
+            ck.config = newConfig
+            ck.mu.Unlock()
+			time.Sleep(100 * time.Millisecond)
 			continue
 		} else {
 			return err

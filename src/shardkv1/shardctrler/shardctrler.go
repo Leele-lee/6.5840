@@ -60,7 +60,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		clerks[gid] = ck
 		return ck
 	}
-	faile := false
+	killed := false
 
 	// i is shardID
 	for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
@@ -86,8 +86,10 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 
 		for retries := 0; retries < maxRetries; retries++ {
 			if retries == maxRetries - 1 {
-				faile = true
+				killed = true
 			}
+			shardgrp.DPrintf("ExecuteMoves: keep trying move shard %d from old group %d to new group %d, from configNum %d to %d \n", i, oldGrpID, newGrpID, oldConfig.Num, new.Num)
+
 			// 1. FREEZE PHASE
 			if oldGrpID != 0 {
 				d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
@@ -123,13 +125,15 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 			break;
 		}
 	}
-	return faile
+	return killed
 }
 
 // get current version and put version in new put, if superseded by another controller 
 // it will retry get version and put again
 func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 	for {
+		shardgrp.DPrintf("SafeUpdate: keep trying to set current value to %s", newValue)
+
 		// 1. get current version, if key not exist, the version will be default 0
 		val, ver, err := sck.IKVClerk.Get(key)
 		if err != rpc.OK && err != rpc.ErrNoKey {
@@ -150,6 +154,8 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
         // If Get returned version 5, we send 5.
 		putErr := sck.IKVClerk.Put(key, newValue, ver)
 		if putErr == rpc.OK {
+			shardgrp.DPrintf("SafeUpdate: success to set current value to %s", newValue)
+
 			return
 		}
 		time.Sleep(100 * time.Millisecond)
@@ -217,6 +223,8 @@ func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 // controller.
 func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// Your code here.
+
+	shardgrp.DPrintf("ExecuteMoves: start change configNum from %d to %d", sck.Query().Num, new.Num)
 
 	// STEP 1: PREPARE (Save the intent)
     // We store the "Next" config so if we crash, the next controller knows what to do
