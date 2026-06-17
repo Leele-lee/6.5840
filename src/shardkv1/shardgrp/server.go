@@ -169,13 +169,24 @@ func (kv *KVServer) DoOp(req any) any {
 		//DPrintf("SERVER %d GID %d: APPLYING FreezeShard for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
         //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 
+		// 1. stop the world
 		if op.ConfigNum >= kv.shardConfigNums[shard] {
-			kv.serveringShards[shard] = false
-			kv.shardConfigNums[shard] = op.ConfigNum
+			if op.ConfigNum > kv.shardConfigNums[shard] {
+				kv.serveringShards[shard] = false
+				kv.shardConfigNums[shard] = op.ConfigNum
+			}
+			// 2. ATOMIC SNAPSHOT: Capture the data RIGHT NOW
+			// Because we are in DoOp, no other Raft commands can be 
+			// changing the database at this exact instant.
 			res.Err = rpc.OK
+			res.Data = copyMap(kv.shardsData[shard])
+			res.LastOpResult = copyLastOpResult(kv.lastOpResult[shard])
+			res.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shard])
+			res.Num = kv.shardConfigNums[shard]
 		} else {
-			res.Err = rpc.OK
+			res.Err = rpc.ErrWrongGroup
 		}
+
 	case "InstallShard":
 		// install only when request num greater than current config, in case of duplicate install
 		// only install when request num strictly greater than current num
@@ -191,10 +202,12 @@ func (kv *KVServer) DoOp(req any) any {
 
 		//	DPrintf("SERVER %d GID %d: Shard %d is now ACTIVE", kv.me, kv.gid, shard)
 			res.Err = rpc.OK
-		} else {
+		} else if op.ConfigNum == kv.shardConfigNums[shard] {
 			//DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
             //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
+		} else {
+			res.Err = rpc.ErrWrongGroup
 		}
 
 	case "DeleteShard":
@@ -213,7 +226,7 @@ func (kv *KVServer) DoOp(req any) any {
 		} else {
 			//DPrintf("SERVER %d GID %d: REJECTED DeleteShard for Shard %d (Stale Num: %d <= %d)", 
 			//	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
-			res.Err = rpc.OK
+			res.Err = rpc.ErrWrongGroup
 		}
 	}
 	return res
@@ -387,39 +400,6 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 	shardID := args.Shard
 	configNumForShard := args.Num
 
-	kv.mu.Lock()
-
-	// reject old config version num
-	// If we are ALREADY at a higher version, we might have already deleted the data!
-	// if req.Num < kv.Num: Return OK. (It’s a duplicate from the past).
-	// if req.Num == kv.Num: Return OK. (It’s a retry or another shard for the current config).
-	if configNumForShard <= kv.shardConfigNums[shardID] {
-		// if the data is gone, we can't request this old request
-		if kv.shardsData[shardID] == nil {
-			reply.Err = rpc.ErrNoKey
-			kv.mu.Unlock()
-			return
-		}
-		// if we still have the data, return it
-		// let executeMoves to check the installShard is done or not
-		reply.Data = copyMap(kv.shardsData[shardID])
-		reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
-		reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
-		reply.Err = rpc.OK
-		reply.Num = kv.shardConfigNums[shardID]
-		kv.mu.Unlock()
-		return
-	}
-
-	// check the request is on raft or not, if yes retry later, don;t send to raft again
-	//if pendingTask, ok := kv.pendingMigration[shardID]; ok && pendingTask.OpType == "Freeze" && pendingTask.Num >= args.Num {
-	//	reply.Err = rpc.OK
-	//	kv.mu.Unlock()
-	//	return
-	//}
-	//kv.pendingMigration[shardID] = MigrationTask{Num: args.Num, OpType: "Freeze"}
-
-	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "FreezeShard",
@@ -435,15 +415,16 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		return
 	}
 
-	reply.Data = copyMap(kv.shardsData[shardID])
-	reply.LastOpResult = copyLastOpResult(kv.lastOpResult[shardID])
-	reply.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shardID])
-	reply.Num = kv.shardConfigNums[shardID]
 
 	DPrintf("S%d after received freezeShard for shard %d, %v", kv.me, shardID, reply)
 
 	res := result.(shardrpc.Result)
-	reply.Err = res.Err
+	// COPY THE DATA FROM THE RESULT TO THE REPLY
+    reply.Data = res.Data
+    reply.LastAppliedSeq = res.LastAppliedSeq
+    reply.LastOpResult = res.LastOpResult
+    reply.Err = res.Err
+	reply.Num = res.Num
 }
 
 // Install the supplied state for the specified shard.
@@ -452,16 +433,7 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	shardID := args.Shard
 	configNumForShard := args.Num
 
-	kv.mu.Lock()
-	// reject old config version num
-	// If we are ALREADY at a higher version, we might have already deleted the data!
-	if configNumForShard <= kv.shardConfigNums[shardID] {
-		reply.Err = rpc.OK
-		kv.mu.Unlock()
-		return
-	}
 
-	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "InstallShard",
@@ -489,27 +461,7 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 	shardID := args.Shard
 	configNumForShard := args.Num
 
-	kv.mu.Lock()
-	// reject old config version num
-	// If we are ALREADY at a higher version, we might have already deleted the data!
-	// if is equal must also submit, bc freezeShard already update configNum for the shard
-	if configNumForShard < kv.shardConfigNums[shardID] {
-		reply.Err = rpc.OK
-		DPrintf("Reject old config version num for shard %d in DeleteShard rpc handler, request config num: %d, old num is: %d", shardID, configNumForShard,  kv.shardConfigNums[shardID])
-		kv.mu.Unlock()
-		return
-	}
 
-	// check the request is on raft or not, if yes retry later, don;t send to raft again
-	//if pendingTask, ok := kv.pendingMigration[shardID]; ok && pendingTask.OpType == "Delete" && pendingTask.Num >= args.Num {
-	//	reply.Err = rpc.OK
-	//	kv.mu.Unlock()
-	//	return
-	//}
-		
-	//kv.pendingMigration[shardID] = MigrationTask{Num: args.Num, OpType: "Delete"}
-
-	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "DeleteShard",

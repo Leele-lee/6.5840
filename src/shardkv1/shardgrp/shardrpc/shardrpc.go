@@ -9,6 +9,10 @@ type Result struct {
 	Value string
 	Err rpc.Err
 	Version rpc.Tversion
+	Data map[string]DBValue
+	LastOpResult map[int64]Result
+	LastAppliedSeq map[int64]int
+	Num shardcfg.Tnum
 }
 
 type DBValue struct {

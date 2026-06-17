@@ -68,6 +68,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		Key: key,
 		ClientID: ck.clientID,
 		SeqNum: ck.seqNum,
+		//ConfigNum: configNum,
 	}
 
 	// TRY ONLY 5 TIMES through all servers, then give up
@@ -149,6 +150,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		Version: version,
 		ClientID: ck.clientID,
 		SeqNum: ck.seqNum,
+		//ConfigNum: configNum,
 	}
 
 	isRetransmission := false
@@ -158,7 +160,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		for i := 0; i < len(ck.servers); i++ {
 			reply := rpc.PutReply{}
 			ok := ck.clnt.Call(ck.servers[serverId], "KVServer.Put", &args, &reply)
-			DPrintf("Put(key: %s, val: %s, ver: %d) to server %d received %s ", key, value, version, serverId, reply.Err)
+			DPrintf("Put(key: %s, val: %s, clientID: %d, ver: %d) to server %d received %s ", key, value, ck.clientID, version, serverId, reply.Err)
 			// if ok return false, it implies request lost or reply lost
 			if !ok {
 				// isduplicate only return true if the first reply lost and make second try
