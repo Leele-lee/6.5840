@@ -10,6 +10,7 @@ package shardkv
 
 import (
 
+	"math/big"
 	"sync"
 	"time"
 	//"fmt"
@@ -19,9 +20,19 @@ import (
 	"6.5840/shardkv1/shardctrler"
 	"6.5840/tester1"
 
+	"crypto/rand"
+
 	"6.5840/shardkv1/shardgrp" 
 	"6.5840/shardkv1/shardcfg"
 )
+
+func nrand() int64 {
+	max := big.NewInt(int64(1) << 62)
+	bigx, _ := rand.Int(rand.Reader, max)
+	x := bigx.Int64()
+	return x
+}
+
 
 type Clerk struct {
 	clnt *tester.Clnt
@@ -32,6 +43,10 @@ type Clerk struct {
 	// Map Group ID -> specific group clerk
 	groupClerks map[tester.Tgid]*shardgrp.Clerk
 	config *shardcfg.ShardConfig
+	clientID int64  // unique Id for this clerk
+	seqNum int		// incrementing counter for requests
+	
+
 
 	// You might need a mutex if your client is multi-threaded
     mu sync.Mutex 
@@ -45,6 +60,8 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 		sck:  sck,
 		groupClerks: make(map[tester.Tgid]*shardgrp.Clerk),
 		config: nil,  // lazily set 
+		clientID: nrand(),
+		seqNum: 0,
 	}
 	// You'll have to add code here.
 	return ck
@@ -113,7 +130,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		ck.mu.Unlock()
 		
 		// ask that group for the key
-		val, ver, err := gClerk.Get(key, config.Num)
+		val, ver, err := gClerk.Get(key, config.Num, ck.clientID, ck.seqNum)
 
 		// handle the result
 		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader {
@@ -135,6 +152,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 	// You will have to modify this function.
 
+	ck.seqNum++
 	for {
 		//  which shard is a key in?
 		shard := shardcfg.Key2Shard(key)
@@ -177,7 +195,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		ck.mu.Unlock()
 
 		// put key to that group
-		err := gClerk.Put(key, value, version, config.Num)
+		err := gClerk.Put(key, value, version, config.Num, ck.clientID, ck.seqNum)
 
 		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader{
 			newConfig := ck.sck.Query()
