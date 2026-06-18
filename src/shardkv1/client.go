@@ -113,7 +113,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		ck.mu.Unlock()
 		
 		// ask that group for the key
-		val, ver, err := gClerk.Get(key)
+		val, ver, err := gClerk.Get(key, config.Num)
 
 		// handle the result
 		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader {
@@ -177,7 +177,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		ck.mu.Unlock()
 
 		// put key to that group
-		err := gClerk.Put(key, value, version)
+		err := gClerk.Put(key, value, version, config.Num)
 
 		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader{
 			newConfig := ck.sck.Query()

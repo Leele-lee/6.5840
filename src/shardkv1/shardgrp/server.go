@@ -140,22 +140,53 @@ func (kv *KVServer) DoOp(req any) any {
         //	return res
     	//}
 
-		if kv.shardConfigNums[shard] != op.ConfigNum {
+		//if kv.shardConfigNums[shard] != op.ConfigNum {
 			// The client is stale. Return ErrWrongGroup. 
 			// (The clerk will then call Query to get the new config)
-			res.Err = rpc.ErrWrongGroup
-			return res
-		}
+		//	DPrintf("DoOP: %s (key: %s)configNum check faild! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
+		//	res.Err = rpc.ErrWrongGroup
+		//	return res
+		//}
 
 		// first check to make sure:
 		// 1. the group still contains this shard
 		// 2. and the config Num is match
 		if !kv.serveringShards[shard] {
-			//DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
-            //	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
+			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
+            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
 			res.Err = rpc.ErrWrongGroup
 			return res
 		}
+
+
+		// CASE A: Server is BEHIND the Clerk (Lagging)
+        //if kv.shardConfigNums[shard] < op.ConfigNum {
+            // The Clerk has seen Config 5, but I am still at Config 4.
+            // I might be about to receive an InstallShard for Config 5!
+            // DO NOT return ErrWrongGroup. Return a retry signal.
+        //    res.Err = rpc.ErrRetry // Clerk treats this as "Sleep and Retry same group"
+		//	DPrintf("DoOP: %s (key: %s)configNum check faild! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
+
+        //    return res
+        //}
+
+        // CASE C: Server is AHEAD of the Clerk (Clerk is stale)
+        if kv.shardConfigNums[shard] > op.ConfigNum {
+            // The Clerk is using Config 5, but I am already at Config 6.
+            // The shard has definitely moved or been frozen.
+            res.Err = rpc.ErrWrongGroup
+			DPrintf("DoOP: %s (key: %s)configNum check faild! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
+
+            return res
+        }
+
+		if !kv.serveringShards[shard] {
+			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
+            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
+			res.Err = rpc.ErrWrongGroup
+			return res
+		}
+
 
 		// then check has duplicate put operations or not
 		if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
@@ -293,8 +324,8 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	shard := shardcfg.Key2Shard(args.Key)
 	DPrintf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
 
-	DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d for shard %d",
-	 kv.me, args.Key, args.ClientID, args.SeqNum, shard)
+	DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d, configNum: %d for shard %d",
+	 kv.me, args.Key, args.ClientID, args.SeqNum, args.ConfigNum, shard)
 
 	op := rsm.Op{
 		Operation: "Get", 
@@ -302,7 +333,7 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 		ClientID: args.ClientID,
 		SeqNum: args.SeqNum,
 		ShardID: shard,
-		ConfigNum: kv.shardConfigNums[shard],
+		ConfigNum: args.ConfigNum,
 	}
 
 	err, result := kv.rsm.Submit(op)
@@ -329,8 +360,8 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
 
-	DPrintf("S%d received put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d for shard %d, configNum %d",
-	 kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, shard, kv.shardConfigNums[shard])
+	DPrintf("S%d received put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d, configNum: %d for shard %d",
+	 kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, args.ConfigNum, shard)
 
 	kv.mu.Lock()
 	// this shardgrp didn't respond for this shard
@@ -352,7 +383,7 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 		SeqNum: args.SeqNum,
 		Version: args.Version,
 		ShardID: shard,
-		ConfigNum: kv.shardConfigNums[shard],
+		ConfigNum: args.ConfigNum,
 	}
 
 	err, result := kv.rsm.Submit(op)

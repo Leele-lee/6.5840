@@ -58,7 +58,7 @@ func MakeClerk(clnt *tester.Clnt, servers []string) *Clerk {
 // The types of args and reply (including whether they are pointers)
 // must match the declared types of the RPC handler function's
 // arguments. Additionally, reply must be passed as a pointer.
-func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
+func (ck *Clerk) Get(key string, configNum shardcfg.Tnum) (string, rpc.Tversion, rpc.Err) {
 	// Your code here
 	// don't need lock, bc one clerk for one goroutine
 	ck.seqNum++
@@ -68,7 +68,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		Key: key,
 		ClientID: ck.clientID,
 		SeqNum: ck.seqNum,
-		//ConfigNum: configNum,
+		ConfigNum: configNum,
 	}
 
 	// TRY ONLY 5 TIMES through all servers, then give up
@@ -139,7 +139,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 // The types of args and reply (including whether they are pointers)
 // must match the declared types of the RPC handler function's
 // arguments. Additionally, reply must be passed as a pointer.
-func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
+func (ck *Clerk) Put(key string, value string, version rpc.Tversion, configNum shardcfg.Tnum) rpc.Err {
 	// Your code here
 	ck.seqNum++
 	serverId := ck.recentLeader
@@ -150,7 +150,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		Version: version,
 		ClientID: ck.clientID,
 		SeqNum: ck.seqNum,
-		//ConfigNum: configNum,
+		ConfigNum: configNum,
 	}
 
 	isRetransmission := false

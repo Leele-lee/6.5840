@@ -1,0 +1,6 @@
+=== RUN   TestJoinBasic5A
+Test (5A): a group joins... (reliable network)...
+  ... Passed --  time 10.9s #peers 1 #RPCs  8052 #Ops  180
+--- PASS: TestJoinBasic5A (10.94s)
+PASS
+ok  	6.5840/shardkv1	11.687s
