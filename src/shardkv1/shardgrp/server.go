@@ -44,9 +44,9 @@ type KVServer struct {
 	shardsData [shardcfg.NShards]map[string]shardrpc.DBValue
 
 	// Store deduplication information for each shard! 
-	// Each shard has its own independent ClientID -> Result mapping.
+	// Each shard has its own independent ClientID -> put Result mapping.
 	lastOpResult [shardcfg.NShards]map[int64]shardrpc.Result
-	// each shard has its own last applied put seq num
+	// each shard has its own independent clientID -> last applied put seq num
 	lastAppliedSeq [shardcfg.NShards]map[int64]int
 	// To avoid raft timeout and repeate send to DoOp
 	// shardID -> configNum snd type
@@ -130,24 +130,6 @@ func (kv *KVServer) DoOp(req any) any {
 	switch op.Operation {
 	case "Put", "Get":
 
-		// 1. If the server is BEHIND the client's config, it's not "wrong," it's just "slow."
-    	//    Return a retry error (like ErrNoKey or a custom ErrRetry) or just return ErrWrongGroup 
-    	//    ONLY if the server's version is >= the client's version.
-    	//if kv.shardConfigNums[shard] < op.ConfigNum {
-			// Your server is lagging. Return ErrRetry. 
-			// (The clerk will wait and try again, giving Raft time to catch up).
-        //	res.Err = rpc.ErrRetry // Tells the clerk to retry the SAME group
-        //	return res
-    	//}
-
-		//if kv.shardConfigNums[shard] != op.ConfigNum {
-			// The client is stale. Return ErrWrongGroup. 
-			// (The clerk will then call Query to get the new config)
-		//	DPrintf("DoOP: %s (key: %s)configNum check faild! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
-		//	res.Err = rpc.ErrWrongGroup
-		//	return res
-		//}
-
 		// first check to make sure:
 		// 1. the group still contains this shard
 		// 2. and the config Num is match
@@ -158,19 +140,7 @@ func (kv *KVServer) DoOp(req any) any {
 			return res
 		}
 
-
-		// CASE A: Server is BEHIND the Clerk (Lagging)
-        //if kv.shardConfigNums[shard] < op.ConfigNum {
-            // The Clerk has seen Config 5, but I am still at Config 4.
-            // I might be about to receive an InstallShard for Config 5!
-            // DO NOT return ErrWrongGroup. Return a retry signal.
-        //    res.Err = rpc.ErrRetry // Clerk treats this as "Sleep and Retry same group"
-		//	DPrintf("DoOP: %s (key: %s)configNum check faild! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
-
-        //    return res
-        //}
-
-        // CASE C: Server is AHEAD of the Clerk (Clerk is stale)
+        // Server is AHEAD of the Clerk (Clerk is stale)
         if kv.shardConfigNums[shard] > op.ConfigNum {
             // The Clerk is using Config 5, but I am already at Config 6.
             // The shard has definitely moved or been frozen.
@@ -179,14 +149,6 @@ func (kv *KVServer) DoOp(req any) any {
 
             return res
         }
-
-		if !kv.serveringShards[shard] {
-			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
-            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
-			res.Err = rpc.ErrWrongGroup
-			return res
-		}
-
 
 		// then check has duplicate put operations or not
 		if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
@@ -392,8 +354,8 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 		return
 	}
 
-	DPrintf("S%d after put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d for shard %d, the kv.lastAppliedSeq: %d, kv.lastOpResult's (val: %s, err: %s, ver: %d)", 
-	kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, shard, kv.lastAppliedSeq[shard][op.ClientID], kv.lastOpResult[shard][op.ClientID].Value, kv.lastOpResult[shard][op.ClientID].Err, kv.lastOpResult[shard][op.ClientID].Version)
+	//DPrintf("S%d after put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d for shard %d, the kv.lastAppliedSeq: %d, kv.lastOpResult's (val: %s, err: %s, ver: %d)", 
+	//kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, shard, kv.lastAppliedSeq[shard][op.ClientID], kv.lastOpResult[shard][op.ClientID].Value, kv.lastOpResult[shard][op.ClientID].Err, kv.lastOpResult[shard][op.ClientID].Version)
 
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err

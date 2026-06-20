@@ -43,6 +43,9 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 	return sck
 }
 
+// move shards from current(old) group to new group which contains freeze shard in old group, 
+// install shard to new group, delete shard in old group
+// if during the process, the grp is killed(loop number equal to maxRetried), return true
 func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) bool {
 	// A temporary map to store clerks for the duration of this function
 	// using pointer instead copy clerk here, bc clerk variable changed instead of 
@@ -103,7 +106,6 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 			// 2. INSTALL PHASE
 			// We only get here if Freeze succeeded (or oldGrp was 0)
 			if newGrpID != 0 {
-				//errInstall := getClerk(newGrpID, new).InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
 				errInstall := newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
 				if errInstall != rpc.OK {
 					// If Install failed, we MUST retry the whole process for this shard.
@@ -130,6 +132,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 
 // get current version and put version in new put, if superseded by another controller 
 // it will retry get version and put again
+// key is "current-config" or "next-config", newValue is the string version config
 func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 	for {
 		shardgrp.DPrintf("SafeUpdate: keep trying to set current value to %s", newValue)
@@ -226,16 +229,51 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 
 	shardgrp.DPrintf("ExecuteMoves: start change configNum from %d to %d", sck.Query().Num, new.Num)
 
+	// conditional put next-config make sure only one controller can start changeConfigTo in concurrent
+	// situation(when all controller have the same configNum)
+
+	// 1. Get the current version of the "NextConfigKey"
+	 val, ver, err := sck.IKVClerk.Get(NextConfigKey)
+	// 2. If someone already posted a "Next" config that is >= ours, we lost the race!
+	if err == rpc.OK {
+		existingNext := shardcfg.FromString(val)
+
+		if existingNext.Num >= new.Num {
+			shardgrp.DPrintf("CONTROLLER: Lost race for Config %d, aborting", new.Num)
+			return
+		}
+	}
+
+	newConfigString := new.String()
+	// 3. ATOMIC UPDATE: Try to post our plan
+    // Use the version from step 1. If this fails, it means another controller 
+    // won the race in the last millisecond.
+	putErr := sck.IKVClerk.Put(NextConfigKey, newConfigString, ver)
+	if putErr != rpc.OK {
+		return
+	}
+	
+
 	// STEP 1: PREPARE (Save the intent)
     // We store the "Next" config so if we crash, the next controller knows what to do
 	// put new config as k/v pairs into kvsrv
 	//err := sck.IKVClerk.Put("next-conifg", configString, 0)
-	newConfigString := new.String()
-	sck.safeUpdate(NextConfigKey, newConfigString)
+	
+	//sck.safeUpdate(NextConfigKey, newConfigString)
 
  	// STEP 2: EXECUTE (Move the data)
 	oldConfig := sck.Query() // get the current/old config
 	killed := sck.executeMoves(oldConfig, new)
+
+
+	// Step 3: PRE-COMMIT CHECK
+    // Ask kvsrv: "Is the next-config still the one I am working on?"
+	// bc While the controller changes the configuration it may be superseded by another controller.
+    val, _, _ = sck.IKVClerk.Get(NextConfigKey)
+    if shardcfg.FromString(val).Num > new.Num {
+        shardgrp.DPrintf("CONTROLLER: Interrupted! A newer config (%s) is in progress. Aborting commit of %d", val, new.Num)
+        return // Stop here! Do not update CurrConfigKey.
+    }
 
 	// STEP 3: COMMIT / POST (Make it official)
     // By updating "current-config", you are telling the whole world the moves are done
@@ -243,10 +281,10 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// using "next-config" as key
 	// (Ensure your Query() logic knows how to find this key later)
 	// succeesed, update current-configure
-	if killed {
-		return
+	if !killed {
+		//return
+		sck.safeUpdate(CurrConfigKey, newConfigString)
 	}
-	sck.safeUpdate(CurrConfigKey, newConfigString)
 }
 
 
