@@ -685,7 +685,9 @@ func partitionRecovery5C(t *testing.T, reliable bool, npart, nclnt int) {
 	}
 
 	for i := 0; i < npart; i++ {
+		ts.t.Logf("ANNOTATION: Start %dth partitionCtrler", i)
 		ts.partitionCtrler(ck, gid, ka, va)
+		ts.t.Logf("ANNOTATION: Finished %dth partitionCtrler", i)
 	}
 
 	if nclnt > 0 {

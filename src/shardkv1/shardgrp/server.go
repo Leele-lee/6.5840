@@ -134,8 +134,8 @@ func (kv *KVServer) DoOp(req any) any {
 		// 1. the group still contains this shard
 		// 2. and the config Num is match
 		if !kv.serveringShards[shard] {
-			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard: %d is %d. servingShards is FALSE", 
-            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard], kv.shardConfigNums[shard])
+			DPrintf("SERVER %d GID %d: REJECTING %s for key %s (Shard %d). Current ConfigNum for shard is %d. servingShards is FALSE", 
+            	kv.me, kv.gid, op.Operation, op.Key, shard, kv.shardConfigNums[shard])
 			res.Err = rpc.ErrWrongGroup
 			return res
 		}
@@ -193,11 +193,11 @@ func (kv *KVServer) DoOp(req any) any {
 			kv.shardConfigNums[shard] = op.ConfigNum
 			kv.serveringShards[shard] = true
 
-		//	DPrintf("SERVER %d GID %d: Shard %d is now ACTIVE", kv.me, kv.gid, shard)
+			DPrintf("InstallShard: SERVER %d GID %d: Shard %d is now ACTIVE op.configNum: %d", kv.me, kv.gid, shard, op.ConfigNum)
 			res.Err = rpc.OK
 		} else if op.ConfigNum == kv.shardConfigNums[shard] {
-			//DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
-            //	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
+			DPrintf("SERVER %d GID %d: REJECTED InstallShard for Shard %d (Stale Num: %d <= %d)", 
+            	kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
 			res.Err = rpc.OK
 		} else {
 			res.Err = rpc.ErrWrongGroup
@@ -286,8 +286,8 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	shard := shardcfg.Key2Shard(args.Key)
 	DPrintf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
 
-	DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d, configNum: %d for shard %d",
-	 kv.me, args.Key, args.ClientID, args.SeqNum, args.ConfigNum, shard)
+	//DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d, Op configNum: %d, local configNum: %d for shard %d",
+	// kv.me, args.Key, args.ClientID, args.SeqNum, args.ConfigNum, kv.shardConfigNums[shard], shard)
 
 	op := rsm.Op{
 		Operation: "Get", 
@@ -311,8 +311,8 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
     reply.Value = res.Value
 	reply.Version = res.Version
 
-	DPrintf("S%d after get(key: %s) clientID: %d, seqNum: %d for shard %d, get reply (val: %s, ver: %d, err: %s)",
-	 kv.me, args.Key, args.ClientID, args.SeqNum, shard, reply.Value, reply.Version, reply.Err)
+	//DPrintf("S%d after get(key: %s) clientID: %d, seqNum: %d for shard %d, op configNum: %d local ocnfigNum: %d, get reply (val: %s, ver: %d, err: %s)",
+	// kv.me, args.Key, args.ClientID, args.SeqNum, shard, args.ConfigNum, kv.shardConfigNums[shard], reply.Value, reply.Version, reply.Err)
 
 }
 
@@ -322,8 +322,10 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
 
-	DPrintf("S%d received put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d, configNum: %d for shard %d",
-	 kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, args.ConfigNum, shard)
+	//DPrintf("S%d received put(key: %s, value: %s, version: %d) clientID: %d, seqNum: %d, configNum: %d for shard %d",
+	// kv.me, args.Key, args.Value, args.Version, args.ClientID, args.SeqNum, args.ConfigNum, shard)
+
+	//DPrintf("S%d received put %s for shard %d, op configNum: %d, local configNum: %d", kv.me, args, shard, args.ConfigNum, kv.shardConfigNums[shard])
 
 	kv.mu.Lock()
 	// this shardgrp didn't respond for this shard

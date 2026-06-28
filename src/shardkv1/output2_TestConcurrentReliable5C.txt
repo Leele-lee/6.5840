@@ -1,0 +1,6 @@
+=== RUN   TestConcurrentReliable5C
+Test (5C): Concurrent ctrlers ... (reliable network)...
+  ... Passed --  time  6.8s #peers 1 #RPCs  2291 #Ops  120
+--- PASS: TestConcurrentReliable5C (6.82s)
+PASS
+ok  	6.5840/shardkv1	8.533s
