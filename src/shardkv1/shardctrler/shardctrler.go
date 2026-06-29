@@ -74,21 +74,97 @@ func (sck *ShardCtrler) getClerk(gid tester.Tgid, config *shardcfg.ShardConfig) 
 }
 
 
-func (sck *ShardCtrler) checkConfigChange(new *shardcfg.ShardConfig) bool {
+func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) bool {
 	currVal, _, _ := sck.IKVClerk.Get(CurrConfigKey)
-    if shardcfg.FromString(currVal).Num >= new.Num {
-        shardgrp.DPrintf("CONTROLLER: Config %d already committed. Done.", new.Num)
+	nextVal, _, _ := sck.IKVClerk.Get(NextConfigKey)
+
+	curr := shardcfg.FromString(currVal)
+	next := shardcfg.FromString(nextVal)
+
+	// 情况 A：任务已经正式完成了 (Committed)
+    // 如果 CurrConfig 已经达到或超过了我们正在执行的版本，说明已经有人提交了
+    if curr.Num >= workingConfig.Num {
+        shardgrp.DPrintf("CONTROLLER: Config %d already committed. Done.", workingConfig.Num)
         return true
     }
 
     // 2. CHECK SUPERSESSION (The "Failure" exit)
     // Ask kvsrv: "Is there a NEWER plan than mine?"
-    //nextVal, _, _ := sck.IKVClerk.Get(NextConfigKey)
-    //if shardcfg.FromString(nextVal).Num > new.Num {
-    //    shardgrp.DPrintf("CONTROLLER: Plan %d superseded by %s. Exiting.", new.Num, nextVal)
-    //    return true 
-    //}
+	// 情况 B：任务被更新的计划取代了 (Superseded)
+    // 如果墙上的 NextConfig 已经比我们现在执行的版本更高了，
+    // 说明我们正在做“无用功”，应该立刻停止，回到主循环去执行那个更新的 Next。
+    if next.Num > workingConfig.Num {
+        shardgrp.DPrintf("CONTROLLER: Plan %d superseded by %s. Exiting.", workingConfig.Num, nextVal)
+        return true 
+    }
 	return false
+}
+
+func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg.ShardConfig,
+	 newConfig *shardcfg.ShardConfig) {
+		oldGrpID := oldConfig.Shards[shardID]
+        newGrpID := newConfig.Shards[shardID]
+
+		var oldGrpClerk *shardgrp.Clerk
+		if oldGrpID != 0 {
+			oldServers := oldConfig.Groups[oldGrpID]
+			oldGrpClerk = shardgrp.MakeClerk(sck.clnt, oldServers)
+		}
+
+		var newGrpClerk *shardgrp.Clerk
+		if newGrpID != 0 {
+			newServers := newConfig.Groups[newGrpID]
+			newGrpClerk = shardgrp.MakeClerk(sck.clnt, newServers)
+		}
+
+		for {
+			// 每一轮重试前，先检查集群是否已经达到了目标版本
+        	// 如果别人已经帮我们把活干完了，直接退出
+			if sck.checkConfigChange(newConfig) {
+				return
+			}
+			var data map[string]shardrpc.DBValue
+			var lastOpResult map[int64]shardrpc.Result
+			var lastAppliedSeq map[int64]int
+
+			// freeze
+			if oldGrpID != 0 {
+				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num)
+				if err != rpc.OK {
+					// 如果失败（网络问题或不是 Leader），小睡后重试整个循环
+					time.Sleep(30 * time.Millisecond)
+					continue
+				}
+				data, lastOpResult, lastAppliedSeq = d, r, s
+			}
+
+			// 再次检查进度，防止在 Freeze 耗时过长期间配置已变更
+        	if sck.checkConfigChange(newConfig) { return }
+			// instsall
+			if newGrpID != 0 {
+				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
+            	if err != rpc.OK {
+                	// Install 失败必须重试。
+               		// 注意：服务器端 shardgrp 必须处理好幂等性（基于 Num 判断）
+                	time.Sleep(30 * time.Millisecond)
+                	continue
+            	}
+        	}
+
+			if sck.checkConfigChange(newConfig) { return }
+			// delete
+			if oldGrpID != 0 {
+				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
+            	if err != rpc.OK {
+                	time.Sleep(30 * time.Millisecond)
+                	continue
+				}
+			}
+
+			// 该分片所有步骤成功，安全退出协程
+        	shardgrp.DPrintf("CONTROLLER: Shard %d successfully moved to Group %d (Config %d)", shardID, newGrpID, newConfig.Num)
+			return
+		}
 }
 
 // move shards from current(old) group to new group which contains freeze shard in old group, 
@@ -107,87 +183,41 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
     // only read operation, groupID -> group clerk
     shardgrp.DPrintf("CONTROLLER: ExecuteMoves start")
 
-    //clerks := make(map[tester.Tgid]*shardgrp.Clerk)
+	var wg sync.WaitGroup
+	//done := make(chan struct{})
 
     // i is shardID
     for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
-        oldGrpID := oldConfig.Shards[i]
-        newGrpID := new.Shards[i]
-        oldGrpClerk := sck.getClerk(oldGrpID, oldConfig)
-        newGrpClerk := sck.getClerk(newGrpID, new)
-
-        // If there was an old group, we must Freeze it
-        var data map[string]shardrpc.DBValue
-        var lastOpResult map[int64]shardrpc.Result
-        var lastAppliedSeq map[int64]int
-        //err := rpc.OK
-
-        // shard's group not change or grp ID is 0(group no exist yet), ignore
-        if oldGrpID == newGrpID {
+		// shard's group not change or grp ID is 0(group no exist yet), ignore
+        if oldConfig.Shards[i] == new.Shards[i] {
             continue
         }
-        
-        shardgrp.DPrintf("CONTROLLER: ExecuteMoves: shard %d move from old group %d to new group %d, from configNum %d to %d \n", i, oldGrpID, newGrpID, oldConfig.Num, new.Num)
+		wg.Add(1)
 
-        //maxRetries := 50
+		go func(shardID shardcfg.Tshid) {
+			defer wg.Done()
+			sck.moveOneShard(shardID, oldConfig, new)
+		}(i)
+	}
 
-		retry := 0
-        //for retries := 0; retries < maxRetries; retries++ {
-        for {
-            //if retries == maxRetries - 1 {
-            //  killed = true
-            //}
-			retry++
-			if retry % 100 == 0 {
-        		shardgrp.DPrintf("CONTROLLER: ExecuteMoves: Shard %d retry=%d", i, retry)
-    		}
-            //shardgrp.DPrintf("CONTROLLER: ExecuteMoves: keep trying move shard %d from old group %d to new group %d, from configNum %d to %d \n", i, oldGrpID, newGrpID, oldConfig.Num, new.Num)
+	// 开启一个监控协程
+    //go func() {
+    //    wg.Wait()
+    //    close(done)
+    //}()
 
-			if sck.checkConfigChange(new) {
-				return false
-			}
+	    // 设置一个合理的单次配置变更最大时限（例如 30 秒）
+    // 如果 30 秒还没迁完分片，这在分布式系统里通常意味着出了严重问题
+    //select {
+    //ase <-done:
+    //    return !sck.checkConfigChange(new) // 正常完成
+    //case <-time.After(30 * time.Second):
+    //    shardgrp.DPrintf("CONTROLLER: executeMoves TIMEOUT! Breaking wg.Wait()")
+    //    return false // 强制退出，让 Controller 回到主循环重试
+    //}
 
-            // 1. FREEZE PHASE
-            if oldGrpID != 0 {
-                d, r, s, err := oldGrpClerk.FreezeShard(i, new.Num)
-                if err != rpc.OK {
-                    // Network failed or server not leader. Sleep and try again.
-                    time.Sleep(20 * time.Millisecond)
-                    continue 
-                }
-                data, lastOpResult, lastAppliedSeq = d, r, s
-            }
-            // 2. INSTALL PHASE
-            // We only get here if Freeze succeeded (or oldGrp was 0)
-			if sck.checkConfigChange(new) {
-				return false
-			}
-            if newGrpID != 0 {
-                errInstall := newGrpClerk.InstallShard(i, data, lastOpResult, lastAppliedSeq, new.Num)
-                if errInstall != rpc.OK {
-                    // If Install failed, we MUST retry the whole process for this shard.
-                    // Note: Since Freeze is idempotent, calling it again is safe.
-                    time.Sleep(20 * time.Millisecond)
-                    continue
-                }
-            }
-            // 3. Delete phase
-			if sck.checkConfigChange(new) {
-				return false
-			}
-            if oldGrpID != 0 {
-                errDelete := oldGrpClerk.DeleteShard(i, new.Num)
-                if errDelete != rpc.OK {
-                    time.Sleep(20 * time.Millisecond)
-                    continue
-                }
-            }
-
-            shardgrp.DPrintf("CONTROLLER: ExecuteMoves: Shard %d successfully moved to GID %d", i, newGrpID)
-            break;
-        }
-    }
-    return true
+	wg.Wait()
+	return !sck.checkConfigChange(new)
 }
 
 // get current version and put version in new put, if superseded by another controller 
@@ -208,9 +238,9 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 
 		// 2. INSTANT EXIT: If another controller already did our work, stop immediately!
         // This is the biggest time-saver in Part C.
-        if val == newValue {
-            return 
-        }
+        //if val == newValue {
+         //   return 
+        //}
 
 		if err == rpc.OK {
             // CRITICAL: If the key is already at our version or NEWER, exit.
@@ -270,10 +300,8 @@ func (sck *ShardCtrler) InitController() {
             nextConfig = shardcfg.FromString(nextStr)
         }
 
-        //if nextStr != "" {
-            //nextConfig := shardcfg.FromString(nextStr)
-            // check config version num
         if nextConfig.Num > currConfig.Num {
+			// 必须一直做，直到成功。不要因为 executeMoves 返回 false 就 return。
             shardgrp.DPrintf("CONTROLLER %d: Recovering Config %d, curr config is %d", sck.controllerID, nextConfig.Num, currConfig.Num)
             // and if next config has a bigger config version, 
             // complete the shard moves necessary to reconfigure to the next one
@@ -282,36 +310,20 @@ func (sck *ShardCtrler) InitController() {
 			start := time.Now()
             if sck.executeMoves(currConfig, nextConfig) {
 				shardgrp.DPrintf("CONTROLLER: initController: Config %d finished in time %v", nextConfig.Num, time.Since(start))
-                // PRE-COMMIT CHECK (Part C safety)
-                // Ensure no one else moved NextConfig forward while we worked
-                checkNext, _, _ := sck.IKVClerk.Get(NextConfigKey)
-                //if checkNext == nextStr {
-                //    sck.safeUpdate(CurrConfigKey, nextStr)
-                //    shardgrp.DPrintf("CONTROLLER %d: Successfully recovered and committed %d", sck.controllerID, nextConfig.Num)
-                //}
-				if checkNext != nextStr {
-					return
-				}
 				sck.safeUpdate(CurrConfigKey, nextStr)
 				shardgrp.DPrintf("CONTROLLER %d: Successfully recovered and committed %d", sck.controllerID, nextConfig.Num)
-
-                // 2. FINALLY POST the new configuration
-                //sck.safeUpdate(CurrConfigKey, nextStr)
-            } else {
-                // We were superseded or killed, stop recovering
-                return
-            }
-        } else {
-            // curr == next, everything is up to date
-			// curr.Num == next.Num, the cluster is stable.
-        	shardgrp.DPrintf("CONTROLLER %d: recover Cluster is stable at Config %d", sck.controllerID, currConfig.Num)
-            return
+				// 成功了一次迁移，不要直接退出，循环回去看看还有没有更高版本的遗留任务
+				continue
+			}
+			// 如果 executeMoves 失败了，休息一下继续试
+            time.Sleep(100 * time.Millisecond)
+            continue
         }
-
-        // Small sleep to prevent CPU spin if we loop
-        time.Sleep(50 * time.Millisecond)
+        // curr == next, everything is up to date
+		// curr.Num == next.Num, the cluster is stable.
+        shardgrp.DPrintf("CONTROLLER %d: recover Cluster is stable at Config %d", sck.controllerID, currConfig.Num)
+        return
     }
-
 }
 
 
