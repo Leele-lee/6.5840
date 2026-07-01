@@ -14,13 +14,14 @@ import (
 	"sync"
 	"time"
 	//"fmt"
+	"math/rand"
 
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
 	"6.5840/shardkv1/shardctrler"
 	"6.5840/tester1"
 
-	"crypto/rand"
+	crand "crypto/rand"
 
 	"6.5840/shardkv1/shardgrp" 
 	"6.5840/shardkv1/shardcfg"
@@ -28,7 +29,7 @@ import (
 
 func nrand() int64 {
 	max := big.NewInt(int64(1) << 62)
-	bigx, _ := rand.Int(rand.Reader, max)
+	bigx, _ := crand.Int(crand.Reader, max)
 	x := bigx.Int64()
 	return x
 }
@@ -115,7 +116,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		if !ok {
 			// If we reach here, the shard isn't assigned yet (gid 0)
         	// or there's a temporary failure. Wait and retry.
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(time.Duration(50+rand.Intn(50)) * time.Millisecond)
 			continue
 		}
 
@@ -140,7 +141,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
             ck.mu.Lock()
             ck.config = newConfig
             ck.mu.Unlock()
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(time.Duration(50+rand.Intn(50)) * time.Millisecond)
 			continue
 		} else {
 			return val, ver, err
@@ -179,7 +180,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		if !ok {
 			// If we reach here, the shard isn't assigned yet (gid 0)
         	// or there's a temporary failure. Wait and retry.
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(time.Duration(50+rand.Intn(50)) * time.Millisecond)
 			continue
 		}
 
@@ -202,7 +203,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
             ck.mu.Lock()
             ck.config = newConfig
             ck.mu.Unlock()
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(time.Duration(50+rand.Intn(50)) * time.Millisecond)
 			continue
 		} else {
 			return err

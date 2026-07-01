@@ -10,7 +10,8 @@ import (
 	"time"
 	"sync"
 	"math/big"
-	"crypto/rand"
+	crand "crypto/rand"
+	"math/rand"
 	"6.5840/kvsrv1"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/kvtest1"
@@ -27,7 +28,7 @@ const (
 
 func nrand() int64 {
 	max := big.NewInt(int64(1) << 62)
-	bigx, _ := rand.Int(rand.Reader, max)
+	bigx, _ := crand.Int(crand.Reader, max)
 	x := bigx.Int64()
 	return x
 }
@@ -117,12 +118,17 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			newGrpClerk = shardgrp.MakeClerk(sck.clnt, newServers)
 		}
 
+		retry := 0
 		for {
-			// 每一轮重试前，先检查集群是否已经达到了目标版本
+			retry++
+			if sck.checkConfigChange(newConfig) { return }
+
+			// 每5轮重试前，先检查集群是否已经达到了目标版本
         	// 如果别人已经帮我们把活干完了，直接退出
-			if sck.checkConfigChange(newConfig) {
-				return
+			if retry % 5 == 0 {
+				if sck.checkConfigChange(newConfig) { return }
 			}
+
 			var data map[string]shardrpc.DBValue
 			var lastOpResult map[int64]shardrpc.Result
 			var lastAppliedSeq map[int64]int
@@ -132,31 +138,35 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num)
 				if err != rpc.OK {
 					// 如果失败（网络问题或不是 Leader），小睡后重试整个循环
-					time.Sleep(30 * time.Millisecond)
+					time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
 					continue
 				}
 				data, lastOpResult, lastAppliedSeq = d, r, s
 			}
 
 			// 再次检查进度，防止在 Freeze 耗时过长期间配置已变更
-        	if sck.checkConfigChange(newConfig) { return }
+			if retry % 5 == 0 {
+				if sck.checkConfigChange(newConfig) { return }
+			}
 			// instsall
 			if newGrpID != 0 {
 				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
             	if err != rpc.OK {
                 	// Install 失败必须重试。
                		// 注意：服务器端 shardgrp 必须处理好幂等性（基于 Num 判断）
-                	time.Sleep(30 * time.Millisecond)
+                	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
                 	continue
             	}
         	}
 
-			if sck.checkConfigChange(newConfig) { return }
+			if retry % 5 == 0 {
+				if sck.checkConfigChange(newConfig) { return }
+			}
 			// delete
 			if oldGrpID != 0 {
 				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
             	if err != rpc.OK {
-                	time.Sleep(30 * time.Millisecond)
+                	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
                 	continue
 				}
 			}
@@ -199,23 +209,6 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 			sck.moveOneShard(shardID, oldConfig, new)
 		}(i)
 	}
-
-	// 开启一个监控协程
-    //go func() {
-    //    wg.Wait()
-    //    close(done)
-    //}()
-
-	    // 设置一个合理的单次配置变更最大时限（例如 30 秒）
-    // 如果 30 秒还没迁完分片，这在分布式系统里通常意味着出了严重问题
-    //select {
-    //ase <-done:
-    //    return !sck.checkConfigChange(new) // 正常完成
-    //case <-time.After(30 * time.Second):
-    //    shardgrp.DPrintf("CONTROLLER: executeMoves TIMEOUT! Breaking wg.Wait()")
-    //    return false // 强制退出，让 Controller 回到主循环重试
-    //}
-
 	wg.Wait()
 	return !sck.checkConfigChange(new)
 }
@@ -232,7 +225,7 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 		val, ver, err := sck.IKVClerk.Get(key)
 		if err != rpc.OK && err != rpc.ErrNoKey {
 			// 如果网络报错，必须重试 Get，不能带着错误的 ver 去 Put
-			time.Sleep(50 * time.Millisecond)
+			time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
 			continue
 		}
 
@@ -273,7 +266,7 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
             continue 
         }
 
-		time.Sleep(50 * time.Millisecond)
+		time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
 	}
 
 }
@@ -300,30 +293,22 @@ func (sck *ShardCtrler) InitController() {
             nextConfig = shardcfg.FromString(nextStr)
         }
 
-        if nextConfig.Num > currConfig.Num {
-			// 必须一直做，直到成功。不要因为 executeMoves 返回 false 就 return。
-            shardgrp.DPrintf("CONTROLLER %d: Recovering Config %d, curr config is %d", sck.controllerID, nextConfig.Num, currConfig.Num)
-            // and if next config has a bigger config version, 
-            // complete the shard moves necessary to reconfigure to the next one
-
-            // 1. Re-run the moves (they must be idempotent!)
-			start := time.Now()
-            if sck.executeMoves(currConfig, nextConfig) {
-				shardgrp.DPrintf("CONTROLLER: initController: Config %d finished in time %v", nextConfig.Num, time.Since(start))
+		if nextConfig.Num == currConfig.Num + 1 {
+			if sck.executeMoves(currConfig, nextConfig) {
 				sck.safeUpdate(CurrConfigKey, nextStr)
-				shardgrp.DPrintf("CONTROLLER %d: Successfully recovered and committed %d", sck.controllerID, nextConfig.Num)
-				// 成功了一次迁移，不要直接退出，循环回去看看还有没有更高版本的遗留任务
 				continue
 			}
-			// 如果 executeMoves 失败了，休息一下继续试
-            time.Sleep(100 * time.Millisecond)
+		} else if nextConfig.Num > currConfig.Num + 1 {
+			shardgrp.DPrintf("CONTROLLER %d: Init: Found jump Next(%d) > Curr(%d)+1. Waiting.", 
+            sck.controllerID, nextConfig.Num, currConfig.Num)
+            
+            time.Sleep(20 * time.Millisecond)
             continue
-        }
-        // curr == next, everything is up to date
-		// curr.Num == next.Num, the cluster is stable.
-        shardgrp.DPrintf("CONTROLLER %d: recover Cluster is stable at Config %d", sck.controllerID, currConfig.Num)
-        return
-    }
+		} else {
+			// next.Num <= curr.Num, no remains undone work
+			return
+		}
+	}
 }
 
 
@@ -353,11 +338,25 @@ func (sck *ShardCtrler) InitConfig(cfg *shardcfg.ShardConfig) {
 	sck.safeUpdate(CurrConfigKey, configString)
 }
 
+// getIntermediateConfig 这个函数的作用是确保系统的连续性。
+// 它的核心逻辑是：“如果我要去的地方（Target）太远了，我必须先确定‘下一站’（v+1）在哪里。”
+func (sck *ShardCtrler) getIntermediateConfig(curr *shardcfg.ShardConfig, target *shardcfg.ShardConfig) *shardcfg.ShardConfig {
+	// 目标版本刚好就是当前版本的下一步
+	if target.Num == curr.Num + 1 {
+		return target
+	}
+	// 目标版本太远了 (例如 Curr=1, Target=5)
+	if target.Num > curr.Num + 1{
+		return nil
+	}
+	return nil
+}
 
 // Called by the tester to ask the controller to change the
 // configuration from the current one to new.  While the controller
 // changes the configuration it may be superseded by another
 // controller.
+// the controller call changConfigTo must one step at a time.
 func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// Your code here.
 
@@ -385,34 +384,44 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 		// 2. 获取集群的“意图” (对应你的 NextConfigKey)
 		val, ver, err := sck.IKVClerk.Get(NextConfigKey)
 
-		var nextConfig *shardcfg.ShardConfig
+		var stepConfig *shardcfg.ShardConfig
 		// 情况 A: 墙上没蓝图 (ErrNoKey) 
 		// 或者 情况 B: 墙上的蓝图已经干完了 (existingNext.Num <= currConfig.Num)
 		if err == rpc.ErrNoKey || shardcfg.FromString(val).Num <= currConfig.Num {
-			// 我们把 Tester 给我们的 new 当作新的蓝图
-			nextConfig = new
+			// 我们把 curr + 1 当作新的蓝图
+			stepConfig = sck.getIntermediateConfig(currConfig, new)
 
-			putErr := sck.IKVClerk.Put(NextConfigKey, nextConfig.String(), ver)
+			if stepConfig == nil {
+				time.Sleep(50 * time.Millisecond)
+				continue
+			}
+
+			putErr := sck.IKVClerk.Put(NextConfigKey, stepConfig.String(), ver)
 			if putErr != rpc.OK {
 				// 抢输了！说明别人刚好贴了一张蓝图上去。
         		// 没关系，直接 continue，下一轮循环就能读到别人贴的蓝图了。
 				continue
 			}
 			 // 抢赢了！nextConfig 现在就是我们要执行的目标
-			shardgrp.DPrintf("CONTROLLER %d: I won the race for NextConfig %d", sck.controllerID, nextConfig.Num)
+			shardgrp.DPrintf("CONTROLLER %d: I won the race for NextConfig %d", sck.controllerID, stepConfig.Num)
 		} else {
 			// 墙上已经有一张还没干完的蓝图了 (Next.Num > Curr.Num)
-    		// 哪怕这张蓝图不是我贴的，我也得认！
-			nextConfig = shardcfg.FromString(val)
-			shardgrp.DPrintf("CONTROLLER %d: Helping finish existing NextConfig %d", sck.controllerID, nextConfig.Num)
+    		// 哪怕这张蓝图不是我贴的，如果符合next.Num = curr.Num + 1我也得认！
+			nextConfig := shardcfg.FromString(val)
+			stepConfig = sck.getIntermediateConfig(currConfig, nextConfig)
+			if stepConfig == nil {
+				time.Sleep(50 * time.Millisecond)
+				continue
+			}
+			shardgrp.DPrintf("CONTROLLER %d: Helping finish existing NextConfig %d", sck.controllerID, stepConfig.Num)
 		}
 
 		// 到这一步，nextConfig 一定是我们要执行的下一个目标
 		// 接下来去执行迁移：
-		if sck.executeMoves(currConfig, nextConfig) {
+		if sck.executeMoves(currConfig, stepConfig) {
 			// 迁移完了，把蓝图变成“已盖好的楼层
-			sck.safeUpdate(CurrConfigKey, nextConfig.String())
-            shardgrp.DPrintf("CONTROLLER %d: Config %d is now OFFICIAL", sck.controllerID, nextConfig.Num)
+			sck.safeUpdate(CurrConfigKey, stepConfig.String())
+            shardgrp.DPrintf("CONTROLLER %d: Config %d is now OFFICIAL", sck.controllerID, stepConfig.Num)
 		}
 	}
 }

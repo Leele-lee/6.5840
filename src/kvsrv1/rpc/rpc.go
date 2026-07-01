@@ -1,8 +1,8 @@
 package rpc
 
-//import (
-//	"6.5840/shardkv1/shardcfg"
-//)
+import (
+	"6.5840/shardkv1/shardcfg"
+)
 
 type Err string
 
@@ -31,7 +31,7 @@ type PutArgs struct {
 	Version Tversion
 	ClientID int64
 	SeqNum int
-	//ConfigNum shardcfg.Tnum
+	ConfigNum shardcfg.Tnum
 }
 
 type PutReply struct {
@@ -42,7 +42,7 @@ type GetArgs struct {
 	Key string
 	ClientID int64
 	SeqNum int
-	//ConfigNum shardcfg.Tnum
+	ConfigNum shardcfg.Tnum
 }
 
 type GetReply struct {
