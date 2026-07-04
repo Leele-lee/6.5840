@@ -126,16 +126,23 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			newGrpClerk = shardgrp.MakeClerk(sck.clnt, newServers)
 		}
 
-		retry := 0
+		//retry := 0
+		lastCheck := time.Now()
 		for {
-			retry++
-			if sck.checkConfigChange(newConfig) { return }
+			//retry++
+			//if sck.checkConfigChange(newConfig) { return }
 
 			// 每5轮重试前，先检查集群是否已经达到了目标版本
         	// 如果别人已经帮我们把活干完了，直接退出
-			if retry % 5 == 0 {
-				if sck.checkConfigChange(newConfig) { return }
-			}
+			//if retry % 5 == 0 {
+			//	if sck.checkConfigChange(newConfig) { return }
+			//}
+
+			// 每 100ms - 200ms 查一次，这比按次数检查更科学
+        	if time.Since(lastCheck) > 450*time.Millisecond {
+            	if sck.checkConfigChange(newConfig) { return }
+            	lastCheck = time.Now()
+        	}
 
 			var data map[string]shardrpc.DBValue
 			var lastOpResult map[int64]shardrpc.Result
