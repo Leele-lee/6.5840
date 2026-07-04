@@ -76,8 +76,16 @@ func (sck *ShardCtrler) getClerk(gid tester.Tgid, config *shardcfg.ShardConfig) 
 
 
 func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) bool {
-	currVal, _, _ := sck.IKVClerk.Get(CurrConfigKey)
-	nextVal, _, _ := sck.IKVClerk.Get(NextConfigKey)
+	currVal, _, err1 := sck.IKVClerk.Get(CurrConfigKey)
+	nextVal, _, err2 := sck.IKVClerk.Get(NextConfigKey)
+
+	// 如果因为网络分区连不上 kvsrv
+    if err1 != rpc.OK || err2 != rpc.OK {
+        // 重点：我们返回 false，表示“不确定配置是否改变”。
+        // 这样 moveOneShard 协程就能跳出 checkConfigChange，
+        // 回到自己的循环开头，去检查 sck.killed()。
+        return false 
+    }
 
 	curr := shardcfg.FromString(currVal)
 	next := shardcfg.FromString(nextVal)
@@ -145,9 +153,9 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			}
 
 			// 再次检查进度，防止在 Freeze 耗时过长期间配置已变更
-			if retry % 5 == 0 {
+			//if retry % 5 == 0 {
 				if sck.checkConfigChange(newConfig) { return }
-			}
+			//}
 			// instsall
 			if newGrpID != 0 {
 				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
@@ -159,9 +167,9 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
             	}
         	}
 
-			if retry % 5 == 0 {
+			//if retry % 5 == 0 {
 				if sck.checkConfigChange(newConfig) { return }
-			}
+			//}
 			// delete
 			if oldGrpID != 0 {
 				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)

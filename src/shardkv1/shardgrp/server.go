@@ -154,6 +154,8 @@ func (kv *KVServer) DoOp(req any) any {
 		if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
 			return kv.lastOpResult[shard][op.ClientID]
 		}
+		DPrintf("DoOP: %s (key: %s)configNum check okay! server configNum: %d, op num: %d", op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
+
 		// truly execute the operation
 		res = kv.executeOp(op)
 
@@ -486,6 +488,7 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 func (kv *KVServer) Kill() {
 	atomic.StoreInt32(&kv.dead, 1)
 	// Your code here, if desired.
+	kv.rsm.Kill()
 }
 
 func (kv *KVServer) killed() bool {
@@ -496,7 +499,7 @@ func (kv *KVServer) killed() bool {
 // StartShardServerGrp starts a server for shardgrp `gid`.
 //
 // StartShardServerGrp() and MakeRSM() must return quickly, so they should
-// start goroutines for any long-running work.
+// start goroutinStartServerShardGrpes for any long-running work.
 func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persister *tester.Persister, maxraftstate int) []tester.IService {
 	// call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
