@@ -23,6 +23,7 @@ type DBValue struct {
 type FreezeShardArgs struct {
 	Shard shardcfg.Tshid
 	Num   shardcfg.Tnum
+	Config shardcfg.ShardConfig
 }
 
 type FreezeShardReply struct {
@@ -41,6 +42,7 @@ type InstallShardArgs struct {
 	LastOpResult map[int64]Result
 	LastAppliedSeq map[int64]int
 	Num   shardcfg.Tnum
+	Config shardcfg.ShardConfig
 }
 
 type InstallShardReply struct {
@@ -50,6 +52,7 @@ type InstallShardReply struct {
 type DeleteShardArgs struct {
 	Shard shardcfg.Tshid
 	Num   shardcfg.Tnum
+	Config shardcfg.ShardConfig
 }
 
 type DeleteShardReply struct {

@@ -1,0 +1,1502 @@
+=== RUN   TestStaticOneShardGroup5A
+Test (5A): one shard group ... (reliable network)...
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 0: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 1: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 SERVER 2: Initializing GID1 as owner of all shards for Config 1
+2026/07/05 22:15:46 CONTROLLER: InitConfig: start has configNum 1
+2026/07/05 22:15:46 CONTROLLER 833373384842820385: SafeUpdate: keep trying to set current value to key: config-0, value: {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:46 CONTROLLER 833373384842820385: SafeUpdate: success to set key: config-0 value: to {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:46 CONTROLLER 833373384842820385: SafeUpdate: keep trying to set current value to key: current-config, value: {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:46 CONTROLLER 833373384842820385: SafeUpdate: success to set key: current-config value: to {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 0 received ErrWrongLeader 
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 1 received ErrWrongLeader 
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 2 received ErrWrongLeader 
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 0 received ErrWrongLeader 
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 1 received ErrWrongLeader 
+2026/07/05 22:15:46 DoOP: Put (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k0, val: UkTV5deFD5NvlWExiDCZ, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k1, val: UcNbZu-YdehqDNWHG0Tn, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k2, val: ffsKYRX_vNhHd3Tq3As1, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k3, val: FUPTxgohm_vxf5IHjdII, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k4, val: xIgYdXsKZVMZgqimyYNf, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k5, val: 5OxeVj3OO-iFiJzJWdFo, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k6, val: oK9jkK5MLTfmwvQyWhBR, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k7, val: JoVppSmw9WevVDAxz8Pc, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k8, val: 5Jwzjg7YzXu9MMvzEpOq, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k9, val: 8iwATOutT4mLfWIwdyMa, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k10, val: uN3KIpYVnKs-_N84gwRu, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k11, val: 0ZQIIYur_TRX6ZZey2Si, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k12, val: 5CraSf5B83oG1hUmuue-, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k13, val: 5UUJnnwMEcoYOrwZ0WTM, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k14, val: HkddTcNUcLswJhYOA5G-, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k15, val: 3kNlb_YlDqp6vVdJ6FLx, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k16, val: eg_3JwdKzssKTJ9SoNom, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k17, val: K4VqQVpr9LSSpjEIx0ir, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k18, val: OWeWq3ApiKQ3TH3NFvFj, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k19, val: 4e3BIEZEFXIWHOWv1H15, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k20, val: 2gXyj3oDJd0E7yIPDptA, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k21, val: PVXHtp5CwbIIBsx3x6UA, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k22, val: f5yVb-46QtyWXPSG3u59, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k23, val: ILNeOPkvYdx0aSB1Q2xt, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:46 DoOP: Put (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 DoOP: Put (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:46 Put(key: k24, val: ScyUuo3Dp9MIohYDsNaZ, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k25, val: yuRWw-Xx4Al7KeNfa44k, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k26, val: fX9dDHHarFs4GysJ6eMr, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k27, val: xVhAz0Vh2ecAt7JAvoww, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k28, val: 9j0p0gnc6jNMXYksTdFX, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k29, val: kV8C2VAOD5L4JQhkrDgN, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k30, val: wgOct6OjD5EKTj26A1P3, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k31, val: sDhmdK2twRpWHo_IfMSR, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k32, val: QKPJsCEOmfJ9vw9vpexH, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k33, val: hrrzRIIFI4htJhiHEZqK, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k34, val: 0uJ35P69wlMasDz3mwbp, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k35, val: rttLqbuCLQsk8r6rIKSN, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k36, val: VrVGgY05a-6bX3vCThS4, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k37, val: cNENdxWPvh9vODRk42hW, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k38, val: qsp0SfQqrHflUicseij7, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k39, val: n4hWu5WGH37pgfZK_w4q, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k40, val: pUFJaVFDMVSZE1sE0m1U, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k41, val: HIxAjpiONW1aQo6_LmHp, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k42, val: qM1JDbSrPvC5BfxbOKvE, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k43, val: kuCqObqUDnC23H-bpFHy, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k44, val: Gx19SNMXXpU1Q9q7s4FM, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k45, val: cTqhONBAx3qjz65_S6yD, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k46, val: GtftyjOn11V53oNqgRYr, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k47, val: QEeWhsKWa3DzydhJmtwC, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k48, val: Hn-9Fx5erVpLmQFbrYvI, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k49, val: Ep22hxIB5ZfVamdbSlB2, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k50, val: PPzYmz1tvH4vjcv7ynLK, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k51, val: qqcvbao00NbShPQ6x0by, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k52, val: 9d84_sv0vhGBmc_R75Rh, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k53, val: UqlXIDfW0yXanCIpZnND, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k54, val: gO0v07uO931QxQiMPslJ, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k55, val: IlCqCnpKUwtFqxv3gmjk, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k56, val: ygncRGF8TFa2LWdHAbl7, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k57, val: sN1N7lgCyG6D0ViXuzQL, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k58, val: seCUg3QMfmXCFqctsv_D, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 DoOP: Put (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 Put(key: k59, val: syfT-A-aKhRc4AEimlaF, clientID: 1574905585314635256, ver: 0) to server 2 received OK 
+2026/07/05 22:15:47 GET: for get key k0 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:47 DoOP: Put (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Put (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k1 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k1, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k1 belongs to Shard 9
+2026/07/05 22:15:47 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k2 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k2 belongs to Shard 0, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k2, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k2 belongs to Shard 0
+2026/07/05 22:15:47 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k3 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k3, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k3 belongs to Shard 11
+2026/07/05 22:15:47 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k4 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k4, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k4 belongs to Shard 6
+2026/07/05 22:15:47 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k5 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k5 belongs to Shard 5, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k5, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k5 belongs to Shard 5
+2026/07/05 22:15:47 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k6 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k6, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k6 belongs to Shard 8
+2026/07/05 22:15:47 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k7 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k7, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k7 belongs to Shard 7
+2026/07/05 22:15:47 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k8 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k8, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k8 belongs to Shard 6
+2026/07/05 22:15:47 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k9 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k9 belongs to Shard 5, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k9, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k9 belongs to Shard 5
+2026/07/05 22:15:47 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k10 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k10, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k10 belongs to Shard 7
+2026/07/05 22:15:47 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k11 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k11, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k11 belongs to Shard 8
+2026/07/05 22:15:47 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k12 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k12 belongs to Shard 5, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k12, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k12 belongs to Shard 5
+2026/07/05 22:15:47 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k13 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k13, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k13 belongs to Shard 6
+2026/07/05 22:15:47 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k14 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k14 belongs to Shard 3, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k14, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k14 belongs to Shard 3
+2026/07/05 22:15:47 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k15 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k15 belongs to Shard 4, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k15, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k15 belongs to Shard 4
+2026/07/05 22:15:47 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k16 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k16 belongs to Shard 1, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k16, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k16 belongs to Shard 1
+2026/07/05 22:15:47 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k17 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k17 belongs to Shard 2, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k17, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k17 belongs to Shard 2
+2026/07/05 22:15:47 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k18 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k18, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k18 belongs to Shard 11
+2026/07/05 22:15:47 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k19 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k19 belongs to Shard 0, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k19, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k19 belongs to Shard 0
+2026/07/05 22:15:47 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k20 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k20 belongs to Shard 4, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k20, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k20 belongs to Shard 4
+2026/07/05 22:15:47 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k21 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k21 belongs to Shard 3, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k21, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k21 belongs to Shard 3
+2026/07/05 22:15:47 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k22 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k22 belongs to Shard 2, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k22, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k22 belongs to Shard 2
+2026/07/05 22:15:47 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k23 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k23 belongs to Shard 1, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k23, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k23 belongs to Shard 1
+2026/07/05 22:15:47 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k24 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k24 belongs to Shard 0, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k24, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k24 belongs to Shard 0
+2026/07/05 22:15:47 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k25 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k25, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k25 belongs to Shard 11
+2026/07/05 22:15:47 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k26 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k26, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k26 belongs to Shard 10
+2026/07/05 22:15:47 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k27 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k27, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k27 belongs to Shard 9
+2026/07/05 22:15:47 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k28 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k28 belongs to Shard 0, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k28, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k28 belongs to Shard 0
+2026/07/05 22:15:47 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k29 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k29, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k29 belongs to Shard 11
+2026/07/05 22:15:47 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 GET: for get key k30 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:47 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/07/05 22:15:47 GET rpc: for (key: k30, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:47 DEBUG: Key k30 belongs to Shard 9
+2026/07/05 22:15:47 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:47 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k31 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k31, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k31 belongs to Shard 10
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k32 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k32, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k32 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k33 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k33 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k33, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k33 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k34 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k34 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k34, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k34 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k35 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k35, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k35 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k36 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k36, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k36 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k37 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k37, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k37 belongs to Shard 8
+2026/07/05 22:15:48 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k38 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k38 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k38, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k38 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k39 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k39, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k39 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k40 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k40, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k40 belongs to Shard 10
+2026/07/05 22:15:48 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k41 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k41, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k41 belongs to Shard 9
+2026/07/05 22:15:48 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k42 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k42 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k42, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k42 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k43 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k43, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k43 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k44 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k44, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k44 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k45 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k45 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k45, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k45 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k46 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k46, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k46 belongs to Shard 8
+2026/07/05 22:15:48 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k47 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k47, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k47 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k48 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k48, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k48 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k49 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k49 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k49, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k49 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k50 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k50 belongs to Shard 3, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k50, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k50 belongs to Shard 3
+2026/07/05 22:15:48 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k51 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k51 belongs to Shard 4, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k51, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k51 belongs to Shard 4
+2026/07/05 22:15:48 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k52 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k52 belongs to Shard 1, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k52, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k52 belongs to Shard 1
+2026/07/05 22:15:48 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k53 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k53 belongs to Shard 2, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k53, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k53 belongs to Shard 2
+2026/07/05 22:15:48 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k54 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k54, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k54 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k55 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k55, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k55 belongs to Shard 8
+2026/07/05 22:15:48 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k56 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k56 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k56, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k56 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k57 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k57, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k57 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k58 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k58, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k58 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k59 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k59 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k59, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k59 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k0 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:48 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k1 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k1, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k1 belongs to Shard 9
+2026/07/05 22:15:48 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k2 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k2 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k2, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k2 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k3 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k3, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k3 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k4 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k4, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k4 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k5 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k5 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k5, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k5 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k6 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k6, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k6 belongs to Shard 8
+2026/07/05 22:15:48 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k7 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k7, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k7 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k8 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k8, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k8 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k9 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k9 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k9, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k9 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k10 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k10, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k10 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k11 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k11, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k11 belongs to Shard 8
+2026/07/05 22:15:48 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k12 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k12 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k12, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k12 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k13 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k13, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k13 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k14 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k14 belongs to Shard 3, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k14, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k14 belongs to Shard 3
+2026/07/05 22:15:48 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k15 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k15 belongs to Shard 4, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k15, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k15 belongs to Shard 4
+2026/07/05 22:15:48 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k16 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k16 belongs to Shard 1, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k16, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k16 belongs to Shard 1
+2026/07/05 22:15:48 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k17 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k17 belongs to Shard 2, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k17, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k17 belongs to Shard 2
+2026/07/05 22:15:48 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k18 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k18, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k18 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k19 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k19 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k19, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k19 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k20 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k20 belongs to Shard 4, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k20, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k20 belongs to Shard 4
+2026/07/05 22:15:48 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k21 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k21 belongs to Shard 3, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k21, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k21 belongs to Shard 3
+2026/07/05 22:15:48 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k22 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k22 belongs to Shard 2, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k22, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k22 belongs to Shard 2
+2026/07/05 22:15:48 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k23 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k23 belongs to Shard 1, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k23, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k23 belongs to Shard 1
+2026/07/05 22:15:48 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k24 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k24 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k24, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k24 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k25 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k25, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k25 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k26 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k26, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k26 belongs to Shard 10
+2026/07/05 22:15:48 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k27 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k27, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k27 belongs to Shard 9
+2026/07/05 22:15:48 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k28 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k28 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k28, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k28 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k29 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k29, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k29 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k30 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k30, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k30 belongs to Shard 9
+2026/07/05 22:15:48 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k31 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k31, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k31 belongs to Shard 10
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k32 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k32, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k32 belongs to Shard 11
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k33 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k33 belongs to Shard 0, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k33, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k33 belongs to Shard 0
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k34 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k34 belongs to Shard 5, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k34, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k34 belongs to Shard 5
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k35 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k35, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k35 belongs to Shard 6
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k36 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k36, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k36 belongs to Shard 7
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:48 GET: for get key k37 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:48 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/07/05 22:15:48 GET rpc: for (key: k37, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:48 DEBUG: Key k37 belongs to Shard 8
+2026/07/05 22:15:49 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k38 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k38 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k38, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k38 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k39 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k39, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k39 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k40 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k40, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k40 belongs to Shard 10
+2026/07/05 22:15:49 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k41 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k41, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k41 belongs to Shard 9
+2026/07/05 22:15:49 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k42 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k42 belongs to Shard 0, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k42, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k42 belongs to Shard 0
+2026/07/05 22:15:49 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k43 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k43, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k43 belongs to Shard 11
+2026/07/05 22:15:49 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k44 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k44, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k44 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k45 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k45 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k45, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k45 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k46 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k46, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k46 belongs to Shard 8
+2026/07/05 22:15:49 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k47 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k47, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k47 belongs to Shard 7
+2026/07/05 22:15:49 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k48 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k48, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k48 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k49 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k49 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k49, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k49 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k50 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k50 belongs to Shard 3, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k50, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k50 belongs to Shard 3
+2026/07/05 22:15:49 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k51 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k51 belongs to Shard 4, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k51, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k51 belongs to Shard 4
+2026/07/05 22:15:49 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k52 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k52 belongs to Shard 1, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k52, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k52 belongs to Shard 1
+2026/07/05 22:15:49 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k53 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k53 belongs to Shard 2, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k53, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k53 belongs to Shard 2
+2026/07/05 22:15:49 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k54 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k54, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k54 belongs to Shard 7
+2026/07/05 22:15:49 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k55 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k55, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k55 belongs to Shard 8
+2026/07/05 22:15:49 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k56 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k56 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k56, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k56 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k57 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k57, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k57 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k58 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k58, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k58 belongs to Shard 11
+2026/07/05 22:15:49 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k59 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k59 belongs to Shard 0, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k59, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 DEBUG: Key k59 belongs to Shard 0
+2026/07/05 22:15:49 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k0 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k0 belongs to Shard 10, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 0
+2026/07/05 22:15:49 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:49 Client 1574905585314635256 get detected wrong leader for key k0 in server 0
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:49 Client 1574905585314635256 get detected wrong leader for key k0 in server 1
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 2
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 0
+2026/07/05 22:15:49 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:49 Client 1574905585314635256 get detected wrong leader for key k0 in server 0
+2026/07/05 22:15:49 GET rpc: for (key: k0, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k0 belongs to Shard 10
+2026/07/05 22:15:49 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k1 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k1 belongs to Shard 9, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k1, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k1 belongs to Shard 9
+2026/07/05 22:15:49 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k0)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k2 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k2 belongs to Shard 0, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k2, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k2 belongs to Shard 0
+2026/07/05 22:15:49 DoOP: Get (key: k1)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k3 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k3 belongs to Shard 11, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k3, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k3 belongs to Shard 11
+2026/07/05 22:15:49 DoOP: Get (key: k2)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k4 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k4 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k4, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k4 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k3)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k5 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k5 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k5, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k5 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k4)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k6 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k6 belongs to Shard 8, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k6, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k6 belongs to Shard 8
+2026/07/05 22:15:49 DoOP: Get (key: k5)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k7 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k7 belongs to Shard 7, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k7, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k7 belongs to Shard 7
+2026/07/05 22:15:49 DoOP: Get (key: k6)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k8 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k8 belongs to Shard 6, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k8, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k8 belongs to Shard 6
+2026/07/05 22:15:49 DoOP: Get (key: k7)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:49 GET: for get key k9 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:49 DEBUG: Key k9 belongs to Shard 5, group 1
+2026/07/05 22:15:49 GET rpc: for (key: k9, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:49 DEBUG: Key k9 belongs to Shard 5
+2026/07/05 22:15:49 DoOP: Get (key: k8)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k10 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k10 belongs to Shard 7, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k10, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k10 belongs to Shard 7
+2026/07/05 22:15:50 DoOP: Get (key: k9)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k11 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k11 belongs to Shard 8, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k11, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k11 belongs to Shard 8
+2026/07/05 22:15:50 DoOP: Get (key: k10)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k12 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k12 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k12, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k12 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k11)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k13 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k13 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k13, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k13 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k12)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k14 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k14 belongs to Shard 3, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k14, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k14 belongs to Shard 3
+2026/07/05 22:15:50 DoOP: Get (key: k13)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k15 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k15 belongs to Shard 4, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k15, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k15 belongs to Shard 4
+2026/07/05 22:15:50 DoOP: Get (key: k14)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k16 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k16 belongs to Shard 1, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k16, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k16 belongs to Shard 1
+2026/07/05 22:15:50 DoOP: Get (key: k15)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k17 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k17 belongs to Shard 2, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k17, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k17 belongs to Shard 2
+2026/07/05 22:15:50 DoOP: Get (key: k16)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k18 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k18 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k18, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k18 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k17)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k19 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k19 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k19, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k19 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k18)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k20 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k20 belongs to Shard 4, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k20, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k20 belongs to Shard 4
+2026/07/05 22:15:50 DoOP: Get (key: k19)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k21 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k21 belongs to Shard 3, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k21, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k21 belongs to Shard 3
+2026/07/05 22:15:50 DoOP: Get (key: k20)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k22 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k22 belongs to Shard 2, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k22, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k22 belongs to Shard 2
+2026/07/05 22:15:50 DoOP: Get (key: k21)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k23 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k23 belongs to Shard 1, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k23, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k23 belongs to Shard 1
+2026/07/05 22:15:50 DoOP: Get (key: k22)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k24 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k24 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k24, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k24 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k23)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k25 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k25 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k25, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k25 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k24)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k26 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k26 belongs to Shard 10, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k26, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k26 belongs to Shard 10
+2026/07/05 22:15:50 DoOP: Get (key: k25)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k27 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k27 belongs to Shard 9, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k27, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k27 belongs to Shard 9
+2026/07/05 22:15:50 DoOP: Get (key: k26)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k28 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k28 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k28, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k28 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k27)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k29 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k29 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k29, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k29 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k28)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k30 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k30 belongs to Shard 9, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k30, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k30 belongs to Shard 9
+2026/07/05 22:15:50 DoOP: Get (key: k29)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k31 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k31 belongs to Shard 10, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k31, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k31 belongs to Shard 10
+2026/07/05 22:15:50 DoOP: Get (key: k30)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k32 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k32 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k32, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k32 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k31)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k33 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k33 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k33, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k33 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k32)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k34 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k34 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k34, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k34 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k33)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k35 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k35 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k35, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k35 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k34)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k36 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k36 belongs to Shard 7, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k36, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k36 belongs to Shard 7
+2026/07/05 22:15:50 DoOP: Get (key: k35)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k37 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k37 belongs to Shard 8, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k37, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k37 belongs to Shard 8
+2026/07/05 22:15:50 DoOP: Get (key: k36)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k38 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k38 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k38, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k38 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k37)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k39 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k39 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k39, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k39 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k38)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k40 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k40 belongs to Shard 10, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k40, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k40 belongs to Shard 10
+2026/07/05 22:15:50 DoOP: Get (key: k39)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k41 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k41 belongs to Shard 9, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k41, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k41 belongs to Shard 9
+2026/07/05 22:15:50 DoOP: Get (key: k40)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k42 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k42 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k42, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k42 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k41)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k43 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k43 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k43, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k43 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k42)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k44 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k44 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k44, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k44 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k43)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k45 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k45 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k45, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k45 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k44)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k46 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k46 belongs to Shard 8, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k46, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k46 belongs to Shard 8
+2026/07/05 22:15:50 DoOP: Get (key: k45)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k47 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k47 belongs to Shard 7, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k47, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k47 belongs to Shard 7
+2026/07/05 22:15:50 DoOP: Get (key: k46)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k48 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k48 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k48, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k48 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k47)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k49 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k49 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k49, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k49 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k48)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k50 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k50 belongs to Shard 3, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k50, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k50 belongs to Shard 3
+2026/07/05 22:15:50 DoOP: Get (key: k49)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k51 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k51 belongs to Shard 4, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k51, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k51 belongs to Shard 4
+2026/07/05 22:15:50 DoOP: Get (key: k50)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k52 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k52 belongs to Shard 1, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k52, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k52 belongs to Shard 1
+2026/07/05 22:15:50 DoOP: Get (key: k51)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k53 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k53 belongs to Shard 2, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k53, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k53 belongs to Shard 2
+2026/07/05 22:15:50 DoOP: Get (key: k52)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k54 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k54 belongs to Shard 7, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k54, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k54 belongs to Shard 7
+2026/07/05 22:15:50 DoOP: Get (key: k53)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k55 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k55 belongs to Shard 8, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k55, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k55 belongs to Shard 8
+2026/07/05 22:15:50 DoOP: Get (key: k54)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k56 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k56 belongs to Shard 5, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k56, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k56 belongs to Shard 5
+2026/07/05 22:15:50 DoOP: Get (key: k55)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k57 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k57 belongs to Shard 6, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k57, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k57 belongs to Shard 6
+2026/07/05 22:15:50 DoOP: Get (key: k56)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k58 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k58 belongs to Shard 11, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k58, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k58 belongs to Shard 11
+2026/07/05 22:15:50 DoOP: Get (key: k57)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 GET: for get key k59 current config is {"Num":1,"Shards":[1,1,1,1,1,1,1,1,1,1,1,1],"Groups":{"1":["server-1-0","server-1-1","server-1-2"]}}
+2026/07/05 22:15:50 DEBUG: Key k59 belongs to Shard 0, group 1
+2026/07/05 22:15:50 GET rpc: for (key: k59, clientID: 1574905585314635256, SeqNum: 60) send to server 1
+2026/07/05 22:15:50 DEBUG: Key k59 belongs to Shard 0
+2026/07/05 22:15:50 DoOP: Get (key: k58)configNum check okay! server configNum: 1, op num: 1
+2026/07/05 22:15:50 DoOP: Get (key: k59)configNum check okay! server configNum: 1, op num: 1
+  ... Passed --  time  4.7s #peers 1 #RPCs   815 #Ops  180
+--- PASS: TestStaticOneShardGroup5A (4.75s)
+PASS
+ok  	6.5840/shardkv1	6.604s

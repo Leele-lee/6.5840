@@ -595,10 +595,11 @@ func (rf *Raft) applier() {
         // If the channel blocks here, we DON'T hold the Raft lock!
         // Heartbeats and elections can still happen in the background.
 		for _, msg := range msgs {
-			if rf.killed() {
-				break
+			select {
+			case rf.applyCh <- msg:
+			case <- time.After(50 * time.Millisecond):
+				if rf.killed() { return }
 			}
-			rf.applyCh <- msg
 		}
 	}
 	// This is the "Close the door" logic

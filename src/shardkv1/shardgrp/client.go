@@ -13,7 +13,7 @@ import (
 	"6.5840/shardkv1/shardgrp/shardrpc"
 )
 
-const Debug = false // Set to false to turn off logs when you are done
+const Debug = true // Set to false to turn off logs when you are done
 
 func DPrintf(format string, a ...interface{}) {
 	if Debug {
@@ -216,13 +216,14 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion, configNum s
 	return rpc.ErrMaybe
 }
 
-func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) (map[string]shardrpc.DBValue, map[int64]shardrpc.Result, map[int64]int, rpc.Err) {
+func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcfg.ShardConfig) (map[string]shardrpc.DBValue, map[int64]shardrpc.Result, map[int64]int, rpc.Err) {
 	// Your code here
 	serverId := ck.recentLeader
 
 	args := shardrpc.FreezeShardArgs {
 		Shard: s,
 		Num: num,
+		Config: config,
 	}
 	for {
 		//DPrintf("C%d calling FreezeShard for Shard %d, Num %d to Group Leader %d", 
@@ -255,7 +256,7 @@ func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) (map[string]sh
 }
 
 func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue, 
-	lastOpResult map[int64]shardrpc.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum) rpc.Err {
+	lastOpResult map[int64]shardrpc.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum, config shardcfg.ShardConfig) rpc.Err {
 	// Your code here
 	serverId := ck.recentLeader
 	args := shardrpc.InstallShardArgs {
@@ -264,6 +265,7 @@ func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue
 		LastOpResult: lastOpResult,
 		LastAppliedSeq: lastAppliedSeq,
 		Num: num,
+		Config: config,
 	}
 
 	DPrintf("Data length return by freezeShard: %d, lastOpResult: %d, lastAppliedSeq: %d", len(data), len(lastOpResult), len(lastAppliedSeq))
@@ -296,12 +298,13 @@ func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue
 	}
 }
 
-func (ck *Clerk) DeleteShard(s shardcfg.Tshid, num shardcfg.Tnum) rpc.Err {
+func (ck *Clerk) DeleteShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcfg.ShardConfig) rpc.Err {
 	// Your code here
 	serverId := ck.recentLeader
 	args := shardrpc.DeleteShardArgs {
 		Shard: s,
 		Num: num,
+		Config: config,
 	}
 	for {
 		//DPrintf("C%d calling DeleteShard for Shard %d, Num %d to Group Leader %d", 

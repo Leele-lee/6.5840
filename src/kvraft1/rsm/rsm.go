@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"sync/atomic"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/labrpc"
 	"6.5840/raft1"
@@ -35,6 +36,7 @@ type Op struct {
 	Data map[string]shardrpc.DBValue // the kv data in shard, used by installShard
 	LastOpResult map[int64]shardrpc.Result
 	LastAppliedSeq map[int64]int
+	Config shardcfg.ShardConfig
 
 }
 
@@ -61,6 +63,17 @@ type RSM struct {
 	// Your definitions here.
 	waitCh       map[int]chan any  // commit index in log -> commit chan waitting reply from GoOp
 	lastApplied  int // last applied index in raft, it used for conditional invoke DoOp and Restore
+	dead         int32
+}
+
+func (rsm *RSM) Kill() {
+	atomic.StoreInt32(&rsm.dead, 1)
+	rsm.rf.Kill()
+}
+
+func (rsm *RSM) killed() bool {
+	z := atomic.LoadInt32(&rsm.dead)
+	return z == 1
 }
 
 // reader goroutine listen from raft
@@ -69,52 +82,57 @@ type RSM struct {
 // 3. if raft size is bigger than maxraftstate bytes should call snapshot
 func (rsm *RSM) applier() {
 
-	for msg := range rsm.applyCh {
-		// 1. check msg contains command or not
-		if msg.CommandValid {
-			// CRITICAL: Ignore commands that are already applied 
-            // (though Raft usually ensures this, it's good practice)
-			if msg.CommandIndex <= rsm.lastApplied {
-				continue
+	for {
+		if rsm.killed() { return }
+		select {
+		case msg, ok := <- rsm.applyCh:
+			if !ok { return } 
+			if msg.CommandValid {
+				// CRITICAL: Ignore commands that are already applied 
+				// (though Raft usually ensures this, it's good practice)
+				if msg.CommandIndex <= rsm.lastApplied {
+					continue
+				}
+
+				//2. update rsm.lastApplied
+				rsm.lastApplied = msg.CommandIndex
+
+				//3. pass the operation to service to operate
+				res := rsm.sm.DoOp(msg.Command)
+			
+				// 4. pass the result to the correspond request channel
+				rsm.mu.Lock()
+				ch, ok := rsm.waitCh[msg.CommandIndex]
+				rsm.mu.Unlock()
+
+				if ok {
+					ch <- res
+				}
+
+				// 4. check we need snapshot or not
+				if rsm.maxraftstate != -1 && rsm.rf.PersistBytes() >= rsm.maxraftstate {
+					// invoke server.snapshot and wait return
+					snapshot := rsm.sm.Snapshot()
+					// invoke raft.snapshot and pass the snap to it
+					commandIndex := msg.CommandIndex
+					rsm.rf.Snapshot(commandIndex, snapshot)
+				}
+			} else if msg.SnapshotValid {
+				// CRITICAL: Only restore if the snapshot is NEWER than our current state
+				if msg.SnapshotIndex <= rsm.lastApplied {
+					continue
+				}
+
+				// update the index to the snapshot's index
+				rsm.lastApplied = msg.SnapshotIndex
+			
+				// restore sate machine server
+				rsm.sm.Restore(msg.Snapshot)
 			}
-
-			//2. update rsm.lastApplied
-			rsm.lastApplied = msg.CommandIndex
-
-			//3. pass the operation to service to operate
-			res := rsm.sm.DoOp(msg.Command)
-		
-			// 4. pass the result to the correspond request channel
-			rsm.mu.Lock()
-			ch, ok := rsm.waitCh[msg.CommandIndex]
-			rsm.mu.Unlock()
-
-			if ok {
-				ch <- res
-			}
-
-			// 4. check we need snapshot or not
-			if rsm.maxraftstate != -1 && rsm.rf.PersistBytes() >= rsm.maxraftstate {
-				// invoke server.snapshot and wait return
-				snapshot := rsm.sm.Snapshot()
-				// invoke raft.snapshot and pass the snap to it
-				commandIndex := msg.CommandIndex
-				rsm.rf.Snapshot(commandIndex, snapshot)
-			}
-		} else if msg.SnapshotValid {
-			// CRITICAL: Only restore if the snapshot is NEWER than our current state
-			if msg.SnapshotIndex <= rsm.lastApplied {
-				continue
-			}
-
-			// update the index to the snapshot's index
-			rsm.lastApplied = msg.SnapshotIndex
-		
-			// restore sate machine server
-			rsm.sm.Restore(msg.Snapshot)
+		case <- time.After(200 * time.Millisecond):
+			continue // even not received message, should check rsm were killed or not
 		}
 	}
-
 }
 
 // servers[] contains the ports of the set of

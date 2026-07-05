@@ -150,7 +150,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 
 			// freeze
 			if oldGrpID != 0 {
-				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num)
+				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num, *newConfig)
 				if err != rpc.OK {
 					// 如果失败（网络问题或不是 Leader），小睡后重试整个循环
 					time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
@@ -165,7 +165,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			//}
 			// instsall
 			if newGrpID != 0 {
-				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
+				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num, *newConfig)
             	if err != rpc.OK {
                 	// Install 失败必须重试。
                		// 注意：服务器端 shardgrp 必须处理好幂等性（基于 Num 判断）
@@ -179,7 +179,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			//}
 			// delete
 			if oldGrpID != 0 {
-				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
+				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num, *newConfig)
             	if err != rpc.OK {
                 	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
                 	continue
