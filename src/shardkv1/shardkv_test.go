@@ -89,6 +89,7 @@ func TestJoinBasic5A(t *testing.T) {
 	cfg := sck.Query()
 
 	gid2 := ts.newGid()
+	ts.t.Logf("DEBUG: Group 2 has ID: %d", gid2) // 看看这里是不是打印了 3
 	if ok := ts.joinGroups(sck, []tester.Tgid{gid2}); !ok {
 		ts.t.Fatalf("TestJoinBasic5A: joinGroups failed")
 	}
@@ -102,17 +103,17 @@ func TestJoinBasic5A(t *testing.T) {
 		ts.t.Fatalf("TestJoinBasic5A: %d isn't a member of %v", gid2, cfg1)
 	}
 	
-	//ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group1, len(ka) is %d", len(ka))
+	ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group1, len(ka) is %d", len(ka))
 	ts.checkShutdownSharding(gid1, ka, va)
-	//ts.t.Logf("ANNOTATION: Finish checkShutdownSharding to group1")
+	ts.t.Logf("ANNOTATION: Finish checkShutdownSharding to group1")
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))
 	}
 
-	//ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group2")
+	ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group2")
 	ts.checkShutdownSharding(gid2, ka, va)
-	//ts.t.Logf("ANNOTATION: End checkShutdownSharding to group2")
+	ts.t.Logf("ANNOTATION: End checkShutdownSharding to group2")
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))
@@ -214,13 +215,18 @@ func joinLeave5A(t *testing.T, reliable bool, part string) {
 
 	ts.joinGroups(sck, grps)
 
+	ts.t.Logf("ANNOTATION: Start checkShutdownSharding to group: %d", grps[0])
 	ts.checkShutdownSharding(grps[0], ka, va)
+	ts.t.Logf("ANNOTATION: End checkShutdownSharding to group: %d", grps[0])
+
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))
 	}
 
+	ts.t.Logf("ANNOTATION: Start leaveGroups for all groups")
 	ts.leaveGroups(sck, grps)
+	ts.t.Logf("ANNOTATION: End leaveGroups for all groups")
 
 	for i := 0; i < len(ka); i++ {
 		ts.CheckGet(ck, ka[i], va[i], rpc.Tversion(1))

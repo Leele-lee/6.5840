@@ -89,7 +89,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 
 		// 2. LAZY FETCH: If we don't have a config, get one now
         if config == nil {
-			shardgrp.DPrintf("GET: for get key %s, the ck.config is nil", key)
+			shardgrp.DPrintf("For client: %d, GET: for get key %s, the ck.config is nil", ck.clientID, key)
             config = ck.sck.Query()
             ck.mu.Lock()
             ck.config = config

@@ -64,6 +64,7 @@ type KVPersistState struct {
 	LastAppliedSeq [shardcfg.NShards]map[int64]int
 	Config shardcfg.ShardConfig
 	ShardStatus [shardcfg.NShards]status
+	CurrConfigNum shardcfg.Tnum
 }
 
 type MigrationTask struct {
@@ -78,11 +79,9 @@ type status int
 const (
 	// NotOwned (0)：我不拥有这个分片，也不打算拥有它。
 	NotOwned status = iota
-	// WaitInstall (1)：新配置说这块地归我，但我还没收到数据，禁止读写。
-	WaitInstall
-	// Active (2)：我拥有数据且配置正确，允许读写。
+	// Active (1)：我拥有数据且配置正确，允许读写。
 	Active
-	// Frozen (3)：我正在把数据给别人，数据已锁定，禁止写入，允许读取（仅限迁移读取）
+	// Frozen (2)：我正在把数据给别人，数据已锁定，禁止写入，允许读取（仅限迁移读取）
 	Frozen
 )
 
@@ -131,109 +130,123 @@ func (kv *KVServer) executeOp(op rsm.Op) shardrpc.Result {
 	return res
 }
 
-func (kv *KVServer) advanceServerConfig(newNum shardcfg.Tnum, newConfig shardcfg.ShardConfig) {
-	kv.currConfigNum = newNum
-	kv.config = newConfig
+func (kv *KVServer) totalKeyCount() int {
+    count := 0
+    for i := 0; i < shardcfg.NShards; i++ {
+        if kv.shardsData[i] != nil {
+            count += len(kv.shardsData[i])
+        }
+    }
+    return count
+}
 
-	for i := 0; i < shardcfg.NShards; i++ {
-		// update all shards configNum in this group server
-		kv.shardConfigNums[i] = newNum
-
-		if newConfig.Shards[i] == kv.gid {
-			// If the new configuration belongs to me, 
-			// and it was already under my control before -> Keep Active
-
-			// if not belong to me before, set to waitInstall
-			if kv.shardStatus[i] != Active {
-				kv.shardStatus[i] = WaitInstall
-			}
-		} else {
-			// 在新版里不属于我了。
-			// 如果我正在持有它，设为 Frozen 准备给别人。
-			// 如果我根本没持有过，设为 NotOwned
-			if kv.shardStatus[i] == Active {
-				kv.shardStatus[i] = Frozen
-			} else {
-				kv.shardStatus[i] = NotOwned
-			}
-		}
-	}
+func (kv *KVServer) debugSpace() {
+    for i := 0; i < shardcfg.NShards; i++ {
+        if len(kv.shardsData[i]) > 0 {
+            DPrintf("SERVER %d: Shard %d has %d keys", kv.me, i, len(kv.shardsData[i]))
+        }
+    }
 }
 
 // deal with op from group rpc, freezeShard, installShard and deleteShard
 func (kv *KVServer) applyAdminOp(op rsm.Op) shardrpc.Result {
 	var res shardrpc.Result
 	shard := op.ShardID
+	localNum := kv.shardConfigNums[shard]
+	status := kv.shardStatus[shard]
+
 	// 如果 op.Num 比我们已知的还小，说明这是来自过去的延迟包，必须丢弃。
-	if op.ConfigNum < kv.shardConfigNums[shard] {
+	if op.ConfigNum < localNum {
 		DPrintf("SERVER %d: Rejecting stale AdminOp %s for Shard %d (Op.Num %d < Current %d)", 
             kv.me, op.Operation, shard, op.ConfigNum, kv.shardConfigNums[shard])
 		res.Err = rpc.ErrWrongGroup
 		return res
 	}
 
-    // --- 2. 全员步进逻辑 (解决分片 7 卡死) ---
-    // 如果这个操作的版本号领先于服务器的全局版本，触发一次全员状态对齐
-	if op.ConfigNum > kv.currConfigNum {
-		kv.advanceServerConfig(op.ConfigNum, op.Config)
-	}
-
-	// --- 3. 记录最大 Num (满足手册要求) ---
-    // 此时 op.Num >= kv.shardConfigNums[shard]
-	// actually already did in advanServerConfig, so can delete
-	kv.shardConfigNums[shard] = op.ConfigNum
-
 	switch op.Operation {
-	case "FreezeShard" :
-		// newconfig already not have this shard
-		// 如果已经 Frozen 了，说明是重复请求，直接返回之前存好的数据
-		if kv.shardStatus[shard] == Frozen {
-			res.Err = rpc.OK
+	case "FreezeShard":
+		// 1. 版本检查
+		switch {
+		case op.ConfigNum == localNum:
+			switch status {
+			case Frozen:
+				// repeat rpc, may lost reply just return all data
+				res.Data = copyMap(kv.shardsData[shard])
+				res.LastOpResult = copyLastOpResult(kv.lastOpResult[shard])
+				res.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shard])
+				res.Num = kv.shardConfigNums[shard]
+				res.Err = rpc.OK
+			case NotOwned:
+				// already delete, return ErrAlreadyDone
+				// controller should move to the next shard
+				res.Err = rpc.ErrAlreadyDone
+			default:
+				res.Err = rpc.ErrWrongGroup
+			}
+
+		case op.ConfigNum > localNum:
+			if status != Active {
+				res.Err = rpc.ErrWrongGroup
+				break
+			}
+
 			res.Data = copyMap(kv.shardsData[shard])
 			res.LastOpResult = copyLastOpResult(kv.lastOpResult[shard])
 			res.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shard])
 			res.Num = kv.shardConfigNums[shard]
-		} else {
+
 			kv.shardStatus[shard] = Frozen
+			kv.shardConfigNums[shard] = op.ConfigNum
 			res.Err = rpc.OK
-			res.Data = copyMap(kv.shardsData[shard])
-			res.LastOpResult = copyLastOpResult(kv.lastOpResult[shard])
-			res.LastAppliedSeq = copyLastAppliedSeq(kv.lastAppliedSeq[shard])
-			res.Num = kv.shardConfigNums[shard]
 		}
-	case "InstallShard" :
-		// newconfig must have this shard now, so it can only active and waitInstall status
-		// through advanServerConfig
-		// notice after update status in advanServerConfig, in this step 
-		// the status of shardID can only be Active or waitInstall
-		// 只有当我们在等待数据时才安装
-		if kv.shardStatus[shard] == WaitInstall {
+	case "InstallShard":
+		switch {
+		case op.ConfigNum == localNum:
+			if status == Active {
+				// repeate install, may lost reply
+				// reply don't have important msg
+				res.Err = rpc.OK
+			} else {
+				// not normal!
+				res.Err = rpc.ErrWrongGroup
+			}
+		case op.ConfigNum > localNum:
+			if status != NotOwned {
+				// not normal
+				res.Err = rpc.ErrWrongGroup
+				break
+			}
 			kv.shardsData[shard] = copyMap(op.Data)
 			kv.lastAppliedSeq[shard] = copyLastAppliedSeq(op.LastAppliedSeq)
 			kv.lastOpResult[shard] = copyLastOpResult(op.LastOpResult)
+
 			kv.shardStatus[shard] = Active
-			res.Err = rpc.OK
-		} else if kv.shardStatus[shard] == Active {
-			// 如果已经是 Active，说明是重复请求，直接返回 OK 即可
-			res.Err = rpc.OK
-		} else {
-			DPrintf("SERVER %d: Something wrong in shardStatus[%d] = %d. InstallShard in applyAdminOp. AdminOp %s.)", 
-            	kv.me, shard, kv.shardStatus[shard], op.Operation)
-		}
-	case "DeleteShard" :
-		// newconfig must not have this shard so it can have other status
-		if kv.shardStatus[shard] != NotOwned {
-			kv.shardsData[shard] = nil
-			kv.lastAppliedSeq[shard] = nil
-			kv.lastOpResult[shard] = nil
-			//DPrintf("SERVER %d GID %d: DeleteShard success for Shard %d, NewConfigNum %d. (Current Config for this shard was %d)", 
-			//kv.me, kv.gid, shard, op.ConfigNum, kv.shardConfigNums[shard])
-			kv.shardStatus[shard] = NotOwned
-			res.Err = rpc.OK
-		} else {
-			// if already delete, this is a repeate request, direct return rpc.OK
+			kv.shardConfigNums[shard] = op.ConfigNum
 			res.Err = rpc.OK
 		}
+	case "DeleteShard":
+		switch {
+		case op.ConfigNum == localNum:
+			switch {
+			case status == Frozen:
+				kv.shardsData[shard] = nil
+				kv.lastAppliedSeq[shard] = nil
+				kv.lastOpResult[shard] = nil
+				kv.shardStatus[shard] = NotOwned
+				res.Err = rpc.OK
+			case status == Active:
+				// arrive too early, not done with freezeShard
+				res.Err = rpc.ErrRetry
+			default:
+				// status == NotOwned
+				// repeat rpc, already delete
+				res.Err = rpc.OK
+			}
+		case op.ConfigNum > localNum:
+			res.Err = rpc.ErrWrongGroup
+		}
+		//DPrintf("SERVER %d group: %d: After Delete Shard %d, DB size is %d", kv.me, kv.gid, op.ShardID, kv.totalKeyCount())
+		//kv.debugSpace()
 	}
 	return res
 }
@@ -241,18 +254,26 @@ func (kv *KVServer) applyAdminOp(op rsm.Op) shardrpc.Result {
 // deal with op from client, put/get 
 func (kv *KVServer) applyClientOp(op rsm.Op) shardrpc.Result {
 	shard := op.ShardID
-	if op.ConfigNum != kv.shardConfigNums[shard] || kv.shardStatus[shard] != Active {
-		return shardrpc.Result{Err: rpc.ErrWrongGroup}
-	}
+	res := shardrpc.Result{}
+	status := kv.shardStatus[shard]
 
-	// then check has duplicate put operations or not
-	if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
-		return kv.lastOpResult[shard][op.ClientID]
-	}
+	switch status {
+	case NotOwned:
+		DPrintf("S%d applying op: %v for shard %d, status: %d, op configNum: %d, local configNum: %d, bc status is NotOwned return ErrWrongGroup ",
+		 kv.me, op, shard, status, op.ConfigNum, kv.shardConfigNums[shard])
+		res.Err = rpc.ErrWrongGroup
+	case Frozen:
+		res.Err = rpc.ErrRetry
+	case Active:
+		if op.Operation != "Get" && kv.lastAppliedSeq[shard][op.ClientID] >= op.SeqNum {
+			DPrintf("S%d applying op: %v for shard %d, status: %d, op configNum: %d, local configNum: %d, status is alive and return %v ",
+		 	 kv.me, op, shard, status, op.ConfigNum, kv.shardConfigNums[shard], kv.lastOpResult[shard][op.ClientID])
 
-	DPrintf("DoOP: %s (key: %s)configNum check okay! server configNum: %d, op num: %d", 
-		op.Operation, op.Key, kv.shardConfigNums[shard], op.ConfigNum)
-	return kv.executeOp(op)
+			return kv.lastOpResult[shard][op.ClientID]
+		}
+		res = kv.executeOp(op)
+	}
+	return res
 }
 
 func (kv *KVServer) DoOp(req any) any {
@@ -274,7 +295,7 @@ func (kv *KVServer) DoOp(req any) any {
 	switch op.Operation {
 	case "Put", "Get" :
 		res = kv.applyClientOp(op)
-	case "FreezeShard", "IntallShard", "DeleteShard" :
+	case "FreezeShard", "InstallShard", "DeleteShard" :
 		res = kv.applyAdminOp(op)
 	}
 	return res
@@ -301,8 +322,11 @@ func (kv *KVServer) Snapshot() []byte {
 	ps.LastAppliedSeq = kv.lastAppliedSeq
 	ps.Config = kv.config
 	ps.ShardStatus = kv.shardStatus
+	ps.CurrConfigNum = kv.currConfigNum
 
 	e.Encode(ps)
+
+	DPrintf("SERVER %d Snapshotting: ConfigNum Array is %v", kv.me, kv.currConfigNum)
 	
 	return w.Bytes()
 }
@@ -332,6 +356,7 @@ func (kv *KVServer) Restore(data []byte) {
 		kv.lastAppliedSeq = ps.LastAppliedSeq
 		kv.config = ps.Config
 		kv.shardStatus = ps.ShardStatus
+		kv.currConfigNum = ps.CurrConfigNum
 	}
 }
 
@@ -343,17 +368,19 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 	
 	// find which shard has this key
 	shard := shardcfg.Key2Shard(args.Key)
-	DPrintf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
+	//DPrintf("DEBUG: Key %s belongs to Shard %d\n", args.Key, shard)
+	//kv.mu.Lock()
+	//DPrintf("S%d group: %d, received get(key: %s) clientID: %d, seqNum: %d, Op configNum: %d, local configNum: %d for shard %d, status: %d",
+	 //kv.me, kv.gid, args.Key, args.ClientID, args.SeqNum, args.ConfigNum, kv.shardConfigNums[shard], shard, kv.shardStatus[shard])
 
-	//DPrintf("S%d received get(key: %s) clientID: %d, seqNum: %d, Op configNum: %d, local configNum: %d for shard %d",
-	// kv.me, args.Key, args.ClientID, args.SeqNum, args.ConfigNum, kv.shardConfigNums[shard], shard)
-	kv.mu.Lock()
-	if args.ConfigNum != kv.shardConfigNums[shard] || kv.shardStatus[shard] != Active {
-		reply.Err = rpc.ErrWrongGroup
-		kv.mu.Unlock()
-		return
-	}
-	kv.mu.Unlock()
+	//if args.ConfigNum != kv.shardConfigNums[shard] || kv.shardStatus[shard] != Active {
+	//	DPrintf("S%d group: %d, get rpc handler reject, op configNum: %d, local configNum: %d, shard status: %d", 
+	//		kv.me, kv.gid, args.ConfigNum, kv.shardConfigNums[shard], kv.shardStatus[shard])
+	//	reply.Err = rpc.ErrWrongGroup
+	//	kv.mu.Unlock()
+	//	return
+	//}
+	//kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "Get", 
@@ -377,8 +404,8 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
     reply.Value = res.Value
 	reply.Version = res.Version
 
-	//DPrintf("S%d after get(key: %s) clientID: %d, seqNum: %d for shard %d, op configNum: %d local ocnfigNum: %d, get reply (val: %s, ver: %d, err: %s)",
-	// kv.me, args.Key, args.ClientID, args.SeqNum, shard, args.ConfigNum, kv.shardConfigNums[shard], reply.Value, reply.Version, reply.Err)
+	//DPrintf("S%d group: %d after get(key: %s) clientID: %d, seqNum: %d for shard %d, op configNum: %d local configNum: %d, status: %d, get reply (val: %s, ver: %d, err: %s)",
+	// kv.me, kv.gid, args.Key, args.ClientID, args.SeqNum, shard, args.ConfigNum, kv.shardConfigNums[shard], kv.shardStatus[shard], reply.Value, reply.Version, reply.Err)
 
 }
 
@@ -395,9 +422,9 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 
 	kv.mu.Lock()
 	// this shardgrp didn't respond for this shard
-	if args.ConfigNum != kv.shardConfigNums[shard] || kv.shardStatus[shard] != Active {
+	if kv.shardStatus[shard] != Active {
 		reply.Err = rpc.ErrWrongGroup
-		DPrintf("S%d received put %s for shard %d, op configNum: %d, local configNum: %d, but return ErrWrongGroup ", kv.me, args, shard, args.ConfigNum, kv.shardConfigNums[shard])
+		DPrintf("S%d received put %s for shard %d, status: %d, op configNum: %d, local configNum: %d, but return ErrWrongGroup ", kv.me, args, shard, kv.shardStatus[shard], args.ConfigNum, kv.shardConfigNums[shard])
 
 		kv.mu.Unlock()
 		return
@@ -484,19 +511,18 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		Operation: "FreezeShard",
 		ShardID: shardID,
 		ConfigNum: configNumForShard,
-		Config: copyConfig(args.Config),
 	}
 
-	DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
+	//DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
+	//DPrintf("S%d group: %d received FreezeShard for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
+
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
 		reply.Err = err
 		return
 	}
-
-
-	DPrintf("S%d after received freezeShard for shard %d, %v", kv.me, shardID, reply)
 
 	res := result.(shardrpc.Result)
 	// COPY THE DATA FROM THE RESULT TO THE REPLY
@@ -505,6 +531,10 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
     reply.LastOpResult = res.LastOpResult
     reply.Err = res.Err
 	reply.Num = res.Num
+
+	//DPrintf("S%d group: %d after received freezeShard for shard %d, op num: %d, server num: %d, reply: %v", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
+
 }
 
 // Install the supplied state for the specified shard.
@@ -522,10 +552,12 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 		Data: copyMap(args.Data),
 		LastAppliedSeq: copyLastAppliedSeq(args.LastAppliedSeq),
 		LastOpResult: copyLastOpResult(args.LastOpResult),
-		Config: copyConfig(args.Config),
 	}
 
-	DPrintf("S%d received InstallShard for shard %d, %v", kv.me, shardID, op)
+	//DPrintf("S%d received InstallShard for shard %d, %v", kv.me, shardID, op)
+	//DPrintf("S%d group: %d received Install for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
+
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
@@ -534,6 +566,10 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	}
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
+
+	//DPrintf("S%d group: %d after received installShard for shard %d, op num: %d, server num: %d, Err: %s, reply: %v", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], res.Err, reply)
+
 }
 
 // Delete the specified shard.
@@ -548,10 +584,12 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 		Operation: "DeleteShard",
 		ShardID: shardID,
 		ConfigNum: configNumForShard,
-		Config: args.Config,
 	}
 
-	DPrintf("S%d received DeleteShard for shard %d, %v", kv.me, shardID, op)
+	//DPrintf("S%d received DeleteShard for shard %d, %v", kv.me, shardID, op)	
+	//DPrintf("S%d group: %d received DeleteShard for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
+
 
 	err, result := kv.rsm.Submit(op)
 	if err != rpc.OK {
@@ -560,6 +598,10 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 	}
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
+
+	//DPrintf("S%d group: %d after received deleteShard for shard %d, op num: %d, server num: %d, reply: %v", 
+		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
+
 }
 
 // the tester calls Kill() when a KVServer instance won't
@@ -588,16 +630,19 @@ func (kv *KVServer) killed() bool {
 func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, persister *tester.Persister, maxraftstate int) []tester.IService {
 	// call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
+
 	labgob.Register(rpc.PutArgs{})
 	labgob.Register(rpc.GetArgs{})
 	labgob.Register(shardrpc.FreezeShardArgs{})
 	labgob.Register(shardrpc.InstallShardArgs{})
 	labgob.Register(shardrpc.DeleteShardArgs{})
 	labgob.Register(rsm.Op{})
+	labgob.Register(shardcfg.ShardConfig{})
 
 	kv := &KVServer{gid: gid, me: me}
 	//kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)
 
+	DPrintf("S%d group: %d restarted", kv.me, kv.gid)
 	//kv.pendingMigration = make(map[shardcfg.Tshid]MigrationTask)
 
 	// Your code here
@@ -613,17 +658,18 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 		// in default, the biggest config version num for all shard is 0
 		kv.shardConfigNums[i] = 0
 		kv.shardStatus[i] = NotOwned
-
-		// if group server is the first group gid1, not recover from snapshot
-		if kv.gid == shardcfg.Gid1 && persister.SnapshotSize() == 0{
-			DPrintf("SERVER %d: Initializing GID1 as owner of all shards for Config 1", kv.me)
-			for i := 0; i < shardcfg.NShards; i++ {
-				kv.shardStatus[i] = Active
-				kv.shardConfigNums[i] = 1
-			}
-			kv.currConfigNum = 1
-		}
 	}
+	kv.currConfigNum = 0
+
+	// if group server is the first group gid1, not recover from snapshot
+	//if kv.gid == shardcfg.Gid1 && persister.SnapshotSize() == 0{
+	//	DPrintf("SERVER %d: Initializing GID1 as owner of all shards for Config 1", kv.me)
+	///	for i := 0; i < shardcfg.NShards; i++ {
+		//	kv.shardStatus[i] = Active
+		//	kv.shardConfigNums[i] = 1
+		//}
+		//kv.currConfigNum = 1
+	//}
 
 	// 2. Read the existing snapshot from the persister
 	snapshotData := persister.ReadSnapshot()
@@ -631,6 +677,17 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	// 3. Restore the state if a snapshot exists
     // (This before RSM starts, make sure the KV maps are ready)
 	kv.Restore(snapshotData)
+
+	// 关键条件：只有当我没从快照恢复任何数据（SnapshotSize == 0），
+    // 且我是 GID 1 时，才手动初始化为版本 1。
+    if kv.gid == shardcfg.Gid1 && persister.SnapshotSize() == 0 {
+        DPrintf("SERVER %d: Cold Start GID1 to Version 1", kv.me)
+        for i := 0; i < shardcfg.NShards; i++ {
+            kv.shardConfigNums[i] = 1
+            kv.shardStatus[i] = Active
+        }
+        kv.currConfigNum = 1
+    }
 
 	// 4. Start the RSM/Raft
 	kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)

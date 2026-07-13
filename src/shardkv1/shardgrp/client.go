@@ -13,7 +13,7 @@ import (
 	"6.5840/shardkv1/shardgrp/shardrpc"
 )
 
-const Debug = true // Set to false to turn off logs when you are done
+const Debug = false // Set to false to turn off logs when you are done
 
 func DPrintf(format string, a ...interface{}) {
 	if Debug {
@@ -74,7 +74,7 @@ func (ck *Clerk) Get(key string, configNum shardcfg.Tnum, clientID int64, seqNum
 	// TRY ONLY 5 TIMES through all servers, then give up
 	for attempt := 0; attempt < 5; attempt++ {
 		for i := 0 ; i < len(ck.servers); i++ {
-			DPrintf("GET rpc: for (key: %s, clientID: %d, SeqNum: %d) send to server %d", key, clientID, seqNum, serverId)
+			//DPrintf("GET rpc: for (key: %s, clientID: %d, SeqNum: %d) send to server %d", key, clientID, seqNum, serverId)
 
 			reply := rpc.GetReply{}
 			ok := ck.clnt.Call(ck.servers[serverId], "KVServer.Get", &args, &reply)
@@ -216,14 +216,13 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion, configNum s
 	return rpc.ErrMaybe
 }
 
-func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcfg.ShardConfig) (map[string]shardrpc.DBValue, map[int64]shardrpc.Result, map[int64]int, rpc.Err) {
+func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) (map[string]shardrpc.DBValue, map[int64]shardrpc.Result, map[int64]int, rpc.Err) {
 	// Your code here
 	serverId := ck.recentLeader
 
 	args := shardrpc.FreezeShardArgs {
 		Shard: s,
 		Num: num,
-		Config: config,
 	}
 	for {
 		//DPrintf("C%d calling FreezeShard for Shard %d, Num %d to Group Leader %d", 
@@ -243,7 +242,7 @@ func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcf
 
 			ck.recentLeader = serverId
 			return reply.Data, reply.LastOpResult, reply.LastAppliedSeq, reply.Err
-		} else if reply.Err == rpc.ErrNoKey || reply.Err == rpc.ErrWrongGroup {
+		} else if reply.Err == rpc.ErrNoKey || reply.Err == rpc.ErrWrongGroup || reply.Err == rpc.ErrAlreadyDone {
 			// if shard not been respondonded by thid group(already moved) or already deleted
 			ck.recentLeader = serverId
 			//DPrintf("C%d FreezeShard received error: %v", ck.clientID, reply.Err)
@@ -256,7 +255,7 @@ func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcf
 }
 
 func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue, 
-	lastOpResult map[int64]shardrpc.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum, config shardcfg.ShardConfig) rpc.Err {
+	lastOpResult map[int64]shardrpc.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum) rpc.Err {
 	// Your code here
 	serverId := ck.recentLeader
 	args := shardrpc.InstallShardArgs {
@@ -265,7 +264,6 @@ func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue
 		LastOpResult: lastOpResult,
 		LastAppliedSeq: lastAppliedSeq,
 		Num: num,
-		Config: config,
 	}
 
 	DPrintf("Data length return by freezeShard: %d, lastOpResult: %d, lastAppliedSeq: %d", len(data), len(lastOpResult), len(lastAppliedSeq))
@@ -298,13 +296,12 @@ func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue
 	}
 }
 
-func (ck *Clerk) DeleteShard(s shardcfg.Tshid, num shardcfg.Tnum, config shardcfg.ShardConfig) rpc.Err {
+func (ck *Clerk) DeleteShard(s shardcfg.Tshid, num shardcfg.Tnum) rpc.Err {
 	// Your code here
 	serverId := ck.recentLeader
 	args := shardrpc.DeleteShardArgs {
 		Shard: s,
 		Num: num,
-		Config: config,
 	}
 	for {
 		//DPrintf("C%d calling DeleteShard for Shard %d, Num %d to Group Leader %d", 

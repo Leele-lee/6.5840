@@ -128,6 +128,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 
 		//retry := 0
 		lastCheck := time.Now()
+		if sck.checkConfigChange(newConfig) { return }
 		for {
 			//retry++
 			//if sck.checkConfigChange(newConfig) { return }
@@ -150,7 +151,12 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 
 			// freeze
 			if oldGrpID != 0 {
-				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num, *newConfig)
+				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num)
+				if err == rpc.ErrAlreadyDone {
+					// this means the group actually already delete
+					// break the loop and jump to the next shard
+					break
+				}
 				if err != rpc.OK {
 					// 如果失败（网络问题或不是 Leader），小睡后重试整个循环
 					time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
@@ -165,7 +171,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			//}
 			// instsall
 			if newGrpID != 0 {
-				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num, *newConfig)
+				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
             	if err != rpc.OK {
                 	// Install 失败必须重试。
                		// 注意：服务器端 shardgrp 必须处理好幂等性（基于 Num 判断）
@@ -179,7 +185,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 			//}
 			// delete
 			if oldGrpID != 0 {
-				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num, *newConfig)
+				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
             	if err != rpc.OK {
                 	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
                 	continue
@@ -206,7 +212,13 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
     // A temporary map to store clerks for the duration of this function
     // using pointer instead copy clerk here, bc clerk variable changed instead of 
     // only read operation, groupID -> group clerk
+
+	// 用于记录已经收到过新版本指令的 GID
+	//contactedGIDs := make(map[tester.Tgid]bool)
+	//var mu sync.Mutex // 保护 contactedGIDs
+
     shardgrp.DPrintf("CONTROLLER: ExecuteMoves start")
+	// --- 第一部分：原有的分片搬运逻辑 (针对变动的分片) ---
 
 	var wg sync.WaitGroup
 	//done := make(chan struct{})
@@ -222,6 +234,7 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 		go func(shardID shardcfg.Tshid) {
 			defer wg.Done()
 			sck.moveOneShard(shardID, oldConfig, new)
+			
 		}(i)
 	}
 	wg.Wait()
