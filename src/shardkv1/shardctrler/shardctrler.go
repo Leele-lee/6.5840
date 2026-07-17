@@ -39,7 +39,7 @@ type ShardCtrler struct {
 	clnt *tester.Clnt
 	kvtest.IKVClerk
 
-	//killed int32 // set by Kill()
+	killed int32 // set by Kill()
 
 	// Your data here.
 	//CurrConfigKeyNum shardgrp.Tnum // the latest configure version number
@@ -89,7 +89,7 @@ func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) b
     }
 
 	curr := shardcfg.FromString(currVal)
-	next := shardcfg.FromString(nextVal)
+	//next := shardcfg.FromString(nextVal)
 
 	// 情况 A：任务已经正式完成了 (Committed)
     // 如果 CurrConfig 已经达到或超过了我们正在执行的版本，说明已经有人提交了
@@ -103,10 +103,15 @@ func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) b
 	// 情况 B：任务被更新的计划取代了 (Superseded)
     // 如果墙上的 NextConfig 已经比我们现在执行的版本更高了，
     // 说明我们正在做“无用功”，应该立刻停止，回到主循环去执行那个更新的 Next。
-    if next.Num > workingConfig.Num {
-        shardgrp.DPrintf("CONTROLLER: Plan %d superseded by %s. Exiting.", workingConfig.Num, nextVal)
-        return true 
-    }
+    //if next.Num > workingConfig.Num {
+    //    shardgrp.DPrintf("CONTROLLER: Plan %d superseded by %s. Exiting.", workingConfig.Num, nextVal)
+      //  return true 
+    //}
+
+	// 必须还是同一份计划，而不仅是相同 Num
+	if nextVal != workingConfig.String() {
+		return true
+	}
 	return false
 }
 
@@ -238,26 +243,8 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 	// --- 第一部分：原有的分片搬运逻辑 (针对变动的分片) ---
 
 	var wg sync.WaitGroup
-	done := make(chan struct{})
+	//done := make(chan struct{})
 	var aborted atomic.Bool
-
-	// background go function to checkConfigChange
-	go func() {
-		ticker := time.NewTicker(150 * time.Millisecond)
-		defer ticker.Stop()
-
-		for {
-			select {
-			case <- done:
-				return
-			case <- ticker.C:
-				if sck.checkConfigChange(new) {
-					aborted.Store(true)
-					return
-				}
-			}
-		}
-	}()
 
     // i is shardID
     for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
@@ -281,15 +268,14 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 	}
 
 	wg.Wait()
-	// call done in go checkConfigChange
-	close(done)
 
-	if aborted.Load() {
-		return false
-	}
+	//if aborted.Load() {
+	//	return false
+	//}
+	return !aborted.Load()
 
 	// 所有 shard 完成后，最后再做一次全局检查
-	return !sck.checkConfigChange(new)
+	//return !sck.checkConfigChange(new)
 }
 
 // get current version and put version in new put, if superseded by another controller 
@@ -499,8 +485,10 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 		// 接下来去执行迁移：
 		if sck.executeMoves(currConfig, stepConfig) {
 			// 迁移完了，把蓝图变成“已盖好的楼层
-			sck.safeUpdate(CurrConfigKey, stepConfig.String())
-            shardgrp.DPrintf("CONTROLLER %d: Config %d is now OFFICIAL", sck.controllerID, stepConfig.Num)
+			if !sck.checkConfigChange(stepConfig) {
+				sck.safeUpdate(CurrConfigKey, stepConfig.String())
+				shardgrp.DPrintf("CONTROLLER %d: Config %d is now OFFICIAL", sck.controllerID, stepConfig.Num)
+			}
 		}
 	}
 }

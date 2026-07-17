@@ -248,7 +248,7 @@ func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) (map[string]sh
 			//DPrintf("C%d FreezeShard for shard %d, Num %d Success to Group Leader %d", ck.clientID, s, num, serverId)
 			return reply.Data, reply.LastOpResult, reply.LastAppliedSeq, reply.Err
 		}
-		return nil, nil, nil, rpc.ErrWrongGroup
+		return nil, nil, nil, reply.Err
 
 	}
 	return nil, nil, nil, rpc.ErrMaybe
