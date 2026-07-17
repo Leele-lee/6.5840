@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"bytes"
 	//"log"
+	"time"
 
 
 	"6.5840/kvraft1/rsm"
@@ -159,7 +160,7 @@ func (kv *KVServer) applyAdminOp(op rsm.Op) shardrpc.Result {
 	if op.ConfigNum < localNum {
 		DPrintf("SERVER %d: Rejecting stale AdminOp %s for Shard %d (Op.Num %d < Current %d)", 
             kv.me, op.Operation, shard, op.ConfigNum, kv.shardConfigNums[shard])
-		res.Err = rpc.ErrWrongGroup
+		res.Err = rpc.ErrStale
 		return res
 	}
 
@@ -391,7 +392,29 @@ func (kv *KVServer) Get(args *rpc.GetArgs, reply *rpc.GetReply) {
 		ConfigNum: args.ConfigNum,
 	}
 
+	term1, leader1 := kv.rsm.DebugRaftState()
+	start := time.Now()
+
 	err, result := kv.rsm.Submit(op)
+
+	term2, leader2 := kv.rsm.DebugRaftState()
+
+
+    DPrintf(
+        "GID=%d S=%d Get(%s) Submit done: "+
+            "before(term=%d leader=%v) "+
+            "after(term=%d leader=%v) "+
+            "err=%v elapsed=%v",
+        kv.gid,
+        kv.me,
+        args.Key,
+        term1,
+        leader1,
+        term2,
+        leader2,
+        err,
+        time.Since(start),
+    )
 
 	// if server is not leader
     if err != rpc.OK {
@@ -420,17 +443,17 @@ func (kv *KVServer) Put(args *rpc.PutArgs, reply *rpc.PutReply) {
 
 	//DPrintf("S%d received put %s for shard %d, op configNum: %d, local configNum: %d", kv.me, args, shard, args.ConfigNum, kv.shardConfigNums[shard])
 
-	kv.mu.Lock()
+	//kv.mu.Lock()
 	// this shardgrp didn't respond for this shard
-	if kv.shardStatus[shard] != Active {
-		reply.Err = rpc.ErrWrongGroup
-		DPrintf("S%d received put %s for shard %d, status: %d, op configNum: %d, local configNum: %d, but return ErrWrongGroup ", kv.me, args, shard, kv.shardStatus[shard], args.ConfigNum, kv.shardConfigNums[shard])
+	//if kv.shardStatus[shard] != Active {
+	//	reply.Err = rpc.ErrWrongGroup
+	//	DPrintf("S%d received put %s for shard %d, status: %d, op configNum: %d, local configNum: %d, but return ErrWrongGroup ", kv.me, args, shard, kv.shardStatus[shard], args.ConfigNum, kv.shardConfigNums[shard])
 
-		kv.mu.Unlock()
-		return
-	}
+	//	kv.mu.Unlock()
+	//	return
+	//}
 
-	kv.mu.Unlock()
+	//kv.mu.Unlock()
 
 	// You can use go's type casts to turn the any return value
 	// of Submit() into a PutReply: rep.(rpc.PutReply)
@@ -506,6 +529,15 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 	shardID := args.Shard
 	configNumForShard := args.Num
 
+	kv.mu.Lock()
+	if configNumForShard < kv.shardConfigNums[shardID] {
+		reply.Err = rpc.ErrStale
+		DPrintf("S%d group %d rejected FreezeShard for shard %d, op num < local num (%d < %d)", 
+		 kv.me, kv.gid, shardID, args.Num, kv.shardConfigNums[shardID] )
+		kv.mu.Unlock()
+		return
+	}
+	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "FreezeShard",
@@ -513,7 +545,7 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
 		ConfigNum: configNumForShard,
 	}
 
-	//DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
+	DPrintf("S%d received freezeShard for shard %d, %v", kv.me, shardID, op)
 	//DPrintf("S%d group: %d received FreezeShard for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
 		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
 
@@ -532,8 +564,8 @@ func (kv *KVServer) FreezeShard(args *shardrpc.FreezeShardArgs, reply *shardrpc.
     reply.Err = res.Err
 	reply.Num = res.Num
 
-	//DPrintf("S%d group: %d after received freezeShard for shard %d, op num: %d, server num: %d, reply: %v", 
-		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
+	DPrintf("S%d group: %d after received freezeShard for shard %d, op num: %d, server num: %d, reply: %v", 
+		kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
 
 }
 
@@ -543,7 +575,15 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	shardID := args.Shard
 	configNumForShard := args.Num
 
-
+	kv.mu.Lock()
+	if configNumForShard < kv.shardConfigNums[shardID] {
+		reply.Err = rpc.ErrStale
+		DPrintf("S%d group %d rejected FreezeShard for shard %d, op num < local num (%d < %d)", 
+		 kv.me, kv.gid, shardID, args.Num, kv.shardConfigNums[shardID] )
+		kv.mu.Unlock()
+		return
+	}
+	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "InstallShard",
@@ -554,7 +594,7 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 		LastOpResult: copyLastOpResult(args.LastOpResult),
 	}
 
-	//DPrintf("S%d received InstallShard for shard %d, %v", kv.me, shardID, op)
+	DPrintf("S%d received InstallShard for shard %d, %v", kv.me, shardID, op)
 	//DPrintf("S%d group: %d received Install for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
 		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
 
@@ -567,8 +607,8 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 
-	//DPrintf("S%d group: %d after received installShard for shard %d, op num: %d, server num: %d, Err: %s, reply: %v", 
-		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], res.Err, reply)
+	DPrintf("S%d group: %d after received installShard for shard %d, op num: %d, server num: %d, Err: %s, reply: %v", 
+		kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], res.Err, reply)
 
 }
 
@@ -578,7 +618,15 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 	shardID := args.Shard
 	configNumForShard := args.Num
 
-
+	kv.mu.Lock()
+	if configNumForShard < kv.shardConfigNums[shardID] {
+		reply.Err = rpc.ErrStale
+		DPrintf("S%d group %d rejected FreezeShard for shard %d, op num < local num (%d < %d)", 
+		 kv.me, kv.gid, shardID, args.Num, kv.shardConfigNums[shardID])
+		kv.mu.Unlock()
+		return
+	}
+	kv.mu.Unlock()
 
 	op := rsm.Op{
 		Operation: "DeleteShard",
@@ -586,7 +634,7 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 		ConfigNum: configNumForShard,
 	}
 
-	//DPrintf("S%d received DeleteShard for shard %d, %v", kv.me, shardID, op)	
+	DPrintf("S%d received DeleteShard for shard %d, %v", kv.me, shardID, op)	
 	//DPrintf("S%d group: %d received DeleteShard for shard %d, op num is: %d, server num is: %d, shardStatus: %d", 
 		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], kv.shardStatus[shardID])
 
@@ -599,8 +647,8 @@ func (kv *KVServer) DeleteShard(args *shardrpc.DeleteShardArgs, reply *shardrpc.
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 
-	//DPrintf("S%d group: %d after received deleteShard for shard %d, op num: %d, server num: %d, reply: %v", 
-		//kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
+	DPrintf("S%d group: %d after received deleteShard for shard %d, op num: %d, server num: %d, reply: %v", 
+		kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], reply)
 
 }
 
@@ -638,6 +686,8 @@ func StartServerShardGrp(servers []*labrpc.ClientEnd, gid tester.Tgid, me int, p
 	labgob.Register(shardrpc.DeleteShardArgs{})
 	labgob.Register(rsm.Op{})
 	labgob.Register(shardcfg.ShardConfig{})
+
+	//labgob.Register(rsm.RSMOp{})
 
 	kv := &KVServer{gid: gid, me: me}
 	//kv.rsm = rsm.MakeRSM(servers, me, persister, maxraftstate, kv)

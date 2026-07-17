@@ -3,7 +3,11 @@ package rsm
 import (
 	"sync"
 	"time"
+	"fmt"
+	"crypto/rand"
+	"encoding/binary"
 
+	"6.5840/labgob"
 	"sync/atomic"
 	"6.5840/kvsrv1/rpc"
 	"6.5840/labrpc"
@@ -16,7 +20,19 @@ import (
 
 var useRaftStateMachine bool // to plug in another raft besided raft1
 
+type OpID struct {
+	Server int
+	Epoch uint64
+	ID uint64
+}
 
+type RSMOp struct {
+	//OpID OpID // use as index in map waitCh
+	OpID OpID
+	Req any // op
+}
+
+// used in DoOp in server for Get / Put / FreezeShard / InstallShard / DeleteShard rpc
 type Op struct {
 	// Your definitions here.
 	// Field names must start with capital letters,
@@ -61,9 +77,12 @@ type RSM struct {
 	maxraftstate int // snapshot if log grows this big
 	sm           StateMachine
 	// Your definitions here.
-	waitCh       map[int]chan any  // commit index in log -> commit chan waitting reply from GoOp
+	waitCh       map[OpID]chan any  // commit index in log -> commit chan waitting reply from GoOp
 	lastApplied  int // last applied index in raft, it used for conditional invoke DoOp and Restore
 	dead         int32
+
+	epoch		 uint64
+	nextID		 uint64
 }
 
 func (rsm *RSM) Kill() {
@@ -88,25 +107,39 @@ func (rsm *RSM) applier() {
 		case msg, ok := <- rsm.applyCh:
 			if !ok { return } 
 			if msg.CommandValid {
+				wrapped, ok := msg.Command.(RSMOp)
+				if !ok {
+					panic(fmt.Sprintf("RSM received unexpected command type %T", msg.Command))
+				}
+
+				// opID := OpID{Server: wrapped.Server, ID: wrapped.ID}
+				opID := wrapped.OpID
+
 				// CRITICAL: Ignore commands that are already applied 
 				// (though Raft usually ensures this, it's good practice)
 				if msg.CommandIndex <= rsm.lastApplied {
 					continue
 				}
 
+				//3. pass the operation to service to operate
+				//res := rsm.sm.DoOp(msg.Command)
+				res := rsm.sm.DoOp(wrapped.Req)
+
 				//2. update rsm.lastApplied
 				rsm.lastApplied = msg.CommandIndex
-
-				//3. pass the operation to service to operate
-				res := rsm.sm.DoOp(msg.Command)
 			
 				// 4. pass the result to the correspond request channel
 				rsm.mu.Lock()
-				ch, ok := rsm.waitCh[msg.CommandIndex]
+				ch, ok := rsm.waitCh[opID]
 				rsm.mu.Unlock()
 
 				if ok {
-					ch <- res
+					select{
+					case ch <- res:
+					default:
+						// Submit 可能已经超时，或者 channel 已有旧通知。
+        				// 绝不能阻塞整个 applier。
+					}
 				}
 
 				// 4. check we need snapshot or not
@@ -135,6 +168,29 @@ func (rsm *RSM) applier() {
 	}
 }
 
+func makeEpoch() uint64 {
+	var buf [8]byte
+
+	if _, err := rand.Read(buf[:]); err != nil {
+		panic(fmt.Sprintf("RSM: cannot generate epoch: %v", err))
+	}
+
+	epoch := binary.LittleEndian.Uint64(buf[:])
+
+	// 0 可以保留表示“未初始化”。
+	if epoch == 0 {
+		return makeEpoch()
+	}
+
+	return epoch
+}
+
+
+func init() {
+    // RSMOp 会作为 interface/any 中的具体类型写入 Raft log。
+    labgob.Register(RSMOp{})
+}
+
 // servers[] contains the ports of the set of
 // servers that will cooperate via Raft to
 // form the fault-tolerant key/value service.
@@ -151,13 +207,23 @@ func (rsm *RSM) applier() {
 // MakeRSM() must return quickly, so it should start goroutines for
 // any long-running work.
 func MakeRSM(servers []*labrpc.ClientEnd, me int, persister *tester.Persister, maxraftstate int, sm StateMachine) *RSM {
+	//labgob.Register(RSMOp{})
 	rsm := &RSM{
 		me:           me,
 		maxraftstate: maxraftstate,
 		applyCh:      make(chan raftapi.ApplyMsg),
 		sm:           sm,
-		waitCh:      make(map[int]chan any),
+		waitCh:       make(map[OpID]chan any),
+		nextID:		  0,
+		epoch:		  makeEpoch(),
 	}
+
+	// 必须在 applier 开始应用新日志之前恢复业务状态。
+    snapshot := persister.ReadSnapshot()
+    if len(snapshot) > 0 {
+        rsm.sm.Restore(snapshot)
+    }
+
 	if !useRaftStateMachine {
 		rsm.rf = raft.Make(servers, me, persister, rsm.applyCh)
 	}
@@ -182,37 +248,44 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	// is the argument to Submit and id is a unique id for the op.
 
 	// your code here
+	id := atomic.AddUint64(&rsm.nextID, 1)
 
-	// 2. call rf.Start
-	index, term, isLeader := rsm.rf.Start(req)
-	if !isLeader {
-		// not leader, try another server
-		return rpc.ErrWrongLeader, nil 
-	}
+	opID := OpID{Server: rsm.me, Epoch: rsm.epoch, ID: id}
+	wrapped := RSMOp{OpID: opID, Req: req}
 
-	// is leader
 	// build the map waitCh
 	ch := make(chan any, 1) // the channel can only transmit Result type, and buffered has size 1
+
 	rsm.mu.Lock()
-	rsm.waitCh[index] = ch
+	rsm.waitCh[opID] = ch
 	rsm.mu.Unlock()
 
 	defer func() {
 		rsm.mu.Lock()
-		delete(rsm.waitCh, index)
+		delete(rsm.waitCh, opID)
 		rsm.mu.Unlock()
 	}()
 
-	// 3. wait for reply from DoOp or timeout
-	select {
-	case res := <- ch:
-		// Lost leadership before commit by checking term
-		currentTerm, currIsLeader := rsm.rf.GetState()
-		if !currIsLeader || currentTerm != term {
-			return rpc.ErrWrongLeader, nil
-		}
-		return rpc.OK, res
-	case <- time.After(2000 * time.Millisecond):
+	_, _, isLeader := rsm.rf.Start(wrapped)
+	if !isLeader {
 		return rpc.ErrWrongLeader, nil
+	}
+
+	timer := time.NewTimer(2 * time.Second)
+	defer timer.Stop()
+
+	select{
+	case res :=<- ch:
+		// ch pass DoOp result to srv/kv shard server
+		// 收到的就是这个 OpID 对应的执行结果
+        // 不需要再检查当前是否仍然是 leader
+		//currentTerm, currIsLeader := rsm.rf.GetState()
+        //if !currIsLeader || currentTerm != term {
+        //    return rpc.ErrWrongLeader, nil
+        //}
+		return rpc.OK, res
+	case <- timer.C:
+		// 不知道请求是否已经提交。
+        return rpc.ErrMaybe, nil
 	}
 }

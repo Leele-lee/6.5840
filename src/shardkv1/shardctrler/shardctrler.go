@@ -9,6 +9,7 @@ import (
 	"log"
 	"time"
 	"sync"
+	"sync/atomic"
 	"math/big"
 	crand "crypto/rand"
 	"math/rand"
@@ -38,7 +39,7 @@ type ShardCtrler struct {
 	clnt *tester.Clnt
 	kvtest.IKVClerk
 
-	killed int32 // set by Kill()
+	//killed int32 // set by Kill()
 
 	// Your data here.
 	//CurrConfigKeyNum shardgrp.Tnum // the latest configure version number
@@ -109,93 +110,117 @@ func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) b
 	return false
 }
 
+// Need to know:
+
+// Whether all shards have completed;
+// Whether anyone has detected that the configuration has been committed; 
+// Whether anyone has detected that the configuration has been superseded.
 func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg.ShardConfig,
-	 newConfig *shardcfg.ShardConfig) {
+	 newConfig *shardcfg.ShardConfig, aborted *atomic.Bool) bool {
 		oldGrpID := oldConfig.Shards[shardID]
         newGrpID := newConfig.Shards[shardID]
 
+		 // 每个 goroutine 使用自己的 Clerk
 		var oldGrpClerk *shardgrp.Clerk
+		var newGrpClerk *shardgrp.Clerk
+
 		if oldGrpID != 0 {
 			oldServers := oldConfig.Groups[oldGrpID]
 			oldGrpClerk = shardgrp.MakeClerk(sck.clnt, oldServers)
 		}
-
-		var newGrpClerk *shardgrp.Clerk
 		if newGrpID != 0 {
 			newServers := newConfig.Groups[newGrpID]
 			newGrpClerk = shardgrp.MakeClerk(sck.clnt, newServers)
 		}
 
-		//retry := 0
-		lastCheck := time.Now()
-		if sck.checkConfigChange(newConfig) { return }
-		for {
-			//retry++
-			//if sck.checkConfigChange(newConfig) { return }
+		var data map[string]shardrpc.DBValue
+		var lastOpResult map[int64]shardrpc.Result
+		var lastAppliedSeq map[int64]int
 
-			// 每5轮重试前，先检查集群是否已经达到了目标版本
-        	// 如果别人已经帮我们把活干完了，直接退出
-			//if retry % 5 == 0 {
-			//	if sck.checkConfigChange(newConfig) { return }
-			//}
-
-			// 每 100ms - 200ms 查一次，这比按次数检查更科学
-        	if time.Since(lastCheck) > 450*time.Millisecond {
-            	if sck.checkConfigChange(newConfig) { return }
-            	lastCheck = time.Now()
-        	}
-
-			var data map[string]shardrpc.DBValue
-			var lastOpResult map[int64]shardrpc.Result
-			var lastAppliedSeq map[int64]int
-
-			// freeze
-			if oldGrpID != 0 {
+		// Freeze until success.
+		if oldGrpID != 0 {
+			for {
+				if aborted.Load() {
+					return false
+				}
 				d, r, s, err := oldGrpClerk.FreezeShard(shardID, newConfig.Num)
-				if err == rpc.ErrAlreadyDone {
-					// this means the group actually already delete
-					// break the loop and jump to the next shard
-					break
-				}
-				if err != rpc.OK {
-					// 如果失败（网络问题或不是 Leader），小睡后重试整个循环
-					time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
-					continue
-				}
-				data, lastOpResult, lastAppliedSeq = d, r, s
-			}
 
-			// 再次检查进度，防止在 Freeze 耗时过长期间配置已变更
-			//if retry % 5 == 0 {
-				if sck.checkConfigChange(newConfig) { return }
-			//}
-			// instsall
-			if newGrpID != 0 {
-				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
-            	if err != rpc.OK {
-                	// Install 失败必须重试。
-               		// 注意：服务器端 shardgrp 必须处理好幂等性（基于 Num 判断）
-                	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
-                	continue
-            	}
-        	}
+				switch err {
+				case rpc.OK:
+					data, lastOpResult, lastAppliedSeq = d, r, s
+					goto installPhase
 
-			//if retry % 5 == 0 {
-				if sck.checkConfigChange(newConfig) { return }
-			//}
-			// delete
-			if oldGrpID != 0 {
-				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
-            	if err != rpc.OK {
-                	time.Sleep(time.Duration(50 + rand.Intn(100)) * time.Millisecond)
-                	continue
+				case rpc.ErrAlreadyDone:
+					// already freeze, install and delete for this shard
+					return true
+
+				case rpc.ErrStale, rpc.ErrWrongGroup:
+					// 结束整个 executeMoves
+					aborted.Store(true)
+					return false
+
+				case rpc.ErrRetry, rpc.ErrMaybe:
+					// 配置检查 goroutine 会负责设置 aborted
+					if aborted.Load() {
+						return false
+					}
+					time.Sleep(10 * time.Millisecond)
+    				continue
 				}
 			}
-
-			// 该分片所有步骤成功，安全退出协程
-        	shardgrp.DPrintf("CONTROLLER: Shard %d successfully moved to Group %d (Config %d)", shardID, newGrpID, newConfig.Num)
-			return
 		}
+		
+	installPhase:
+		if newGrpID != 0 {
+			for {
+				if aborted.Load() {
+					return false
+				}
+				err := newGrpClerk.InstallShard(shardID, data, lastOpResult, lastAppliedSeq, newConfig.Num)
+				switch err {
+				case rpc.OK:
+					goto deletePhase
+
+				case rpc.ErrStale, rpc.ErrWrongGroup:
+					aborted.Store(true)
+					return false
+
+				case rpc.ErrRetry, rpc.ErrMaybe:
+					// 配置检查 goroutine 会负责设置 aborted
+					if aborted.Load() {
+						return false
+					}
+					time.Sleep(10 * time.Millisecond)
+    				continue
+				}
+			}
+		}
+
+	deletePhase:
+		if oldGrpID != 0 {
+			for {
+				if aborted.Load() {
+					return false
+				}
+				err := oldGrpClerk.DeleteShard(shardID, newConfig.Num)
+				switch err {
+				case rpc.OK:
+					return true
+
+				case rpc.ErrStale, rpc.ErrWrongGroup:
+					aborted.Store(true)
+					return false
+
+				case rpc.ErrRetry, rpc.ErrMaybe:
+					if aborted.Load() {
+						return false
+					}
+					time.Sleep(10 * time.Millisecond)
+    				continue
+				}
+			}
+		}
+		return true
 }
 
 // move shards from current(old) group to new group which contains freeze shard in old group, 
@@ -209,19 +234,30 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 //   - a newer configuration superseded this one,
 //   - or this controller abandoned the migration.
 func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) bool {
-    // A temporary map to store clerks for the duration of this function
-    // using pointer instead copy clerk here, bc clerk variable changed instead of 
-    // only read operation, groupID -> group clerk
-
-	// 用于记录已经收到过新版本指令的 GID
-	//contactedGIDs := make(map[tester.Tgid]bool)
-	//var mu sync.Mutex // 保护 contactedGIDs
-
     shardgrp.DPrintf("CONTROLLER: ExecuteMoves start")
 	// --- 第一部分：原有的分片搬运逻辑 (针对变动的分片) ---
 
 	var wg sync.WaitGroup
-	//done := make(chan struct{})
+	done := make(chan struct{})
+	var aborted atomic.Bool
+
+	// background go function to checkConfigChange
+	go func() {
+		ticker := time.NewTicker(150 * time.Millisecond)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <- done:
+				return
+			case <- ticker.C:
+				if sck.checkConfigChange(new) {
+					aborted.Store(true)
+					return
+				}
+			}
+		}
+	}()
 
     // i is shardID
     for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
@@ -233,11 +269,26 @@ func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shard
 
 		go func(shardID shardcfg.Tshid) {
 			defer wg.Done()
-			sck.moveOneShard(shardID, oldConfig, new)
-			
+
+			if aborted.Load() {
+				return
+			}
+
+			if !sck.moveOneShard(shardID, oldConfig, new, &aborted) {
+				aborted.Store(true)
+			}
 		}(i)
 	}
+
 	wg.Wait()
+	// call done in go checkConfigChange
+	close(done)
+
+	if aborted.Load() {
+		return false
+	}
+
+	// 所有 shard 完成后，最后再做一次全局检查
 	return !sck.checkConfigChange(new)
 }
 

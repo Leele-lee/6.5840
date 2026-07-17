@@ -218,46 +218,47 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion, configNum s
 
 func (ck *Clerk) FreezeShard(s shardcfg.Tshid, num shardcfg.Tnum) (map[string]shardrpc.DBValue, map[int64]shardrpc.Result, map[int64]int, rpc.Err) {
 	// Your code here
-	serverId := ck.recentLeader
+	//serverId := ck.recentLeader
 
 	args := shardrpc.FreezeShardArgs {
 		Shard: s,
 		Num: num,
 	}
-	for {
-		//DPrintf("C%d calling FreezeShard for Shard %d, Num %d to Group Leader %d", 
-        //    ck.clientID, s, num, serverId)
+
+	start := ck.recentLeader
+
+	for offset := 0; offset < len(ck.servers); offset++ {
+		serverID := (start + offset) % len(ck.servers)
 		reply := shardrpc.FreezeShardReply{}
-		ok := ck.clnt.Call(ck.servers[serverId], "KVServer.FreezeShard", &args, &reply)
+
+		ok := ck.clnt.Call(ck.servers[serverID], "KVServer.FreezeShard", &args, &reply)
 
 		if !ok {
-			// Network failure
-			serverId = (serverId + 1) % len(ck.servers)
-			//DPrintf("C%d FreezeShard RPC Failed (ok=false)", ck.clientID)
 			continue
 		}
 
+		if reply.Err == rpc.ErrWrongLeader {
+			continue
+		}
+
+		// 收到了业务结果，记录这个 server
+		ck.recentLeader = serverID
+
 		if reply.Err == rpc.OK {
 			//DPrintf("C%d FreezeShard for shard %d, Num %d Success to Group Leader %d", ck.clientID, s, num, serverId)
-
-			ck.recentLeader = serverId
 			return reply.Data, reply.LastOpResult, reply.LastAppliedSeq, reply.Err
-		} else if reply.Err == rpc.ErrNoKey || reply.Err == rpc.ErrWrongGroup || reply.Err == rpc.ErrAlreadyDone {
-			// if shard not been respondonded by thid group(already moved) or already deleted
-			ck.recentLeader = serverId
-			//DPrintf("C%d FreezeShard received error: %v", ck.clientID, reply.Err)
-			return nil, nil, nil, reply.Err
 		}
-		serverId = (serverId + 1) % len(ck.servers)
-		//DPrintf("C%d FreezeShard received error: %v", ck.clientID, reply.Err)
-		time.Sleep(100 * time.Millisecond)
+		return nil, nil, nil, rpc.ErrWrongGroup
+
 	}
+	return nil, nil, nil, rpc.ErrMaybe
 }
+
 
 func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue, 
 	lastOpResult map[int64]shardrpc.Result, lastAppliedSeq map[int64]int, num shardcfg.Tnum) rpc.Err {
 	// Your code here
-	serverId := ck.recentLeader
+	//serverId := ck.recentLeader
 	args := shardrpc.InstallShardArgs {
 		Shard: s,
 		Data: data,
@@ -266,67 +267,53 @@ func (ck *Clerk) InstallShard(s shardcfg.Tshid, data map[string]shardrpc.DBValue
 		Num: num,
 	}
 
-	DPrintf("Data length return by freezeShard: %d, lastOpResult: %d, lastAppliedSeq: %d", len(data), len(lastOpResult), len(lastAppliedSeq))
-	for {
-		//DPrintf("C%d calling InstallShard for Shard %d, Num %d to Group Leader %d", 
-		//	ck.clientID, s, num, serverId)
+	start := ck.recentLeader
+
+	for offset := 0; offset < len(ck.servers); offset++ {
+		serverID := (start + offset) % len(ck.servers)
 		reply := shardrpc.InstallShardReply {}
-		ok := ck.clnt.Call(ck.servers[serverId], "KVServer.InstallShard", &args, &reply)
+		ok := ck.clnt.Call(ck.servers[serverID], "KVServer.InstallShard", &args, &reply)
 
 		if !ok {
-			// Network failure
-			serverId = (serverId + 1) % len(ck.servers)
-		//	DPrintf("C%d InstallShard RPC Failed (ok=false)", ck.clientID)
 			continue
 		}
 
-		if reply.Err == rpc.OK {
-		//	DPrintf("C%d InstallShard for shard %d, Num %d Success to Group Leader %d", ck.clientID, s, num, serverId)
-			ck.recentLeader = serverId
-			return rpc.OK
-		} else if reply.Err == rpc.ErrNoKey || reply.Err == rpc.ErrWrongGroup {
-			ck.recentLeader = serverId
-		//	DPrintf("C%d InstallFreeze received error: %v", ck.clientID, reply.Err)
-			return reply.Err
+		if reply.Err == rpc.ErrWrongLeader {
+			continue
 		}
-		// if network failed or no leader
-		//DPrintf("C%d InstallShard received error: %v", ck.clientID, reply.Err)
-		serverId = (serverId + 1) % len(ck.servers)
-		time.Sleep(100 * time.Millisecond)
+
+		ck.recentLeader = serverID
+		return reply.Err
 	}
+
+	return rpc.ErrMaybe
 }
 
 func (ck *Clerk) DeleteShard(s shardcfg.Tshid, num shardcfg.Tnum) rpc.Err {
 	// Your code here
-	serverId := ck.recentLeader
+	//serverId := ck.recentLeader
 	args := shardrpc.DeleteShardArgs {
 		Shard: s,
 		Num: num,
 	}
-	for {
-		//DPrintf("C%d calling DeleteShard for Shard %d, Num %d to Group Leader %d", 
-        //        ck.clientID, s, num, serverId)
+
+	start := ck.recentLeader
+
+	for offset := 0; offset < len(ck.servers); offset++ {
+		serverID := (start + offset) % len(ck.servers)
 		reply := shardrpc.DeleteShardReply {}
-		ok := ck.clnt.Call(ck.servers[serverId], "KVServer.DeleteShard", &args, &reply)
+		ok := ck.clnt.Call(ck.servers[serverID], "KVServer.DeleteShard", &args, &reply)
 
-		if ok {
-            if reply.Err == rpc.OK {
-				ck.recentLeader = serverId
-		//		DPrintf("C%d Delete for shard %d, Num %d Success to Group Leader %d", ck.clientID, s, num, serverId)
+		if !ok {
+			continue
+		}
 
-                return rpc.OK
-            } else if reply.Err == rpc.ErrNoKey || reply.Err == rpc.ErrWrongGroup {
-				ck.recentLeader = serverId
-        //    	DPrintf("C%d DeleteShard received error: %v", ck.clientID, reply.Err)
-				return reply.Err
-			}
-        } else {
-        //    DPrintf("C%d DeleteShard RPC Failed (ok=false)", ck.clientID)
-        }
-		
-		// if no leader
-		//DPrintf("C%d DeleteShard received error: %v", ck.clientID, reply.Err)
-		serverId = (serverId + 1) % len(ck.servers)
-		time.Sleep(100 * time.Millisecond)
+		if reply.Err == rpc.ErrWrongLeader {
+			continue
+		}
+
+		ck.recentLeader = serverID
+		return reply.Err
 	}
+	return rpc.ErrMaybe
 }
