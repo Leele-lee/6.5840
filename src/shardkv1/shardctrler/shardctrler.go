@@ -57,6 +57,8 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 	return sck
 }
 
+// 当前存储的 NextConfig
+// 必须等于我刚刚恢复的完整计划/已经完成的changeConfigTo——workingConfig
 // 只有明确确认安全，才返回 true；
 // 读取失败、不确定、状态变化，全部返回 false。
 func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
@@ -70,6 +72,10 @@ func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
         // 重点：我们返回 false，表示“不确定配置是否改变”。
         return false 
     }
+
+	if currVal == "" || nextVal == "" {
+		return false
+	}
 
 	curr := shardcfg.FromString(currVal)
 	//next := shardcfg.FromString(nextVal)
@@ -89,6 +95,34 @@ func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 	return true
 }
 
+func (sck *ShardCtrler) shouldStop(expectedStr string, expectedNum shardcfg.Tnum) bool {
+	currStr, _, currErr := sck.IKVClerk.Get(CurrConfigKey)
+
+    if currErr == rpc.OK && currStr != "" {
+        curr := shardcfg.FromString(currStr)
+
+        // Another controller has already committed this
+        // configuration or a newer one.
+        if curr.Num >= expectedNum {
+            return true
+        }
+    }	
+
+	nextStr, _, nextErr := sck.IKVClerk.Get(NextConfigKey)
+
+	if nextErr == rpc.OK && nextStr != "" {
+		// A different complete plan now occupies NextConfig
+		        if nextStr != expectedStr {
+            return true
+        }
+	}
+
+	// Reading failed or the plan is still current.
+    // We cannot prove that this controller should stop.
+    return false
+}
+
+
 // called by executeMOves, move shardID from old group to new group, 
 // seperatly call freezeShard -> installShard -> deleteShard rpc
 // if receive rpc.ErrStale or rpc.ErrWrongGroup set aborted to true 
@@ -96,7 +130,7 @@ func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 // if receive rpc.OK, can jump to the next phase
 // check aborted at start of each loop, in case of other shards already stopped
 func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg.ShardConfig,
-	 newConfig *shardcfg.ShardConfig, aborted *atomic.Bool) bool {
+	 newConfig *shardcfg.ShardConfig, expectedStr string, aborted *atomic.Bool) bool {
 		oldGrpID := oldConfig.Shards[shardID]
         newGrpID := newConfig.Shards[shardID]
 
@@ -139,7 +173,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					aborted.Store(true)
 					return false
 
-				case rpc.ErrRetry, rpc.ErrMaybe:
+				case rpc.ErrRetry:
 					// 配置检查 goroutine 会负责设置 aborted
 					if aborted.Load() {
 						return false
@@ -147,6 +181,19 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					//time.Sleep(100 * time.Millisecond)
 					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
     				continue
+
+				case rpc.ErrMaybe:
+					// No extra watcher goroutine.
+					// This call may block while this controller is partitioned.
+					// Once reconnected, it can immediately observe that it was
+					// superseded and exit.
+					if sck.shouldStop(expectedStr, newConfig.Num) {
+						aborted.Store(true)
+						return false
+					}
+
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
+					continue	
 				}
 			}
 		}
@@ -166,7 +213,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					aborted.Store(true)
 					return false
 
-				case rpc.ErrRetry, rpc.ErrMaybe:
+				case rpc.ErrRetry:
 					// 配置检查 goroutine 会负责设置 aborted
 					if aborted.Load() {
 						return false
@@ -175,6 +222,19 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
 
     				continue
+
+				case rpc.ErrMaybe:
+					// No extra watcher goroutine.
+					// This call may block while this controller is partitioned.
+					// Once reconnected, it can immediately observe that it was
+					// superseded and exit.
+					if sck.shouldStop(expectedStr, newConfig.Num) {
+						aborted.Store(true)
+						return false
+					}
+
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
+					continue
 				}
 			}
 		}
@@ -194,7 +254,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					aborted.Store(true)
 					return false
 
-				case rpc.ErrRetry, rpc.ErrMaybe:
+				case rpc.ErrRetry:
 					if aborted.Load() {
 						return false
 					}
@@ -202,6 +262,19 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
 
     				continue
+
+				case rpc.ErrMaybe:
+					// No extra watcher goroutine.
+					// This call may block while this controller is partitioned.
+					// Once reconnected, it can immediately observe that it was
+					// superseded and exit.
+					if sck.shouldStop(expectedStr, newConfig.Num) {
+						aborted.Store(true)
+						return false
+					}
+
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
+					continue			
 				}
 			}
 		}
@@ -218,6 +291,7 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 func (sck *ShardCtrler) executeMoves(
     oldConfig *shardcfg.ShardConfig,
     newConfig *shardcfg.ShardConfig,
+	expectedStr string,
 ) bool {
     var aborted atomic.Bool
 
@@ -230,10 +304,18 @@ func (sck *ShardCtrler) executeMoves(
             continue
         }
 
+		// The previous shard may have returned duplicate OK or
+        // AlreadyDone. Before touching another shard, check whether
+        // another controller has already completed the plan.
+        if sck.shouldStop(expectedStr, newConfig.Num) {
+            return false
+        }
+
         if !sck.moveOneShard(
             shardID,
             oldConfig,
             newConfig,
+			expectedStr,
             &aborted,
         ) {
             return false
@@ -312,37 +394,77 @@ func (sck *ShardCtrler) InitController() {
     for {
         // first check if there is a stored next configuration with 
         // a TASK higher configuration number than the current one
-        nextStr, _, _ := sck.IKVClerk.Get(NextConfigKey)
-        currStr, _, _ := sck.IKVClerk.Get(CurrConfigKey)
+		// read next first and then curr
+        nextStr, _, nextErr := sck.IKVClerk.Get(NextConfigKey)
+        currStr, _, currErr := sck.IKVClerk.Get(CurrConfigKey)
 
-        if currStr == "" { return }
-
-		currConfig := shardcfg.FromString(currStr)
-		var nextConfig *shardcfg.ShardConfig
-
-		if nextStr == "" {
-            nextConfig = currConfig
-        } else {
-            nextConfig = shardcfg.FromString(nextStr)
+		// in case of unreliable network cause return "", ErrTimeOut
+        // Curr is required.
+        //
+        // ErrNoKey is abnormal after InitConfig, but there is
+        // nothing this controller can recover without Curr.
+        if currErr == rpc.ErrNoKey || currStr == "" {
+            return
         }
 
-		if nextConfig.Num == currConfig.Num + 1 {
-			if sck.executeMoves(currConfig, nextConfig) {
-				if sck.mayCommit(nextConfig) {
-					sck.safeUpdate(CurrConfigKey, nextStr)
-					continue
-				}
-			}
-		} else if nextConfig.Num > currConfig.Num + 1 {
-			shardgrp.DPrintf("CONTROLLER %d: Init: Found jump Next(%d) > Curr(%d)+1. Waiting.", 
-             sck.controllerID, nextConfig.Num, currConfig.Num)
-            
-            time.Sleep(20 * time.Millisecond)
+		// Temporary Curr read failure: retry.
+        if currErr != rpc.OK {
+            time.Sleep(time.Duration(50+rand.Intn(70)) *time.Millisecond)
             continue
-		} else {
-			// next.Num <= curr.Num, no remains undone work
-			return
-		}
+        }
+
+        // No published recovery plan.
+        if nextErr == rpc.ErrNoKey {
+            return
+        }
+
+		// Temporary Next read failure: retry.
+        if nextErr != rpc.OK {
+            time.Sleep(time.Duration(50+rand.Intn(70)) *time.Millisecond)
+            continue
+        }
+
+		if nextStr == "" {
+            // rpc.OK with an empty value is malformed metadata.
+            return
+        }
+
+		currConfig := shardcfg.FromString(currStr)
+		nextConfig := shardcfg.FromString(nextStr)
+
+		// Another controller already completed this plan.
+        if nextConfig.Num <= currConfig.Num {
+            return
+        }
+
+		// We can only recover the immediate next configuration.
+        if nextConfig.Num != currConfig.Num+1 {
+            // This can be a temporarily inconsistent observation.
+            // Re-read both keys rather than acting on it.
+            time.Sleep(time.Duration(50+rand.Intn(70)) *time.Millisecond)
+            continue
+        }
+
+        // Recover the exact plan stored in NextConfig.
+        if !sck.executeMoves(currConfig, nextConfig, nextStr) {
+            time.Sleep(time.Duration(50+rand.Intn(70)) *time.Millisecond)
+            continue
+        }
+
+        // Another controller may have committed while we migrated,
+        // or the validation read may have failed.
+        if !sck.mayCommit(nextConfig) {
+            time.Sleep(time.Duration(50+rand.Intn(70)) *time.Millisecond)
+            continue
+        }
+
+        sck.safeUpdate(CurrConfigKey, nextStr)
+
+        // Re-read Curr/Next.
+        //
+        // Normally the next iteration observes:
+        //     Curr.Num == Next.Num
+        // and returns.
 	}
 }
 
@@ -454,7 +576,7 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 
 		// 到这一步，nextConfig 一定是我们要执行的下一个目标
 		// 接下来去执行迁移：
-		if sck.executeMoves(currConfig, stepConfig) {
+		if sck.executeMoves(currConfig, stepConfig, stepConfig.String()) {
 			// 迁移完了，把蓝图变成“已盖好的楼层
 			if sck.mayCommit(stepConfig) {
 				sck.safeUpdate(CurrConfigKey, stepConfig.String())

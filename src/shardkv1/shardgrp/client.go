@@ -103,7 +103,7 @@ func (ck *Clerk) Get(key string, configNum shardcfg.Tnum, clientID int64, seqNum
 				// Move to the NEXT server (Round Robin)
 				DPrintf("Client %d get detected wrong leader for key %s in server %d", clientID, key, serverId)
 				serverId = (serverId + 1) % len(ck.servers)
-				time.Sleep(100 * time.Millisecond)
+				//time.Sleep(100 * time.Millisecond)
 				continue
 			} else if err == rpc.ErrWrongGroup {
 				ck.recentLeader = serverId
@@ -203,7 +203,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion,
 				// so there is no chance that the first attempt success
 				//  when the second attempt return ErrVersion
 				serverId = (serverId + 1) % len(ck.servers)
-				time.Sleep(100 * time.Millisecond)
+				//time.Sleep(100 * time.Millisecond)
 				continue
 
 			} else if reply.Err == rpc.ErrWrongGroup {
