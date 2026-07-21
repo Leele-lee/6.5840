@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"crypto/rand"
 	"encoding/binary"
+	//"log"
 
 	"6.5840/labgob"
 	"sync/atomic"
@@ -56,6 +57,9 @@ type Op struct {
 
 }
 
+func (rsm *RSM) DebugRaftState() (term int, isLeader bool) {
+    return rsm.rf.GetState()
+}
 
 // A server (i.e., ../server.go) that wants to replicate itself calls
 // MakeRSM and must implement the StateMachine interface.  This
@@ -132,6 +136,14 @@ func (rsm *RSM) applier() {
 				rsm.mu.Lock()
 				ch, ok := rsm.waitCh[opID]
 				rsm.mu.Unlock()
+
+				//log.Printf(
+				//	"RSM S=%d NOTIFY index=%d opID=%+v waiting=%v",
+				//	rsm.me,
+				//	msg.CommandIndex,
+				//	wrapped.OpID,
+				//	ok,
+				//)
 
 				if ok {
 					select{
@@ -267,6 +279,7 @@ func (rsm *RSM) Submit(req any) (rpc.Err, any) {
 	}()
 
 	_, _, isLeader := rsm.rf.Start(wrapped)
+
 	if !isLeader {
 		return rpc.ErrWrongLeader, nil
 	}

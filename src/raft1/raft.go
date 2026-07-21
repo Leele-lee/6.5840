@@ -347,8 +347,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 			// Log why we refused
         	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Vote Denied", 
-            fmt.Sprintf("Refused S%d. Has larger term: %d, VotedFor: %d", 
-            args.CandidateId, currentLastLogEntry.Term, rf.votedFor))
+            	fmt.Sprintf("Refused S%d. Has larger term: %d, VotedFor: %d", 
+            	args.CandidateId, currentLastLogEntry.Term, rf.votedFor))
 			return
 		}
 
@@ -364,7 +364,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Reset Election Timeout", 
-        fmt.Sprintf("Success vote for S%d", args.CandidateId))
+         fmt.Sprintf("Success vote for S%d", args.CandidateId))
 		return
 	}
 }
@@ -439,8 +439,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Step Down", 
-		fmt.Sprintf("Term %d -> %d. Found higher term from leader S%d in AE", 
-        oldTerm, args.Term, args.LeaderID))
+		  fmt.Sprintf("Term %d -> %d. Found higher term from leader S%d in AE", 
+          oldTerm, args.Term, args.LeaderID))
 	}
 
 	// THE FIX: Snapshot Bounds Check
@@ -470,7 +470,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "follower's log too short", 
-        fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
+          fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
 
 		return
 	} else {
@@ -490,7 +490,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 			// ADD ANNOTATION HERE
     		tester.Annotate(fmt.Sprintf("S%d", rf.me), "AE false mesg", 
-        	fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
+        	  fmt.Sprintf("XTerm: %d, XIndex: %d, XLen: %d", reply.XTerm, reply.XIndex, reply.XLen))
 
 			return
 		} else {
@@ -735,8 +735,8 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, reply *InstallSnapsho
 
         // ADD ANNOTATION HERE
         tester.Annotate(fmt.Sprintf("S%d", rf.me), "Step Down", 
-        fmt.Sprintf("Term %d -> %d. Found higher term from leader S%d in IS", 
-        oldTerm, args.Term, args.LeaderID))
+          fmt.Sprintf("Term %d -> %d. Found higher term from leader S%d in IS", 
+          oldTerm, args.Term, args.LeaderID))
 	}
 
 	// reject stale snapshot
@@ -1074,8 +1074,8 @@ func (rf *Raft) handleVoteReply(termStartAtElection int, voteNum *int, reply *Re
 		    
 		// ADD ANNOTATION HERE
     	tester.Annotate(fmt.Sprintf("S%d", rf.me), "Handle Vote", 
-        fmt.Sprintf("Vote num is: %d", 
-        *voteNum))
+          fmt.Sprintf("Vote num is: %d", 
+          *voteNum))
 
 		if *voteNum > len(rf.peers)/2 {
 			rf.becomeLeader()
@@ -1107,7 +1107,7 @@ func (rf *Raft) startElection() {
 
 	// ADD ANNOTATION HERE
     tester.Annotate(fmt.Sprintf("S%d", rf.me), "Election Start", 
-    fmt.Sprintf("Starting election for Term %d", rf.currentTerm))
+      fmt.Sprintf("Starting election for Term %d", rf.currentTerm))
 
 	termStartAtElection := rf.currentTerm
 

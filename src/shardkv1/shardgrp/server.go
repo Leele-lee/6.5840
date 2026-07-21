@@ -107,12 +107,12 @@ func (kv *KVServer) executeOp(op rsm.Op) shardrpc.Result {
 
 	case "Put":
 		verVal, ok := kv.shardsData[shard][op.Key]
-		if !ok && verVal.Version != 0 {
+		if !ok && op.Version != 0 {
 			res.Err = rpc.ErrNoKey
 			return res
 		}
 		// If versions don't match, return ErrVersion.
-		if op.Version != verVal.Version {
+		if ok && op.Version != verVal.Version {
 			res.Err = rpc.ErrVersion
 			return res
 		}
@@ -166,7 +166,6 @@ func (kv *KVServer) applyAdminOp(op rsm.Op) shardrpc.Result {
 
 	switch op.Operation {
 	case "FreezeShard":
-		// 1. 版本检查
 		switch {
 		case op.ConfigNum == localNum:
 			switch status {
@@ -236,8 +235,8 @@ func (kv *KVServer) applyAdminOp(op rsm.Op) shardrpc.Result {
 				kv.shardStatus[shard] = NotOwned
 				res.Err = rpc.OK
 			case status == Active:
-				// arrive too early, not done with freezeShard
-				res.Err = rpc.ErrRetry
+				// not normal
+				res.Err = rpc.ErrWrongGroup
 			default:
 				// status == NotOwned
 				// repeat rpc, already delete
@@ -579,7 +578,7 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	if configNumForShard < kv.shardConfigNums[shardID] {
 		reply.Err = rpc.ErrStale
 		DPrintf("S%d group %d rejected FreezeShard for shard %d, op num < local num (%d < %d)", 
-		 kv.me, kv.gid, shardID, args.Num, kv.shardConfigNums[shardID] )
+		 kv.me, kv.gid, shardID, args.Num, kv.shardConfigNums[shardID])
 		kv.mu.Unlock()
 		return
 	}
@@ -607,8 +606,8 @@ func (kv *KVServer) InstallShard(args *shardrpc.InstallShardArgs, reply *shardrp
 	res := result.(shardrpc.Result)
 	reply.Err = res.Err
 
-	DPrintf("S%d group: %d after received installShard for shard %d, op num: %d, server num: %d, Err: %s, reply: %v", 
-		kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], res.Err, reply)
+	//DPrintf("S%d group: %d after received installShard for shard %d, op num: %d, server num: %d, Err: %s, reply: %v", 
+	//	kv.me, kv.gid, shardID, op.ConfigNum, kv.shardConfigNums[shardID], res.Err, reply)
 
 }
 

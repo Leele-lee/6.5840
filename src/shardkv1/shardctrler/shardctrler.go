@@ -42,10 +42,7 @@ type ShardCtrler struct {
 	killed int32 // set by Kill()
 
 	// Your data here.
-	//CurrConfigKeyNum shardgrp.Tnum // the latest configure version number
-	//CurrConfigKey sharddcfg.ShardConfig
 	mu sync.Mutex
-	clerks map[tester.Tgid]*shardgrp.Clerk
 	controllerID int64
 
 }
@@ -56,70 +53,48 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 	srv := tester.ServerName(tester.GRP0, 0)
 	sck.IKVClerk = kvsrv.MakeClerk(clnt, srv)
 	// Your code here.
-	sck.clerks = make(map[tester.Tgid]*shardgrp.Clerk)
 	sck.controllerID = nrand()
 	return sck
 }
 
-func (sck *ShardCtrler) getClerk(gid tester.Tgid, config *shardcfg.ShardConfig) *shardgrp.Clerk {
-	// helper to get or create clerk
-		sck.mu.Lock()
-		defer sck.mu.Unlock()
-		if ck, ok := sck.clerks[gid]; ok {
-			return ck
-		}
-		// If it doesn't exist, create it and store it
-		servers := config.Groups[gid]
-		ck := shardgrp.MakeClerk(sck.clnt, servers)
-		sck.clerks[gid] = ck
-		return ck
-}
-
-
-func (sck *ShardCtrler) checkConfigChange(workingConfig *shardcfg.ShardConfig) bool {
+// 只有明确确认安全，才返回 true；
+// 读取失败、不确定、状态变化，全部返回 false。
+func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 	currVal, _, err1 := sck.IKVClerk.Get(CurrConfigKey)
 	nextVal, _, err2 := sck.IKVClerk.Get(NextConfigKey)
 
-	// 如果因为网络分区连不上 kvsrv
+	// 如果因为partition连不上 kvsrv
+	// this part actually no use, bc if partition the clerk will sleep retry 
+	// instead of return
     if err1 != rpc.OK || err2 != rpc.OK {
         // 重点：我们返回 false，表示“不确定配置是否改变”。
-        // 这样 moveOneShard 协程就能跳出 checkConfigChange，
-        // 回到自己的循环开头，去检查 sck.killed()。
         return false 
     }
 
 	curr := shardcfg.FromString(currVal)
 	//next := shardcfg.FromString(nextVal)
 
-	// 情况 A：任务已经正式完成了 (Committed)
+	// 任务已经正式完成了 (Committed)
     // 如果 CurrConfig 已经达到或超过了我们正在执行的版本，说明已经有人提交了
     if curr.Num >= workingConfig.Num {
         shardgrp.DPrintf("CONTROLLER: Config %d already committed. Done.", workingConfig.Num)
-        return true
+        return false
     }
 
-    // 2. CHECK SUPERSESSION (The "Failure" exit)
-    // Ask kvsrv: "Is there a NEWER plan than mine?"
-	// 情况 B：任务被更新的计划取代了 (Superseded)
-    // 如果墙上的 NextConfig 已经比我们现在执行的版本更高了，
-    // 说明我们正在做“无用功”，应该立刻停止，回到主循环去执行那个更新的 Next。
-    //if next.Num > workingConfig.Num {
-    //    shardgrp.DPrintf("CONTROLLER: Plan %d superseded by %s. Exiting.", workingConfig.Num, nextVal)
-      //  return true 
-    //}
-
 	// 必须还是同一份计划，而不仅是相同 Num
+	// because different configNum can represent different config for controllers
 	if nextVal != workingConfig.String() {
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
-// Need to know:
-
-// Whether all shards have completed;
-// Whether anyone has detected that the configuration has been committed; 
-// Whether anyone has detected that the configuration has been superseded.
+// called by executeMOves, move shardID from old group to new group, 
+// seperatly call freezeShard -> installShard -> deleteShard rpc
+// if receive rpc.ErrStale or rpc.ErrWrongGroup set aborted to true 
+// if receive rpc.ErrMaybe and rpc.ErrRetry will sleep/continue
+// if receive rpc.OK, can jump to the next phase
+// check aborted at start of each loop, in case of other shards already stopped
 func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg.ShardConfig,
 	 newConfig *shardcfg.ShardConfig, aborted *atomic.Bool) bool {
 		oldGrpID := oldConfig.Shards[shardID]
@@ -169,7 +144,8 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					if aborted.Load() {
 						return false
 					}
-					time.Sleep(10 * time.Millisecond)
+					//time.Sleep(100 * time.Millisecond)
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
     				continue
 				}
 			}
@@ -195,7 +171,9 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					if aborted.Load() {
 						return false
 					}
-					time.Sleep(10 * time.Millisecond)
+					//time.Sleep(100 * time.Millisecond)
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
+
     				continue
 				}
 			}
@@ -220,7 +198,9 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 					if aborted.Load() {
 						return false
 					}
-					time.Sleep(10 * time.Millisecond)
+					//time.Sleep(100 * time.Millisecond)
+					time.Sleep(time.Duration(50 + rand.Intn(70)) * time.Millisecond)
+
     				continue
 				}
 			}
@@ -228,62 +208,53 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 		return true
 }
 
-// move shards from current(old) group to new group which contains freeze shard in old group, 
-// install shard to new group, delete shard in old group
-// executeMoves returns true only if THIS controller
-// finished moving all shards and may attempt to
-// commit CurrConfig.
+// called by changeConfigTo and initControl
+// move all changed group's shards from current(old) group to new group 
+// freeze shard in old group, install shard to new group, delete shard in old group
+// executeMoves returns true only if THIS controller finished moving all shards 
 //
-// It returns false if:
-//   - another controller already committed,
-//   - a newer configuration superseded this one,
-//   - or this controller abandoned the migration.
-func (sck *ShardCtrler) executeMoves(oldConfig *shardcfg.ShardConfig, new *shardcfg.ShardConfig) bool {
-    shardgrp.DPrintf("CONTROLLER: ExecuteMoves start")
-	// --- 第一部分：原有的分片搬运逻辑 (针对变动的分片) ---
+// It returns false if aborted is true
 
-	var wg sync.WaitGroup
-	//done := make(chan struct{})
-	var aborted atomic.Bool
+func (sck *ShardCtrler) executeMoves(
+    oldConfig *shardcfg.ShardConfig,
+    newConfig *shardcfg.ShardConfig,
+) bool {
+    var aborted atomic.Bool
 
-    // i is shardID
-    for i := shardcfg.Tshid(0); i < shardcfg.NShards; i++ {
-		// shard's group not change or grp ID is 0(group no exist yet), ignore
-        if oldConfig.Shards[i] == new.Shards[i] {
+    for shardID := shardcfg.Tshid(0);
+        shardID < shardcfg.NShards;
+        shardID++ {
+
+        if oldConfig.Shards[shardID] ==
+            newConfig.Shards[shardID] {
             continue
         }
-		wg.Add(1)
 
-		go func(shardID shardcfg.Tshid) {
-			defer wg.Done()
+        if !sck.moveOneShard(
+            shardID,
+            oldConfig,
+            newConfig,
+            &aborted,
+        ) {
+            return false
+        }
+    }
 
-			if aborted.Load() {
-				return
-			}
-
-			if !sck.moveOneShard(shardID, oldConfig, new, &aborted) {
-				aborted.Store(true)
-			}
-		}(i)
-	}
-
-	wg.Wait()
-
-	//if aborted.Load() {
-	//	return false
-	//}
-	return !aborted.Load()
-
-	// 所有 shard 完成后，最后再做一次全局检查
-	//return !sck.checkConfigChange(new)
+    return true
 }
 
-// get current version and put version in new put, if superseded by another controller 
-// it will retry get version and put again
+// use CAS(compare and swap, version put)save currConfig or nextConfig to kvsrv
+// direct return if currConfig/nextConfig's num is bigger than target num
 // key is "current-config" or "next-config", newValue is the string version config
+
+// Get 当前值和 key version
+// → 条件 Put
+// → 处理并发冲突或网络不确定性
+// 当前代码会反复执行 Get → Put，在已有版本达到目标时退出，在 ErrVersion 时重新读取，在临时错误时等待后重试
 func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 	for {
-		shardgrp.DPrintf("CONTROLLER %d: SafeUpdate: keep trying to set current value to key: %s, value: %s", sck.controllerID, key, newValue)
+		shardgrp.DPrintf("CONTROLLER %d: SafeUpdate: keep trying to set current value to key: %s, value: %s",
+		 sck.controllerID, key, newValue)
 
 		targetNum := shardcfg.FromString(newValue).Num
 		// 1. get current version, if key not exist, the version will be default 0
@@ -296,10 +267,6 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 
 		// 2. INSTANT EXIT: If another controller already did our work, stop immediately!
         // This is the biggest time-saver in Part C.
-        //if val == newValue {
-         //   return 
-        //}
-
 		if err == rpc.OK {
             // CRITICAL: If the key is already at our version or NEWER, exit.
             if shardcfg.FromString(val).Num >= targetNum {
@@ -307,19 +274,13 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
             }
         }
 
-		// --- OPTIMIZATION (Important for idempotency) ---
-        // If the value is ALREADY what we want, we can stop! 
-        // This handles "Case A" (where we succeeded but got ErrMaybe).
-        //if val == newValue {
-        //    return 
-        //}
-
-		// 2. PUT: Attempt update
+		// 3. PUT: Attempt update
         // If Get returned version 0 (key doesn't exist), we send 0.
         // If Get returned version 5, we send 5.
 		putErr := sck.IKVClerk.Put(key, newValue, ver)
 		if putErr == rpc.OK {
-			shardgrp.DPrintf("CONTROLLER %d: SafeUpdate: success to set key: %s value: to %s", sck.controllerID, key, newValue)
+			shardgrp.DPrintf("CONTROLLER %d: SafeUpdate: success to set key: %s value: to %s",
+			 sck.controllerID, key, newValue)
 
 			return
 		}
@@ -340,6 +301,13 @@ func (sck *ShardCtrler) safeUpdate(key string, newValue string) {
 // The tester calls InitController() before starting a new
 // controller. In part A, this method doesn't need to do anything. In
 // B and C, this method implements recovery.
+
+// InitController() 的工作是恢复：
+// CurrConfig < NextConfig
+
+// 所代表的未完成迁移。
+// 你的当前结构会反复读取 Curr 和 Next；
+// 如果发现 Next.Num == Curr.Num+1，就恢复迁移并提交；成功后继续重新读取
 func (sck *ShardCtrler) InitController() {
     for {
         // first check if there is a stored next configuration with 
@@ -360,12 +328,14 @@ func (sck *ShardCtrler) InitController() {
 
 		if nextConfig.Num == currConfig.Num + 1 {
 			if sck.executeMoves(currConfig, nextConfig) {
-				sck.safeUpdate(CurrConfigKey, nextStr)
-				continue
+				if sck.mayCommit(nextConfig) {
+					sck.safeUpdate(CurrConfigKey, nextStr)
+					continue
+				}
 			}
 		} else if nextConfig.Num > currConfig.Num + 1 {
 			shardgrp.DPrintf("CONTROLLER %d: Init: Found jump Next(%d) > Curr(%d)+1. Waiting.", 
-            sck.controllerID, nextConfig.Num, currConfig.Num)
+             sck.controllerID, nextConfig.Num, currConfig.Num)
             
             time.Sleep(20 * time.Millisecond)
             continue
@@ -425,20 +395,19 @@ func (sck *ShardCtrler) getIntermediateConfig(curr *shardcfg.ShardConfig, target
 func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 	// Your code here.
 
-	//oldConfig := sck.Query()
-	//newConfigString := new.String()
-	// // This is an infinite loop; 
+	// This is an infinite loop; 
 	// it only exits when CurrentConfig actually reaches the target version(new).
 	// 这是一个死循环，直到 CurrentConfig 真的达到了目标版本才退出
 	for {
 		// get currenfigNum
 		currConfig := sck.Query()
-		shardgrp.DPrintf("CONTROLLER %d: changeConfigTo: start change configNum from %d to %d", sck.controllerID, currConfig.Num, new.Num)
+		shardgrp.DPrintf("CONTROLLER %d: changeConfigTo: start change configNum from %d to %d",
+		 sck.controllerID, currConfig.Num, new.Num)
 
-		
 		// 如果当前的实际版本已经达到或超过了 Tester 要求的版本，大功告成！
 		if currConfig.Num >= new.Num {
-			shardgrp.DPrintf("CONTROLLER %d: Done! Current %d >= Target %d", sck.controllerID, currConfig.Num, new.Num)
+			shardgrp.DPrintf("CONTROLLER %d: Done! Current %d >= Target %d",
+			 sck.controllerID, currConfig.Num, new.Num)
             return
 		}
 
@@ -468,7 +437,8 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 				continue
 			}
 			 // 抢赢了！nextConfig 现在就是我们要执行的目标
-			shardgrp.DPrintf("CONTROLLER %d: I won the race for NextConfig %d", sck.controllerID, stepConfig.Num)
+			shardgrp.DPrintf("CONTROLLER %d: I won the race for NextConfig %d",
+			 sck.controllerID, stepConfig.Num)
 		} else {
 			// 墙上已经有一张还没干完的蓝图了 (Next.Num > Curr.Num)
     		// 哪怕这张蓝图不是我贴的，如果符合next.Num = curr.Num + 1我也得认！
@@ -478,14 +448,15 @@ func (sck *ShardCtrler) ChangeConfigTo(new *shardcfg.ShardConfig) {
 				time.Sleep(50 * time.Millisecond)
 				continue
 			}
-			shardgrp.DPrintf("CONTROLLER %d: Helping finish existing NextConfig %d", sck.controllerID, stepConfig.Num)
+			shardgrp.DPrintf("CONTROLLER %d: Helping finish existing NextConfig %d",
+			 sck.controllerID, stepConfig.Num)
 		}
 
 		// 到这一步，nextConfig 一定是我们要执行的下一个目标
 		// 接下来去执行迁移：
 		if sck.executeMoves(currConfig, stepConfig) {
 			// 迁移完了，把蓝图变成“已盖好的楼层
-			if !sck.checkConfigChange(stepConfig) {
+			if sck.mayCommit(stepConfig) {
 				sck.safeUpdate(CurrConfigKey, stepConfig.String())
 				shardgrp.DPrintf("CONTROLLER %d: Config %d is now OFFICIAL", sck.controllerID, stepConfig.Num)
 			}

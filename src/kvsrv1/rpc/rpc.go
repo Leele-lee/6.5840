@@ -21,6 +21,11 @@ const (
 
 	// for shardsrv delay
 	ErrRetry = "ErrRetry"
+	// for freezeShard, avoid continue to install empty data
+	ErrAlreadyDone = "ErrAlreadyDone"
+	// The configuration update has already been handled locally. 
+	// The current config is outdated; the entire executeMoves process should stop.
+	ErrStale = "ErrStale"
 )
 
 type Tversion uint64

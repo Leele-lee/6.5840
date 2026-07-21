@@ -76,8 +76,6 @@ func MakeClerk(clnt *tester.Clnt, sck *shardctrler.ShardCtrler) kvtest.IKVClerk 
 // calling shardgrp.MakeClerk(ck.clnt, servers).
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 	// You will have to modify this function.
-	//maxRetry := 30
-	//for i := 0; i < maxRetry; i++ {
 	for {
 		// find which shard has this key
 		shard := shardcfg.Key2Shard(key)
@@ -136,7 +134,7 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 		val, ver, err := gClerk.Get(key, config.Num, ck.clientID, ck.seqNum)
 
 		// handle the result
-		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader {
+		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe {
 			// The config changed while we were talking to them!
             // Loop again to Query() the new config.
 			newConfig := ck.sck.Query()
@@ -149,7 +147,6 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 			return val, ver, err
 		}
 	}
-	//return "", 0, rpc.ErrMaybe
 }
 
 // Put a key to a shard group.
@@ -201,7 +198,7 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion) rpc.Err {
 		// put key to that group
 		err := gClerk.Put(key, value, version, config.Num, ck.clientID, ck.seqNum)
 
-		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe || err == rpc.ErrWrongLeader{
+		if err == rpc.ErrWrongGroup || err == rpc.ErrMaybe{
 			newConfig := ck.sck.Query()
             ck.mu.Lock()
             ck.config = newConfig
