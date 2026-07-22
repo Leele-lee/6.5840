@@ -61,6 +61,7 @@ func MakeShardCtrler(clnt *tester.Clnt) *ShardCtrler {
 // 必须等于我刚刚恢复的完整计划/已经完成的changeConfigTo——workingConfig
 // 只有明确确认安全，才返回 true；
 // 读取失败、不确定、状态变化，全部返回 false。
+// return false when 已提交 被替代 临时错误
 func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 	currVal, _, err1 := sck.IKVClerk.Get(CurrConfigKey)
 	nextVal, _, err2 := sck.IKVClerk.Get(NextConfigKey)
@@ -95,6 +96,10 @@ func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 	return true
 }
 
+// used to determine whether to proceed with moveOneShard
+// return true: There is already clear evidence proving that I should stop.
+// 1. Curr.Num >= working.Num
+// 2. NextConfig: Key Differences
 func (sck *ShardCtrler) shouldStop(expectedStr string, expectedNum shardcfg.Tnum) bool {
 	currStr, _, currErr := sck.IKVClerk.Get(CurrConfigKey)
 
@@ -112,7 +117,7 @@ func (sck *ShardCtrler) shouldStop(expectedStr string, expectedNum shardcfg.Tnum
 
 	if nextErr == rpc.OK && nextStr != "" {
 		// A different complete plan now occupies NextConfig
-		        if nextStr != expectedStr {
+		if nextStr != expectedStr {
             return true
         }
 	}
@@ -295,12 +300,9 @@ func (sck *ShardCtrler) executeMoves(
 ) bool {
     var aborted atomic.Bool
 
-    for shardID := shardcfg.Tshid(0);
-        shardID < shardcfg.NShards;
-        shardID++ {
+    for shardID := shardcfg.Tshid(0); shardID < shardcfg.NShards; shardID++ {
 
-        if oldConfig.Shards[shardID] ==
-            newConfig.Shards[shardID] {
+        if oldConfig.Shards[shardID] == newConfig.Shards[shardID] {
             continue
         }
 

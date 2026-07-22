@@ -47,8 +47,6 @@ type Clerk struct {
 	clientID int64  // unique Id for this clerk
 	seqNum int		// incrementing counter for requests
 	
-
-
 	// You might need a mutex if your client is multi-threaded
     mu sync.Mutex 
 }
