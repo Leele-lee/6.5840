@@ -192,8 +192,8 @@ func (ck *Clerk) Put(key string, value string, version rpc.Tversion,
 				if isRetransmission == true {
 					return rpc.ErrMaybe
 				}
-				return reply.Err // rpc.ErrVersion or rpc.ErrNoKey
-
+				return reply.Err // rpc.ErrVersion
+				
 			} else if reply.Err == rpc.ErrNoKey {
 				ck.recentLeader = serverId
 				return reply.Err

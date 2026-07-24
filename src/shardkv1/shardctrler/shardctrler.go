@@ -97,6 +97,7 @@ func (sck *ShardCtrler) mayCommit(workingConfig *shardcfg.ShardConfig) bool {
 }
 
 // used to determine whether to proceed with moveOneShard
+// use this check can reduce the time spend on TestPartitionRecoveryReliableNoClerk5C
 // return true: There is already clear evidence proving that I should stop.
 // 1. Curr.Num >= working.Num
 // 2. NextConfig: Key Differences
@@ -134,6 +135,12 @@ func (sck *ShardCtrler) shouldStop(expectedStr string, expectedNum shardcfg.Tnum
 // if receive rpc.ErrMaybe and rpc.ErrRetry will sleep/continue
 // if receive rpc.OK, can jump to the next phase
 // check aborted at start of each loop, in case of other shards already stopped
+//
+// aborted is used when executeMoves concurrent moveOneShard
+// It return false if aborted is true
+//
+// now we use serial moveOneShard to reduce TestPartitionRecoveryUnreliableNoClerk5C
+// time,  we not use it now
 func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg.ShardConfig,
 	 newConfig *shardcfg.ShardConfig, expectedStr string, aborted *atomic.Bool) bool {
 		oldGrpID := oldConfig.Shards[shardID]
@@ -291,7 +298,11 @@ func (sck *ShardCtrler) moveOneShard(shardID shardcfg.Tshid, oldConfig *shardcfg
 // freeze shard in old group, install shard to new group, delete shard in old group
 // executeMoves returns true only if THIS controller finished moving all shards 
 //
-// It returns false if aborted is true
+// aborted is used when executeMoves concurrent moveOneShard
+// It return false if aborted is true
+//
+// now we use serial moveOneShard to reduce TestPartitionRecoveryUnreliableNoClerk5C
+// time,  we not use it now
 
 func (sck *ShardCtrler) executeMoves(
     oldConfig *shardcfg.ShardConfig,
